@@ -45,6 +45,21 @@ OWNER_EMAILS=jij@voorbeeld.nl,partner@voorbeeld.nl
 
 **Belangrijk:** Zet `OWNER_EMAILS` alleen in server-side env (nooit in `NEXT_PUBLIC_*`), zodat de lijst niet in de frontend terechtkomt.
 
+### Owner-portal op productie (Vercel)
+
+1. **OWNER_EMAILS in Vercel zetten**  
+   Vercel → je project → **Settings** → **Environment Variables**. Voeg toe:  
+   `OWNER_EMAILS` = jouw@email.nl (precies het adres waarmee je inlogt).  
+   Zonder deze variabele op productie kan niemand bij `/owner`; je wordt dan doorgestuurd naar het dashboard.
+
+2. **Zo kom je bij het portal**  
+   - Ga naar **https://helderly.io/login** (of jouw domein).  
+   - Log in met het e-mailadres dat in `OWNER_EMAILS` staat.  
+   - Open daarna in de browser: **https://helderly.io/owner**.  
+   Je moet dus eerst ingelogd zijn; daarna de URL `/owner` openen.
+
+3. Als er “niets gebeurt” bij inloggen: in **Supabase** → **Authentication** → **URL Configuration** de **Redirect URLs** uitbreiden met o.a. `https://helderly.io/**` en **Site URL** zetten op `https://helderly.io`.
+
 ---
 
 ## 2. Wat zit er in het portal?

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +21,6 @@ import { cn } from "@/lib/utils";
 type Role = "client" | "freelancer";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [role, setRole] = useState<Role>("client");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,8 +42,11 @@ export default function LoginPage() {
         setError(signInError.message);
         return;
       }
-      router.push(ROUTES.dashboard);
-      router.refresh();
+      // Full page navigation so the server receives the new session cookie
+      window.location.href = ROUTES.dashboard;
+      return;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Inloggen mislukt. Controleer je gegevens.");
     } finally {
       setLoading(false);
     }
@@ -68,6 +69,8 @@ export default function LoginPage() {
         return;
       }
       setMagicSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Magic link kon niet worden verzonden.");
     } finally {
       setLoading(false);
     }

@@ -63,8 +63,9 @@ Exacte stappen hangen af van je DNS-provider; Vercel toont per domein de juiste 
 
 ---
 
-## 4. Na deploy: Stripe en e-mail
+## 4. Na deploy: Stripe, Supabase Auth en e-mail
 
+- **Supabase Auth (inloggen op productie):** Supabase Dashboard → **Authentication** → **URL Configuration**. Zet **Site URL** op `https://helderly.io` en voeg bij **Redirect URLs** o.a. `https://helderly.io/**` toe. Anders werkt inloggen of redirect na login niet.
 - **Stripe:** In het Stripe Dashboard bij **Webhooks** een endpoint toevoegen:  
   `https://helderly.io/api/stripe/webhook`  
   (en het bijbehorende **Signing secret** als `STRIPE_WEBHOOK_SECRET` in Vercel zetten.)

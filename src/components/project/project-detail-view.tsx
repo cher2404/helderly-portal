@@ -31,7 +31,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GlassModal } from "@/components/ui/glass-modal";
-import { StatusDot } from "@/components/ui/status-dot";
 import { ROUTES } from "@/lib/constants";
 import {
   createAppointment,
@@ -58,8 +57,6 @@ import { SortableDashboardWidget, renderWidgetContent, type ProjectWidgetPropsWi
 import { WidgetGallery } from "./widget-gallery";
 import type { WidgetId } from "@/lib/project-widgets";
 import { usePreviewMode } from "@/contexts/preview-mode-context";
-
-const HOVER_CARD = "rounded-lg border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-950/50 transition-colors hover:border-zinc-300 dark:hover:border-zinc-700/80";
 
 type Props = {
   project: Project;
@@ -96,8 +93,6 @@ export function ProjectDetailView({
   const [error, setError] = useState<string | null>(null);
   const [expandedFaqId, setExpandedFaqId] = useState<string | null>(null);
   const [templateName, setTemplateName] = useState("");
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteSending, setInviteSending] = useState(false);
 
   const supabase = useMemo(() => createClient(), []);
   const isFreelancer = profile.role === "admin";

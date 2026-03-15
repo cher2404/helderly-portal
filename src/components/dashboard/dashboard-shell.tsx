@@ -76,7 +76,13 @@ function ThemeToggle() {
   );
 }
 
-type Props = { profile: Profile; initialProjects: Project[]; children: React.ReactNode };
+type Props = {
+  profile: Profile;
+  initialProjects: Project[];
+  initialNotifications: Notification[];
+  unreadNotificationCount: number;
+  children: React.ReactNode;
+};
 
 export function DashboardShell({ profile, initialProjects, initialNotifications, unreadNotificationCount, children }: Props) {
   const pathname = usePathname();
@@ -104,11 +110,9 @@ export function DashboardShell({ profile, initialProjects, initialNotifications,
         initialProjects={initialProjects}
         initialNotifications={initialNotifications}
         unreadNotificationCount={unreadNotificationCount}
-        pathname={pathname}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
         isFreelancer={isFreelancer}
-        isProjectPage={isProjectPage}
         currentProjectId={currentProjectId}
         navSections={navSections}
         isActive={isActive}
@@ -124,11 +128,9 @@ function DashboardShellInner({
   initialProjects,
   initialNotifications,
   unreadNotificationCount,
-  pathname,
   mobileOpen,
   setMobileOpen,
   isFreelancer,
-  isProjectPage,
   currentProjectId,
   navSections,
   isActive,
@@ -138,13 +140,11 @@ function DashboardShellInner({
   initialProjects: Project[];
   initialNotifications: Notification[];
   unreadNotificationCount: number;
-  pathname: string;
   mobileOpen: boolean;
   setMobileOpen: (v: boolean) => void;
   isFreelancer: boolean;
-  isProjectPage: boolean;
   currentProjectId: string | null;
-  navSections: { title: string | null; items: typeof globalNav }[];
+  navSections: { title: string | null; items: Array<{ href: string; label: string; icon: React.ComponentType<{ className?: string }> }> }[];
   isActive: (href: string) => boolean;
   children: React.ReactNode;
 }) {
@@ -180,6 +180,7 @@ function DashboardShellInner({
         <div className="flex items-center justify-between h-14 px-4 border-b border-slate-500/10">
           {profile.logo_url ? (
             <Link href={ROUTES.dashboard} className="flex items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={profile.logo_url} alt="Logo" className="h-8 max-w-[140px] object-contain object-left" />
             </Link>
           ) : (

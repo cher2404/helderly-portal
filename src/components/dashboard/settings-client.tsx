@@ -120,6 +120,7 @@ export function SettingsClient({ profile }: Props) {
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 mb-2">Shown at the top of the sidebar.</p>
               {logoPreview && (
                 <div className="flex items-center gap-3 mb-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={logoPreview} alt="Logo" className="h-10 max-w-[160px] object-contain" />
                   <Button variant="ghost" size="sm" onClick={removeLogo} className="text-red-500 hover:text-red-400 text-xs">
                     Remove

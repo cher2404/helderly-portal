@@ -1,6 +1,5 @@
 import { getOwnerProfiles } from "@/lib/supabase/owner-queries";
 import type { UserRole, SubscriptionStatus } from "@/lib/database.types";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const roleLabels: Record<UserRole, string> = {

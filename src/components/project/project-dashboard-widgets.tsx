@@ -52,7 +52,7 @@ import type {
   Decision,
   ProjectFaq,
 } from "@/lib/database.types";
-import type { StageStatus } from "@/lib/database.types";
+import type { StageStatus, MilestoneStatus } from "@/lib/database.types";
 import { WIDGET_META, type WidgetId } from "@/lib/project-widgets";
 import { useProjectLayout } from "./project-layout-provider";
 

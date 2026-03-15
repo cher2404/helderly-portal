@@ -10,8 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/lib/constants";
 import Link from "next/link";
-import { CreditCard, ExternalLink, Sun, Moon, Monitor, Copy, Check } from "lucide-react";
+import { CreditCard, ExternalLink, Sun, Moon, Monitor, Copy, Check, Download, Trash2 } from "lucide-react";
 import { updateProfileAccent, updateProfileLogo, updateProfileTheme, updateProfileBusinessAndSlug } from "@/app/actions/profile";
+import { exportMyData, deleteAccount } from "@/app/actions/account";
 import { createClient } from "@/lib/supabase/client";
 
 type Props = { profile: Profile };

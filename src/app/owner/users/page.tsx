@@ -1,4 +1,4 @@
-import { getOwnerProfiles } from "@/lib/supabase/owner-queries";
+import { getOwnerProfilesWithEmails } from "@/lib/supabase/owner-queries";
 import type { UserRole, SubscriptionStatus } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
 

@@ -64,7 +64,7 @@ async function getAuthUserEmails(): Promise<Map<string, string>> {
   while (true) {
     const { data, error } = await supabase.auth.admin.listUsers({
       page,
-      per_page: perPage,
+      perPage,
     });
     if (error || !data?.users?.length) break;
     for (const u of data.users) {

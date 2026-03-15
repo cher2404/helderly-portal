@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/lib/constants";
 import Link from "next/link";
-import { CreditCard, ExternalLink, Sun, Moon, Monitor } from "lucide-react";
-import { updateProfileAccent, updateProfileLogo, updateProfileTheme } from "@/app/actions/profile";
+import { CreditCard, ExternalLink, Sun, Moon, Monitor, Copy, Check } from "lucide-react";
+import { updateProfileAccent, updateProfileLogo, updateProfileTheme, updateProfileBusinessAndSlug } from "@/app/actions/profile";
 import { createClient } from "@/lib/supabase/client";
 
 type Props = { profile: Profile };
@@ -26,11 +26,23 @@ export function SettingsClient({ profile }: Props) {
   const [loading, setLoading] = useState(false);
   const [accentSaving, setAccentSaving] = useState(false);
   const [themeSaving, setThemeSaving] = useState(false);
+  const [businessSaving, setBusinessSaving] = useState(false);
+  const [businessError, setBusinessError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(profile.logo_url);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const businessNameRef = useRef<HTMLInputElement>(null);
+  const slugRef = useRef<HTMLInputElement>(null);
   const { setTheme } = useTheme();
   const isFreelancer = profile.role === "admin";
+  const appUrl = typeof window !== "undefined" ? window.location.origin : (process.env.NEXT_PUBLIC_APP_URL ?? "https://helderly.io");
+  const clientLoginUrl = profile.slug ? `${appUrl}/${profile.slug}` : null;
 
   async function openPortal() {
     setLoading(true);
@@ -94,6 +106,55 @@ export function SettingsClient({ profile }: Props) {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
+  async function saveBusinessAndSlug() {
+    const businessName = businessNameRef.current?.value?.trim() ?? "";
+    const slug = slugRef.current?.value?.trim() ?? "";
+    setBusinessError(null);
+    setBusinessSaving(true);
+    const r = await updateProfileBusinessAndSlug(businessName || null, slug || null);
+    setBusinessSaving(false);
+    if (r.error) setBusinessError(r.error);
+  }
+
+  function copyClientLoginUrl() {
+    if (!clientLoginUrl) return;
+    navigator.clipboard.writeText(clientLoginUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  async function handleExport() {
+    setExporting(true);
+    setExportError(null);
+    const result = await exportMyData();
+    setExporting(false);
+    if ("error" in result) {
+      setExportError(result.error);
+      return;
+    }
+    const blob = new Blob([result.data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `helderly-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleDeleteAccount() {
+    setDeleteError(null);
+    setDeleteLoading(true);
+    const result = await deleteAccount();
+    setDeleteLoading(false);
+    if ("error" in result) {
+      setDeleteError(result.error);
+      return;
+    }
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = ROUTES.home;
+  }
+
   const isPro = profile.subscription_status === "active";
   const currentTheme = (profile.theme ?? "system") as ThemePreference;
 
@@ -151,6 +212,60 @@ export function SettingsClient({ profile }: Props) {
               </div>
               {accentSaving && <span className="text-xs text-zinc-500 ml-2">Saving…</span>}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {isFreelancer && (
+        <Card className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80">
+          <CardHeader className="border-b border-zinc-200 dark:border-zinc-800">
+            <CardTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Inlogpagina voor klanten
+            </CardTitle>
+            <CardDescription>
+              Geef je bedrijfsnaam en een unieke URL. Deel de inloglink met je klanten; zij loggen dan direct bij jou in (bijv. helderly.io/fotografiestudiomaan).
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-5 space-y-4">
+            <div>
+              <Label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Bedrijfsnaam</Label>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 mb-1">Toont &quot;Log in bij [naam]&quot; op de inlogpagina.</p>
+              <Input
+                ref={businessNameRef}
+                type="text"
+                defaultValue={profile.business_name ?? ""}
+                onBlur={saveBusinessAndSlug}
+                placeholder="bijv. Fotografie Studio Maan"
+                className="rounded-lg border-zinc-200 dark:border-zinc-700"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Inlog-URL (slug)</Label>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 mb-1">Alleen kleine letters en cijfers, geen spaties (bijv. fotografiestudiomaan).</p>
+              <Input
+                ref={slugRef}
+                type="text"
+                defaultValue={profile.slug ?? ""}
+                onBlur={saveBusinessAndSlug}
+                placeholder="fotografiestudiomaan"
+                className="rounded-lg border-zinc-200 dark:border-zinc-700 font-mono text-sm"
+              />
+            </div>
+            {businessError && <p className="text-sm text-red-500">{businessError}</p>}
+            {clientLoginUrl && (
+              <>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Deel deze link met je klanten; zij loggen dan direct bij jou in.</p>
+                <div className="flex items-center gap-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
+                  <span className="flex-1 truncate text-sm text-zinc-700 dark:text-zinc-300" title={clientLoginUrl}>
+                    {clientLoginUrl}
+                  </span>
+                  <Button variant="ghost" size="sm" onClick={copyClientLoginUrl} className="shrink-0">
+                    {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </>
+            )}
+            {businessSaving && <span className="text-xs text-zinc-500">Opslaan…</span>}
           </CardContent>
         </Card>
       )}
@@ -213,6 +328,71 @@ export function SettingsClient({ profile }: Props) {
               <Link href={ROUTES.pricing}>Upgrade to Pro</Link>
             </Button>
           )}
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80">
+        <CardHeader>
+          <CardTitle className="text-zinc-900 dark:text-zinc-50">Gegevens en account</CardTitle>
+          <CardDescription>
+            Exporteer je gegevens (AVG) of verwijder je account definitief.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2">
+              Download een kopie van je profiel en projectgegevens als JSON.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExport}
+              disabled={exporting}
+              className="rounded-lg border-zinc-200 dark:border-zinc-700"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              {exporting ? "Bezig…" : "Exporteer mijn data"}
+            </Button>
+            {exportError && <p className="text-sm text-red-500 mt-2">{exportError}</p>}
+          </div>
+          <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2">
+              Verwijder je account en alle bijbehorende gegevens. Je abonnement wordt opgezegd. Dit kan niet ongedaan worden gemaakt.
+            </p>
+            {!deleteConfirm ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDeleteConfirm(true)}
+                className="rounded-lg border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Account verwijderen
+              </Button>
+            ) : (
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDeleteAccount}
+                  disabled={deleteLoading}
+                  className="rounded-lg"
+                >
+                  {deleteLoading ? "Bezig…" : "Ja, definitief verwijderen"}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => { setDeleteConfirm(false); setDeleteError(null); }}
+                  disabled={deleteLoading}
+                  className="rounded-lg"
+                >
+                  Annuleren
+                </Button>
+              </div>
+            )}
+            {deleteError && <p className="text-sm text-red-500 mt-2">{deleteError}</p>}
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -20,7 +20,7 @@ const statusClass: Record<SubscriptionStatus, string> = {
 };
 
 export default async function OwnerUsersPage() {
-  const profiles = await getOwnerProfiles();
+  const profiles = await getOwnerProfilesWithEmails();
 
   return (
     <div className="space-y-6">
@@ -31,6 +31,7 @@ export default async function OwnerUsersPage() {
             <thead>
               <tr className="border-b border-slate-500/20">
                 <th className="px-4 py-3 font-medium text-slate-400">Naam</th>
+                <th className="px-4 py-3 font-medium text-slate-400">E-mail</th>
                 <th className="px-4 py-3 font-medium text-slate-400">User ID</th>
                 <th className="px-4 py-3 font-medium text-slate-400">Rol</th>
                 <th className="px-4 py-3 font-medium text-slate-400">Abonnement</th>
@@ -46,6 +47,9 @@ export default async function OwnerUsersPage() {
                 >
                   <td className="px-4 py-3 text-slate-100">
                     {p.full_name || "—"}
+                  </td>
+                  <td className="px-4 py-3 text-slate-300">
+                    {p.email || "—"}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-slate-500">
                     {p.user_id.slice(0, 8)}…

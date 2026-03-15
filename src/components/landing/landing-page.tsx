@@ -423,6 +423,12 @@ export function LandingPage() {
             <span className="text-sm text-zinc-500">by Conexy</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-zinc-500">
+            <Link href={ROUTES.privacy} className="hover:text-zinc-300 transition-colors">
+              Privacy
+            </Link>
+            <Link href={ROUTES.cookies} className="hover:text-zinc-300 transition-colors">
+              Cookies
+            </Link>
             <Link href={ROUTES.pricing} className="hover:text-zinc-300 transition-colors">
               Pricing
             </Link>

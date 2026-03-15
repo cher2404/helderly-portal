@@ -26,6 +26,7 @@ import {
   Box,
   Eye,
   EyeOff,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -323,9 +324,9 @@ function ProjectDetailContent({
       {/* Header — premium top bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <Link
+            <Link
             href={ROUTES.dashboard}
-            className="rounded-xl border border-slate-500/15 bg-slate-500/10 p-2 text-slate-400 transition-colors hover:border-sky-400/25 hover:text-sky-200"
+            className="rounded-xl border border-slate-500/15 bg-slate-500/10 p-2 text-slate-400 transition-colors hover:border-[var(--primary-accent)]/25 hover:text-[var(--primary-accent)]"
           >
             <ChevronLeft className="h-4 w-4" />
           </Link>
@@ -368,13 +369,22 @@ function ProjectDetailContent({
             <Button
               variant={isPreviewMode ? "secondary" : "outline"}
               size="sm"
-              className="rounded-xl border-slate-500/20 bg-slate-500/10 text-slate-200 hover:bg-sky-500/15 hover:border-sky-400/25 hover:text-sky-100"
+              className="rounded-xl border-slate-500/20 bg-slate-500/10 text-slate-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100"
               onClick={togglePreviewMode}
               aria-label={isPreviewMode ? "Exit preview mode" : "Preview as client"}
             >
               {isPreviewMode ? <EyeOff className="h-3.5 w-3.5 mr-1.5" /> : <Eye className="h-3.5 w-3.5 mr-1.5" />}
               {isPreviewMode ? "Exit preview" : "Preview as client"}
             </Button>
+            {project.client_email && !isPreviewMode && (
+              <a
+                href={`mailto:${project.client_email}`}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-500/20 bg-slate-500/10 px-3 py-2 text-sm font-medium text-slate-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100 transition-colors"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                Email client
+              </a>
+            )}
             <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-slate-500/15 bg-slate-500/10 px-2 py-1 text-xs text-slate-400">
               <kbd className="rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700/50 px-1.5 py-0.5 font-mono text-zinc-700 dark:text-zinc-300 shadow-sm">N</kbd>
               <span>quick new</span>

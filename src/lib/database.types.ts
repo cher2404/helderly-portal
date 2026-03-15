@@ -26,6 +26,8 @@ export interface Profile {
   trial_starts_at: string | null;
   subscription_status: SubscriptionStatus;
   stripe_customer_id: string | null;
+  business_name: string | null;
+  slug: string | null;
   created_at: string;
   updated_at: string;
 }

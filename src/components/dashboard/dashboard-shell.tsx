@@ -172,12 +172,12 @@ function DashboardShellInner({
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-56 flex flex-col transition-transform duration-200 ease-out",
-          "border-r border-slate-500/10 bg-slate-900/50 backdrop-blur-xl",
+          "border-r border-slate-200/80 bg-white/90 dark:border-slate-500/10 dark:bg-slate-900/50 backdrop-blur-xl",
           "lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-500/10">
+        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-200/80 dark:border-slate-500/10">
           {profile.logo_url ? (
             <Link href={ROUTES.dashboard} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -186,9 +186,9 @@ function DashboardShellInner({
           ) : (
             <Link
               href={ROUTES.dashboard}
-              className="font-semibold text-slate-100 tracking-tight flex items-center gap-2 text-sm"
+              className="font-semibold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2 text-sm"
             >
-              <FolderKanban className="h-4 w-4 text-sky-300/80" />
+              <FolderKanban className="h-4 w-4 text-[var(--primary-accent)]" />
               Helderly
             </Link>
           )}
@@ -216,7 +216,7 @@ function DashboardShellInner({
             ) : (
               <Link
                 href={ROUTES.dashboard}
-                className="flex items-center justify-center gap-2 rounded-[12px] border border-slate-500/20 border-dashed px-3 py-2.5 text-sm font-medium text-slate-400 hover:border-sky-400/40 hover:text-sky-200 hover:bg-sky-500/5 transition-colors"
+                className="flex items-center justify-center gap-2 rounded-[12px] border border-slate-300 dark:border-slate-500/20 border-dashed px-3 py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:border-[var(--primary-accent)]/40 hover:text-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/5 transition-colors"
               >
                 <FolderKanban className="h-4 w-4 shrink-0" />
                 Create your first project
@@ -243,8 +243,8 @@ function DashboardShellInner({
                       className={cn(
                         "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
                         active
-                          ? "nav-active-neon bg-sky-500/10 text-sky-200 border-sky-400/20"
-                          : "text-slate-400 hover:bg-slate-500/10 hover:text-slate-100 border-transparent"
+                          ? "nav-active-neon"
+                          : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-500/10 hover:text-slate-900 dark:hover:text-slate-100 border-transparent"
                       )}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -256,9 +256,9 @@ function DashboardShellInner({
             </div>
           ))}
         </nav>
-        <div className="p-3 border-t border-slate-500/10 space-y-2">
+        <div className="p-3 border-t border-slate-200/80 dark:border-slate-500/10 space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs font-medium text-slate-400">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
               {isPreviewMode ? "Customer View" : isFreelancer ? "Master Craftsman" : "Customer"}
             </p>
             <ThemeToggle />

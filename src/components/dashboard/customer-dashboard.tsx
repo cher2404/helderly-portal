@@ -24,7 +24,7 @@ export function CustomerDashboard({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-50">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           My project
         </h1>
         <p className="text-zinc-400 mt-1">
@@ -53,7 +53,7 @@ export function CustomerDashboard({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold text-zinc-50">{project.name}</p>
+                <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{project.name}</p>
                 <p className="text-sm text-zinc-500 capitalize mt-0.5">{project.status} · {project.progress_percentage}%</p>
               </CardContent>
             </Card>
@@ -65,7 +65,7 @@ export function CustomerDashboard({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xl font-bold text-zinc-50">{recentAssets.length}</p>
+                <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{recentAssets.length}</p>
                 <p className="text-sm text-zinc-500 mt-0.5">available to download</p>
               </CardContent>
             </Card>

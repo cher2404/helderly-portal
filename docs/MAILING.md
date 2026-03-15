@@ -2,6 +2,8 @@
 
 Helderly gebruikt **Resend** voor transactie-e-mails (welkom, uitnodiging, notificaties). Supabase Auth kan óók via Resend (of andere SMTP) lopen, zodat inlog- en magic-link-mails hetzelfde afzenderdomein gebruiken.
 
+**Contact freelancer → klant:** In de portal kunnen freelancers hun klant e-mailen via **Email client** (projectpagina) en **Email** (Clients-pagina). Dat opent standaard je e-mailprogramma (`mailto:`). Later kan een “Verstuur e-mail via portal”-actie worden toegevoegd die Resend gebruikt.
+
 ---
 
 ## 1. Resend configureren

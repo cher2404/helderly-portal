@@ -4,6 +4,8 @@ export const ROUTES = {
   signUp: "/signup",
   pricing: "/pricing",
   billing: "/billing",
+  privacy: "/privacy",
+  cookies: "/cookies",
   owner: "/owner",
   dashboard: "/dashboard",
   clients: "/dashboard/clients",

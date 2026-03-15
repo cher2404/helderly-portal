@@ -65,19 +65,19 @@ export function FeedbackThreadClient({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-50">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           Feedback
         </h1>
-        <p className="text-zinc-400 mt-1">
+        <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           {isFreelancer ? "View client feedback and questions." : "Ask questions or leave feedback about this project."}
         </p>
       </div>
 
       {projects.length > 1 && (
         <div className="flex flex-wrap gap-2">
-          <span className="text-sm text-zinc-400 self-center">Project:</span>
+          <span className="text-sm text-zinc-500 dark:text-zinc-400 self-center">Project:</span>
           <select
-            className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-100"
+            className="rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100"
             value={selectedProject?.id ?? ""}
             onChange={(e) => router.push(`/dashboard/messages?project=${e.target.value}`)}
           >
@@ -89,16 +89,16 @@ export function FeedbackThreadClient({
       )}
 
       {!selectedProject ? (
-        <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
+        <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-zinc-50/80 dark:bg-white/[0.03] backdrop-blur-xl">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
             <MessageSquare className="h-14 w-14 text-zinc-500 mb-4" />
-            <p className="text-zinc-400 font-medium">No project selected</p>
+            <p className="text-zinc-600 dark:text-zinc-400 font-medium">No project selected</p>
           </CardContent>
         </Card>
       ) : (
-        <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
+        <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl">
           <CardHeader>
-            <CardTitle>{selectedProject.name} — Feedback</CardTitle>
+            <CardTitle className="text-zinc-900 dark:text-zinc-50">{selectedProject.name} — Feedback</CardTitle>
             <CardDescription>Messages about this project.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -112,9 +112,9 @@ export function FeedbackThreadClient({
                 messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3"
+                    className="rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] px-4 py-3"
                   >
-                    <p className="text-sm text-zinc-200">{msg.message}</p>
+                    <p className="text-sm text-zinc-800 dark:text-zinc-200">{msg.message}</p>
                     <p className="text-xs text-zinc-500 mt-1">
                       {new Date(msg.created_at).toLocaleString()}
                     </p>
@@ -129,7 +129,7 @@ export function FeedbackThreadClient({
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Ask a question or leave feedback..."
-                  className="flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-white/20"
+                  className="flex-1 rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[var(--primary-accent)]/30"
                 />
                 <Button type="submit" disabled={sending} className="rounded-xl">
                   <Send className="h-4 w-4" />

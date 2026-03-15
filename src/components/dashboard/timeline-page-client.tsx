@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { TimelineStepper } from "./timeline-stepper";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Inbox } from "lucide-react";
 import type { Project, ProjectStage, Profile } from "@/lib/database.types";
 
@@ -52,10 +54,17 @@ export function TimelinePageClient({
         <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
             <Inbox className="h-14 w-14 text-zinc-500 mb-4" />
-            <p className="text-zinc-400 font-medium">No project selected</p>
+            <p className="text-zinc-400 font-medium">Geen project geselecteerd</p>
             <p className="text-sm text-zinc-500 mt-1">
-              {isFreelancer ? "Create a project from the Dashboard first." : "You don’t have a project yet."}
+              {isFreelancer ? "Maak een project aan via het dashboard. Daarna kun je mijlpalen en voortgang bijhouden." : "You don’t have a project yet."}
             </p>
+            {isFreelancer && (
+              <Link href="/dashboard" className="mt-4">
+                <Button size="sm" variant="outline" className="rounded-xl border-zinc-600 text-zinc-300 hover:bg-zinc-800">
+                  Naar Dashboard
+                </Button>
+              </Link>
+            )}
           </CardContent>
         </Card>
       ) : (

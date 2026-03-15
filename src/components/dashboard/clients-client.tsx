@@ -46,13 +46,23 @@ export function ClientsClient({ clients }: Props) {
                     <span className="text-sm text-zinc-900 dark:text-zinc-100">{c.email}</span>
                     <span className="text-xs text-zinc-500">· {c.projectName}</span>
                   </div>
-                  <Link
-                    href={ROUTES.project(c.projectId)}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--primary-accent)] hover:underline"
-                  >
-                    <FolderOpen className="h-3.5 w-3.5" />
-                    Open project
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`mailto:${c.email}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-[var(--primary-accent)]"
+                      title="Email client"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      Email
+                    </a>
+                    <Link
+                      href={ROUTES.project(c.projectId)}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--primary-accent)] hover:underline"
+                    >
+                      <FolderOpen className="h-3.5 w-3.5" />
+                      Open project
+                    </Link>
+                  </div>
                 </li>
               ))}
             </ul>

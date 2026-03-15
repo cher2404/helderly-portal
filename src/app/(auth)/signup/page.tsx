@@ -149,6 +149,17 @@ export default function SignUpPage() {
               {error}
             </p>
           )}
+          <p className="text-xs text-zinc-500">
+            Door een account aan te maken ga je akkoord met onze{" "}
+            <Link href={ROUTES.privacy} className="text-zinc-400 hover:underline underline-offset-4">
+              Privacyverklaring
+            </Link>{" "}
+            en{" "}
+            <Link href={ROUTES.cookies} className="text-zinc-400 hover:underline underline-offset-4">
+              Cookiebeleid
+            </Link>
+            .
+          </p>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Creating account…" : "Create account"}
           </Button>

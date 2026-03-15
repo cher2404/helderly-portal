@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Profile } from "@/lib/database.types";
 
+export type ProfileWithEmail = Profile & { email: string | null };
+
 export type OwnerStats = {
   totalUsers: number;
   freelancers: number;
@@ -51,4 +53,36 @@ export async function getOwnerProfiles(): Promise<Profile[]> {
     .order("created_at", { ascending: false });
   if (error) return [];
   return (data ?? []) as Profile[];
+}
+
+/** Build map of user_id -> email from Auth (paginated). */
+async function getAuthUserEmails(): Promise<Map<string, string>> {
+  const supabase = createAdminClient();
+  const map = new Map<string, string>();
+  let page = 1;
+  const perPage = 200;
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({
+      page,
+      per_page: perPage,
+    });
+    if (error || !data?.users?.length) break;
+    for (const u of data.users) {
+      if (u.email) map.set(u.id, u.email);
+    }
+    if (data.users.length < perPage) break;
+    page++;
+  }
+  return map;
+}
+
+export async function getOwnerProfilesWithEmails(): Promise<ProfileWithEmail[]> {
+  const [profiles, emailMap] = await Promise.all([
+    getOwnerProfiles(),
+    getAuthUserEmails(),
+  ]);
+  return profiles.map((p) => ({
+    ...p,
+    email: emailMap.get(p.user_id) ?? null,
+  }));
 }

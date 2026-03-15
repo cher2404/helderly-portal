@@ -60,7 +60,7 @@ export function DashboardClient({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-zinc-50">Dashboard</h1>
+        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Dashboard</h1>
         <p className="text-zinc-400 mt-1">
           {isAdmin
             ? "Manage projects and keep clients in the loop."
@@ -95,9 +95,20 @@ export function DashboardClient({
                 </p>
               </>
             ) : (
-              <p className="text-sm text-zinc-400">
-                No projects yet. {isAdmin && "Create one from the timeline."}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm text-zinc-400">
+                  {isAdmin
+                    ? "Nog geen projecten. Start je eerste project via de timeline."
+                    : "Nog geen projecten. Je freelancer nodigt je uit voor een project."}
+                </p>
+                {isAdmin && (
+                  <Link href={ROUTES.timeline}>
+                    <Button variant="outline" size="sm" className="rounded-lg">
+                      Eerste project starten
+                    </Button>
+                  </Link>
+                )}
+              </div>
             )}
           </CardContent>
         </Card>
@@ -124,7 +135,14 @@ export function DashboardClient({
           <CardTitle>Recent Uploads</CardTitle>
           <CardContent className="pt-0">
             {recentAssets.length === 0 ? (
-              <p className="text-sm text-zinc-400">No files yet.</p>
+              <div className="flex flex-col items-center gap-2 py-4 text-center">
+                <p className="text-sm text-zinc-400">Nog geen bestanden. Documenten van je projecten verschijnen hier.</p>
+                <Link href={ROUTES.documents}>
+                  <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-zinc-300">
+                    Naar Documenten
+                  </Button>
+                </Link>
+              </div>
             ) : (
               <ul className="space-y-2">
                 {recentAssets.map((asset) => (

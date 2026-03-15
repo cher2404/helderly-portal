@@ -128,10 +128,10 @@ export function DocumentsClient({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-50">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           {isAdmin ? "Documents" : "Files"}
         </h1>
-        <p className="text-zinc-400 mt-1">
+        <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           {isAdmin
             ? "Upload files and share them with your client."
             : "View and download files shared with you."}
@@ -139,19 +139,30 @@ export function DocumentsClient({
       </div>
 
       {projects.length === 0 ? (
-        <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
+        <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-zinc-50/80 dark:bg-white/[0.03] backdrop-blur-xl">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <FileText className="h-14 w-14 text-zinc-500 mb-4" />
-            <p className="text-zinc-400 font-medium">No projects yet</p>
-            <p className="text-sm text-zinc-500 mt-1">{isAdmin && "Create a project first."}</p>
+            <FileText className="h-14 w-14 text-zinc-500 dark:text-zinc-600 mb-4" />
+            <p className="text-zinc-600 dark:text-zinc-400 font-medium">Nog geen projecten</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-500 mt-1 max-w-sm">
+              {isAdmin
+                ? "Maak eerst een project aan op de timeline. Daarna kun je hier bestanden uploaden en delen."
+                : "Je hebt nog geen projecten. Je freelancer nodigt je uit wanneer er bestanden zijn om te bekijken."}
+            </p>
+            {isAdmin && (
+              <Link href={ROUTES.timeline} className="mt-4">
+                <Button size="sm" className="rounded-xl bg-[var(--primary-accent)] hover:opacity-90">
+                  Naar Timeline
+                </Button>
+              </Link>
+            )}
           </CardContent>
         </Card>
       ) : (
         <>
           <div className="flex flex-wrap items-center gap-3">
-            <Label className="text-zinc-400">Project</Label>
+            <Label className="text-zinc-500 dark:text-zinc-400">Project</Label>
             <select
-              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[var(--primary-accent)]/30"
               value={selectedProjectId ?? ""}
               onChange={(e) => setSelectedProjectId(e.target.value || null)}
             >
@@ -162,7 +173,7 @@ export function DocumentsClient({
           </div>
 
           {isAdmin && selectedProjectId && (
-            <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
+            <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl">
               <CardHeader>
                 <CardTitle className="text-base">Upload file</CardTitle>
                 <CardDescription>
@@ -195,7 +206,10 @@ export function DocumentsClient({
               {assets.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <FileText className="h-12 w-12 text-zinc-500 dark:text-zinc-600 mb-2" />
-                  <p className="text-sm text-zinc-500">No files in this project.</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Nog geen bestanden in dit project.</p>
+                  {isAdmin && (
+                    <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1">Upload hierboven een bestand om te delen met je klant.</p>
+                  )}
                 </div>
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

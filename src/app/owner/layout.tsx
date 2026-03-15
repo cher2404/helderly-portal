@@ -18,12 +18,12 @@ export default async function OwnerLayout({
   if (!isOwnerEmail(user.email)) redirect(ROUTES.dashboard);
 
   return (
-    <div className="min-h-screen bg-[#0f0f11] text-slate-100">
-      <header className="border-b border-slate-500/20 bg-slate-900/50 backdrop-blur-xl">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      <header className="border-b border-zinc-700/50 bg-zinc-900/50 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <Link
             href={ROUTES.owner}
-            className="flex items-center gap-2 font-semibold text-slate-100"
+            className="flex items-center gap-2 font-semibold text-zinc-100"
           >
             <Shield className="h-5 w-5 text-amber-400" />
             Owner
@@ -31,21 +31,21 @@ export default async function OwnerLayout({
           <nav className="flex items-center gap-1">
             <Link
               href={ROUTES.owner}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-slate-500/10 hover:text-slate-100"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-500/10 hover:text-zinc-100"
             >
               <LayoutDashboard className="h-4 w-4" />
               Overzicht
             </Link>
             <Link
               href={`${ROUTES.owner}/users`}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-slate-500/10 hover:text-slate-100"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-500/10 hover:text-zinc-100"
             >
               <Users className="h-4 w-4" />
               Gebruikers
             </Link>
             <Link
               href={`${ROUTES.owner}/subscriptions`}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-slate-500/10 hover:text-slate-100"
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-500/10 hover:text-zinc-100"
             >
               <CreditCard className="h-4 w-4" />
               Abonnementen
@@ -53,7 +53,7 @@ export default async function OwnerLayout({
           </nav>
           <Link
             href={ROUTES.dashboard}
-            className="text-sm text-slate-500 hover:text-slate-300"
+            className="text-sm text-zinc-500 hover:text-zinc-300"
           >
             ← Dashboard
           </Link>

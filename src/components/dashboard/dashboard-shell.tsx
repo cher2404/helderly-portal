@@ -36,22 +36,22 @@ import { PreviewModeProvider, usePreviewMode } from "@/contexts/preview-mode-con
 
 const globalNav = [
   { href: ROUTES.dashboard, label: "Dashboard", icon: LayoutDashboard },
-  { href: ROUTES.clients, label: "Clients", icon: Users },
-  { href: ROUTES.settings, label: "Settings", icon: Settings },
+  { href: ROUTES.clients, label: "Klanten", icon: Users },
+  { href: ROUTES.settings, label: "Instellingen", icon: Settings },
 ];
 
 const projectNav = [
   { href: ROUTES.timeline, label: "Timeline", icon: Calendar },
-  { href: ROUTES.documents, label: "Documents", icon: FileText },
+  { href: ROUTES.documents, label: "Documenten", icon: FileText },
   { href: ROUTES.messages, label: "Feedback", icon: MessageSquare },
 ];
 
 const customerNav = [
-  { href: ROUTES.dashboard, label: "My Project", icon: Inbox },
+  { href: ROUTES.dashboard, label: "Mijn project", icon: Inbox },
   { href: ROUTES.timeline, label: "Timeline", icon: Calendar },
-  { href: ROUTES.documents, label: "Files", icon: FileText },
+  { href: ROUTES.documents, label: "Bestanden", icon: FileText },
   { href: ROUTES.messages, label: "Feedback", icon: MessageSquare },
-  { href: ROUTES.settings, label: "Settings", icon: Settings },
+  { href: ROUTES.settings, label: "Instellingen", icon: Settings },
 ];
 
 function ThemeToggle() {
@@ -172,12 +172,12 @@ function DashboardShellInner({
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-40 w-56 flex flex-col transition-transform duration-200 ease-out",
-          "border-r border-slate-200/80 bg-white/90 dark:border-slate-500/10 dark:bg-slate-900/50 backdrop-blur-xl",
+          "border-r border-zinc-200/80 bg-white/90 dark:border-zinc-600/20 dark:bg-zinc-900/50 backdrop-blur-xl",
           "lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between h-14 px-4 border-b border-slate-200/80 dark:border-slate-500/10">
+        <div className="flex items-center justify-between h-14 px-4 border-b border-zinc-200/80 dark:border-zinc-600/20">
           {profile.logo_url ? (
             <Link href={ROUTES.dashboard} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -186,7 +186,7 @@ function DashboardShellInner({
           ) : (
             <Link
               href={ROUTES.dashboard}
-              className="font-semibold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2 text-sm"
+              className="font-semibold text-zinc-800 dark:text-zinc-100 tracking-tight flex items-center gap-2 text-sm"
             >
               <FolderKanban className="h-4 w-4 text-[var(--primary-accent)]" />
               Helderly
@@ -207,7 +207,14 @@ function DashboardShellInner({
         </div>
 
         {isFreelancer && (
-          <div className="p-3 border-b border-white/10">
+          <div className="p-3 border-b border-zinc-200/80 dark:border-white/10 space-y-2">
+            <Link
+              href="/dashboard#create-project"
+              className="flex items-center justify-center gap-2 rounded-[12px] px-3 py-2.5 text-sm font-medium text-white bg-[var(--primary-accent)] hover:opacity-90 transition-colors"
+            >
+              <FolderKanban className="h-4 w-4 shrink-0" />
+              Nieuw project
+            </Link>
             {initialProjects.length > 0 ? (
               <ProjectSwitcher
                 projects={initialProjects}
@@ -219,7 +226,7 @@ function DashboardShellInner({
                 className="flex items-center justify-center gap-2 rounded-[12px] border border-slate-300 dark:border-slate-500/20 border-dashed px-3 py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:border-[var(--primary-accent)]/40 hover:text-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/5 transition-colors"
               >
                 <FolderKanban className="h-4 w-4 shrink-0" />
-                Create your first project
+                Eerste project aanmaken
               </Link>
             )}
           </div>
@@ -229,7 +236,7 @@ function DashboardShellInner({
           {navSections.map(({ title, items }) => (
             <div key={title ?? "main"}>
               {title && (
-                <p className="px-3 pt-3 pb-1 text-xs font-medium text-slate-500">
+                <p className="px-3 pt-3 pb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
                   {title}
                 </p>
               )}
@@ -244,7 +251,7 @@ function DashboardShellInner({
                         "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
                         active
                           ? "nav-active-neon"
-                          : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-500/10 hover:text-slate-900 dark:hover:text-slate-100 border-transparent"
+                          : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
                       )}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -256,10 +263,18 @@ function DashboardShellInner({
             </div>
           ))}
         </nav>
-        <div className="p-3 border-t border-slate-200/80 dark:border-slate-500/10 space-y-2">
+        <div className="p-3 border-t border-zinc-200/80 dark:border-zinc-600/20 space-y-2">
+          {isFreelancer && profile.slug && (
+            <Link
+              href={ROUTES.settings}
+              className="flex items-center gap-2 rounded-[12px] px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            >
+              <span className="truncate">Inloglink voor klanten</span>
+            </Link>
+          )}
           <div className="flex items-center justify-between gap-2">
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-              {isPreviewMode ? "Customer View" : isFreelancer ? "Master Craftsman" : "Customer"}
+            <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              {isPreviewMode ? "Klantweergave" : isFreelancer ? "Freelancer" : "Klant"}
             </p>
             <ThemeToggle />
           </div>
@@ -276,7 +291,10 @@ function DashboardShellInner({
 
       <main className="lg:pl-56 min-h-screen pt-14 lg:pt-0 flex flex-col">
         <TrialBanner profile={profile} />
-        <div className="flex-1 p-5 sm:p-6 lg:p-8">{children}</div>
+        <div className="flex-1 p-5 sm:p-6 lg:p-8">
+          <Breadcrumbs />
+          {children}
+        </div>
       </main>
 
       {isFreelancer && <CommandPalette projects={initialProjects} />}

@@ -83,6 +83,11 @@ export function ProjectDetailView({
   profile,
 }: Props) {
   const [project, setProject] = useState(initialProject);
+  const { setProjectName } = useBreadcrumbProjectName();
+  useEffect(() => {
+    setProjectName(initialProject.name);
+    return () => setProjectName(null);
+  }, [initialProject.name, setProjectName]);
   const [stages, setStages] = useState(initialStages);
   const [appointments, setAppointments] = useState(initialAppointments);
   const [contactLogs, setContactLogs] = useState(initialContactLogs);
@@ -326,7 +331,7 @@ function ProjectDetailContent({
         <div className="flex items-center gap-3">
             <Link
             href={ROUTES.dashboard}
-            className="rounded-xl border border-slate-500/15 bg-slate-500/10 p-2 text-slate-400 transition-colors hover:border-[var(--primary-accent)]/25 hover:text-[var(--primary-accent)]"
+            className="rounded-xl border border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-500/10 p-2 text-zinc-500 dark:text-zinc-400 transition-colors hover:border-[var(--primary-accent)]/25 hover:text-[var(--primary-accent)]"
           >
             <ChevronLeft className="h-4 w-4" />
           </Link>
@@ -338,7 +343,7 @@ function ProjectDetailContent({
               <h1 className="text-xl font-semibold tracking-tight text-slate-100 truncate">
                 {project.name}
               </h1>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {project.status} · {project.progress_percentage}%
               </p>
             </div>
@@ -369,7 +374,7 @@ function ProjectDetailContent({
             <Button
               variant={isPreviewMode ? "secondary" : "outline"}
               size="sm"
-              className="rounded-xl border-slate-500/20 bg-slate-500/10 text-slate-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100"
+              className="rounded-xl border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-500/10 text-zinc-700 dark:text-zinc-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-zinc-900 dark:hover:text-zinc-100"
               onClick={togglePreviewMode}
               aria-label={isPreviewMode ? "Exit preview mode" : "Preview as client"}
             >
@@ -385,7 +390,7 @@ function ProjectDetailContent({
                 Email client
               </a>
             )}
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-slate-500/15 bg-slate-500/10 px-2 py-1 text-xs text-slate-400">
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-500/10 px-2 py-1 text-xs text-zinc-500 dark:text-zinc-400">
               <kbd className="rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700/50 px-1.5 py-0.5 font-mono text-zinc-700 dark:text-zinc-300 shadow-sm">N</kbd>
               <span>quick new</span>
             </span>
@@ -625,7 +630,7 @@ function ProjectDetailContent({
 
       {/* Modular widget grid */}
       <div
-        className={`relative rounded-[12px] transition-colors ${effectiveEditMode ? "min-h-[400px] bg-slate-500/5" : ""}`}
+        className={`relative rounded-[12px] transition-colors ${effectiveEditMode ? "min-h-[400px] bg-zinc-100 dark:bg-zinc-500/5" : ""}`}
       >
         <DndContext
           sensors={sensors}

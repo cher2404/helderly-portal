@@ -240,7 +240,7 @@ export function DocumentsClient({
                           {asset.status === "needs_changes" && (
                             <span className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">Needs changes</span>
                           )}
-                          {asset.status === "pending" && isAdmin && <span className="text-xs text-zinc-500 mt-0.5">Pending</span>}
+                          {asset.status === "pending" && isAdmin && <span className="text-xs text-zinc-500 mt-0.5">In afwachting</span>}
                           <Download className="h-4 w-4 text-zinc-500 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                         {!isAdmin && needsAction && (

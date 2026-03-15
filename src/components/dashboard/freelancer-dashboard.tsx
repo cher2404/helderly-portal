@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FolderOpen, FileText, Clock, Inbox, Calendar } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import type { Project, Asset, Profile, Appointment, Template } from "@/lib/database.types";
 import { ProjectBuilderForm } from "./project-builder-form";
 import { StatusDot } from "@/components/ui/status-dot";
@@ -27,9 +28,17 @@ export function FreelancerDashboard({
   pendingAssetsCount = 0,
   meetingsTodayCount = 0,
   initialTemplates = [],
+  profile,
 }: Props) {
   const [projects] = useState(initialProjects);
   const [recentAssets] = useState(initialRecentAssets);
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed">("all");
+  const filteredProjects =
+    statusFilter === "all"
+      ? projects
+      : statusFilter === "active"
+        ? projects.filter((p) => p.status === "active")
+        : projects.filter((p) => p.status === "completed");
 
   const nextByProject = useMemo(() => {
     const map = new Map<string, Appointment>();
@@ -44,39 +53,48 @@ export function FreelancerDashboard({
 
   return (
     <div className="space-y-8">
-      {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
-        <div className="flex flex-wrap items-center gap-4 rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 px-4 py-3 text-sm">
-          {pendingAssetsCount > 0 && (
-            <span className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-              <FileText className="h-4 w-4 text-[var(--primary-accent)]" />
-              <strong>{pendingAssetsCount}</strong> {pendingAssetsCount === 1 ? "asset" : "assets"} waiting for approval
-            </span>
-          )}
-          {meetingsTodayCount > 0 && (
-            <span className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-              <Calendar className="h-4 w-4 text-[var(--primary-accent)]" />
-              <strong>{meetingsTodayCount}</strong> {meetingsTodayCount === 1 ? "meeting" : "meetings"} today
-            </span>
-          )}
-        </div>
-      )}
-
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           Dashboard
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-          Manage projects and keep clients in the loop.
+          Overzicht van je projecten, acties en recente bestanden.
         </p>
       </div>
 
+      {/* Onboarding: toon korte checklist als nog geen slug of geen projecten */}
+      {!profile.slug && (
+        <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 px-4 py-3 text-sm">
+          <p className="font-medium text-zinc-700 dark:text-zinc-300">Quick start</p>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-0.5">
+            Stel in <Link href={ROUTES.settings} className="text-[var(--primary-accent)] hover:underline">Instellingen</Link> je inloglink voor klanten in, zodat ze bij jou kunnen inloggen.
+          </p>
+        </div>
+      )}
+      {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
+        <div className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm">
+          {pendingAssetsCount > 0 && (
+            <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <FileText className="h-4 w-4 shrink-0" />
+              <strong>{pendingAssetsCount}</strong> {pendingAssetsCount === 1 ? "bestand" : "bestanden"} wachten op goedkeuring
+            </span>
+          )}
+          {meetingsTodayCount > 0 && (
+            <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Calendar className="h-4 w-4 shrink-0" />
+              <strong>{meetingsTodayCount}</strong> {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
+            </span>
+          )}
+        </div>
+      )}
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Tooltip content="Active projects">
+        <Tooltip content="Actieve projecten">
           <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                 <FolderOpen className="h-4 w-4" />
-                Active Projects
+                Actieve projecten
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -97,12 +115,12 @@ export function FreelancerDashboard({
             </CardContent>
           </Card>
         </Tooltip>
-        <Tooltip content="Total project count">
+        <Tooltip content="Totaal aantal projecten">
           <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors sm:col-span-2 lg:col-span-1">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                Total projects
+                Totaal projecten
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -119,25 +137,44 @@ export function FreelancerDashboard({
       <section>
         <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
           <CardHeader>
-            <CardTitle className="text-zinc-900 dark:text-zinc-50">Projects</CardTitle>
-            <CardDescription>Status, progress, and next meeting.</CardDescription>
+            <CardTitle className="text-zinc-900 dark:text-zinc-50">Jouw projecten</CardTitle>
+            <CardDescription>Status, voortgang en volgende afspraak per project.</CardDescription>
           </CardHeader>
           <CardContent>
+            {projects.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {(["all", "active", "completed"] as const).map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setStatusFilter(key)}
+                    className={cn(
+                      "rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                      statusFilter === key
+                        ? "bg-[var(--primary-accent)] text-white"
+                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                    )}
+                  >
+                    {key === "all" ? "Alle" : key === "active" ? "Actief" : "Voltooid"}
+                  </button>
+                ))}
+              </div>
+            )}
             {projects.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-white/[0.04] p-8 mb-4">
                   <Inbox className="h-14 w-14 text-zinc-400 dark:text-zinc-500 mx-auto" />
                 </div>
-                <p className="text-zinc-900 dark:text-zinc-100 font-semibold">No projects yet</p>
+                <p className="text-zinc-900 dark:text-zinc-100 font-semibold">Nog geen projecten</p>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm">
-                  Create your first project to get started. Add a client email and deadline.
+                  Maak je eerste project aan. Voeg een klant-e-mail en deadline toe.
                 </p>
                 <a
                   href="#create-project"
                   className="mt-6 inline-flex items-center gap-2 rounded-[12px] px-4 py-2.5 text-sm font-medium text-white transition-colors bg-[var(--primary-accent)] hover:opacity-90"
                 >
                   <FolderOpen className="h-4 w-4" />
-                  Create your first project
+                  Eerste project aanmaken
                 </a>
               </div>
             ) : (
@@ -191,7 +228,7 @@ export function FreelancerDashboard({
             {recentAssets.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <FileText className="h-10 w-10 text-zinc-400 dark:text-zinc-600 mb-2" />
-                <p className="text-sm text-zinc-500">No files uploaded yet.</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">Nog geen bestanden geüpload. Upload via Documenten per project.</p>
               </div>
             ) : (
               <ul className="space-y-2">
@@ -207,7 +244,7 @@ export function FreelancerDashboard({
                       rel="noopener noreferrer"
                       className="text-sm text-[var(--primary-accent)] hover:underline"
                     >
-                      Download
+                      Downloaden
                     </a>
                   </li>
                 ))}

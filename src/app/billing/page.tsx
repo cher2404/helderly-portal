@@ -19,8 +19,8 @@ export default async function BillingPage({
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#16171a] text-slate-100">
-      <div className="w-full max-w-md rounded-2xl border border-slate-500/20 bg-slate-900/50 p-8 shadow-xl">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-zinc-950 text-zinc-100">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-700/50 bg-zinc-900/50 p-8 shadow-xl">
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/20 text-amber-400">
             <Lock className="h-7 w-7" />
@@ -28,7 +28,7 @@ export default async function BillingPage({
           <h1 className="text-xl font-semibold text-slate-100">
             Trial ended — upgrade to continue
           </h1>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-zinc-400">
             Your 30-day trial has ended. Upgrade to Pro to access the dashboard again.
           </p>
           <Link href={ROUTES.pricing} className="mt-6 w-full sm:w-auto">
@@ -45,7 +45,7 @@ export default async function BillingPage({
           </p>
           <Link
             href={ROUTES.dashboard}
-            className="mt-4 text-sm text-slate-400 hover:text-slate-200"
+            className="mt-4 text-sm text-zinc-400 hover:text-zinc-200"
           >
             Back to dashboard (access may be restricted)
           </Link>

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { AccentWrapper } from "@/components/dashboard/accent-wrapper";
 import { ThemeSync } from "@/components/dashboard/theme-sync";
+import { BreadcrumbProvider } from "@/contexts/breadcrumb-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 
 export default async function DashboardLayout({
@@ -31,8 +32,9 @@ export default async function DashboardLayout({
             unreadNotificationCount={unreadCount}
           >
             {children}
-          </DashboardShell>
-        </ErrorBoundary>
+            </DashboardShell>
+          </ErrorBoundary>
+        </BreadcrumbProvider>
       </div>
     </AccentWrapper>
   );

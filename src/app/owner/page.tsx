@@ -48,7 +48,7 @@ export default async function OwnerDashboardPage() {
         {cards.map(({ label, value, icon: Icon, href }) => {
           const content = (
             <>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-500/20 text-slate-400">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-500/20 text-zinc-400">
                 <Icon className="h-5 w-5" />
               </div>
               <div>
@@ -58,7 +58,7 @@ export default async function OwnerDashboardPage() {
             </>
           );
           const className =
-            "flex items-center gap-4 rounded-xl border border-slate-500/20 bg-slate-900/40 p-5 transition-colors hover:border-slate-500/30";
+            "flex items-center gap-4 rounded-xl border border-zinc-700/50 bg-zinc-900/40 p-5 transition-colors hover:border-zinc-600/50";
           if (href) {
             return (
               <Link key={label} href={href} className={className}>

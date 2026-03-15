@@ -338,7 +338,7 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
                     </span>
                   )}
                   {isPending && !isEditing && (
-                    <span className="shrink-0 text-xs text-amber-600 dark:text-amber-400 font-medium">Pending</span>
+                    <span className="shrink-0 text-xs text-amber-600 dark:text-amber-400 font-medium">In afwachting</span>
                   )}
                   {isFreelancer && !isEditing ? (
                     <Input

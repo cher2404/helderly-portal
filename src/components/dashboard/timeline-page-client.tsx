@@ -37,9 +37,9 @@ export function TimelinePageClient({
 
       {isFreelancer && projects.length > 1 && (
         <div className="flex flex-wrap gap-2">
-          <label className="text-sm text-zinc-400 self-center">Project:</label>
+          <label className="text-sm text-zinc-500 dark:text-zinc-400 self-center">Project:</label>
           <select
-            className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-zinc-100"
+            className="rounded-xl border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800/50 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100"
             value={selectedProject?.id ?? ""}
             onChange={(e) => router.push(`/dashboard/timeline?project=${e.target.value}`)}
           >
@@ -51,11 +51,11 @@ export function TimelinePageClient({
       )}
 
       {!selectedProject ? (
-        <Card className="rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-xl">
+        <Card className="rounded-2xl border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/30 backdrop-blur-xl">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <Inbox className="h-14 w-14 text-zinc-500 mb-4" />
-            <p className="text-zinc-400 font-medium">Geen project geselecteerd</p>
-            <p className="text-sm text-zinc-500 mt-1">
+            <Inbox className="h-14 w-14 text-zinc-500 dark:text-zinc-600 mb-4" />
+            <p className="text-zinc-700 dark:text-zinc-400 font-medium">Geen project geselecteerd</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-500 mt-1 max-w-sm">
               {isFreelancer ? "Maak een project aan via het dashboard. Daarna kun je mijlpalen en voortgang bijhouden." : "You don’t have a project yet."}
             </p>
             {isFreelancer && (

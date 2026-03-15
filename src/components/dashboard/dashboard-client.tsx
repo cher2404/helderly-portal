@@ -77,27 +77,27 @@ export function DashboardClient({
             {primaryProject ? (
               <>
                 <div className="flex justify-between text-sm">
-                  <span className="text-zinc-400">{primaryProject.name}</span>
-                  <span className="text-zinc-300">
+                  <span className="text-zinc-500 dark:text-zinc-400">{primaryProject.name}</span>
+                  <span className="text-zinc-700 dark:text-zinc-300">
                     {primaryProject.progress_percentage}%
                   </span>
                 </div>
-                <div className="h-2 rounded-full bg-zinc-800 overflow-hidden">
+                <div className="h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-zinc-100 transition-all duration-500"
+                    className="h-full rounded-full bg-[var(--primary-accent)] dark:bg-zinc-100 transition-all duration-500"
                     style={{
                       width: `${primaryProject.progress_percentage}%`,
                     }}
                   />
                 </div>
-                <p className="text-xs text-zinc-500 capitalize">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 capitalize">
                   Status: {primaryProject.status}
                 </p>
               </>
             ) : (
               <div className="space-y-2">
-                <p className="text-sm text-zinc-400">
-                  {isAdmin
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    {isAdmin
                     ? "Nog geen projecten. Start je eerste project via de timeline."
                     : "Nog geen projecten. Je freelancer nodigt je uit voor een project."}
                 </p>
@@ -136,7 +136,7 @@ export function DashboardClient({
           <CardContent className="pt-0">
             {recentAssets.length === 0 ? (
               <div className="flex flex-col items-center gap-2 py-4 text-center">
-                <p className="text-sm text-zinc-400">Nog geen bestanden. Documenten van je projecten verschijnen hier.</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">Nog geen bestanden. Documenten van je projecten verschijnen hier.</p>
                 <Link href={ROUTES.documents}>
                   <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-zinc-300">
                     Naar Documenten
@@ -148,9 +148,9 @@ export function DashboardClient({
                 {recentAssets.map((asset) => (
                   <li
                     key={asset.id}
-                    className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900/30 px-3 py-2"
+                    className="flex items-center justify-between rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 px-3 py-2"
                   >
-                    <span className="flex items-center gap-2 text-sm text-zinc-300 truncate">
+                    <span className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-300 truncate">
                       <FileText className="h-4 w-4 shrink-0 text-zinc-500" />
                       {asset.file_name}
                     </span>
@@ -158,7 +158,7 @@ export function DashboardClient({
                       href={asset.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-zinc-400 hover:text-zinc-50"
+                      className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
                     >
                       <Download className="h-4 w-4" />
                     </a>

@@ -3,20 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import {
-  LayoutDashboard,
-  Calendar,
-  FileText,
-  MessageSquare,
-  Settings,
-  Menu,
-  X,
-  FolderKanban,
-  Inbox,
-  Users,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { Menu, X, FolderKanban, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -29,31 +16,11 @@ import { TrialBanner } from "./trial-banner";
 import { PaywallOverlay } from "./paywall-overlay";
 import { NotificationsBell } from "./notifications-bell";
 import { WelcomeModal } from "./welcome-modal";
-import { Tooltip } from "@/components/ui/tooltip";
 import { Breadcrumbs } from "./breadcrumbs";
+import { DashboardTabs } from "./dashboard-tabs";
 import { isTrialActive } from "@/lib/trial";
 import type { Notification } from "@/lib/database.types";
 import { PreviewModeProvider, usePreviewMode } from "@/contexts/preview-mode-context";
-
-const globalNav = [
-  { href: ROUTES.dashboard, label: "Dashboard", icon: LayoutDashboard },
-  { href: ROUTES.clients, label: "Klanten", icon: Users },
-  { href: ROUTES.settings, label: "Instellingen", icon: Settings },
-];
-
-const projectNav = [
-  { href: ROUTES.timeline, label: "Timeline", icon: Calendar },
-  { href: ROUTES.documents, label: "Documenten", icon: FileText },
-  { href: ROUTES.messages, label: "Feedback", icon: MessageSquare },
-];
-
-const customerNav = [
-  { href: ROUTES.dashboard, label: "Mijn project", icon: Inbox },
-  { href: ROUTES.timeline, label: "Timeline", icon: Calendar },
-  { href: ROUTES.documents, label: "Bestanden", icon: FileText },
-  { href: ROUTES.messages, label: "Feedback", icon: MessageSquare },
-  { href: ROUTES.settings, label: "Instellingen", icon: Settings },
-];
 
 function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
@@ -92,18 +59,6 @@ export function DashboardShell({ profile, initialProjects, initialNotifications,
   const isProjectPage = pathname.startsWith("/dashboard/project/");
   const currentProjectId = isProjectPage ? pathname.split("/").pop() ?? null : null;
 
-  const navSections = isFreelancer
-    ? [
-        { title: null, items: globalNav },
-        { title: "Project", items: projectNav },
-      ]
-    : [{ title: null, items: customerNav }];
-
-  const isActive = (href: string) => {
-    if (href === ROUTES.dashboard) return pathname === href || isProjectPage;
-    return pathname === href || (href !== ROUTES.dashboard && pathname.startsWith(href));
-  };
-
   return (
     <PreviewModeProvider>
       <DashboardShellInner
@@ -115,8 +70,6 @@ export function DashboardShell({ profile, initialProjects, initialNotifications,
         setMobileOpen={setMobileOpen}
         isFreelancer={isFreelancer}
         currentProjectId={currentProjectId}
-        navSections={navSections}
-        isActive={isActive}
       >
         {children}
       </DashboardShellInner>
@@ -133,8 +86,6 @@ function DashboardShellInner({
   setMobileOpen,
   isFreelancer,
   currentProjectId,
-  navSections,
-  isActive,
   children,
 }: {
   profile: Profile;
@@ -145,8 +96,6 @@ function DashboardShellInner({
   setMobileOpen: (v: boolean) => void;
   isFreelancer: boolean;
   currentProjectId: string | null;
-  navSections: { title: string | null; items: Array<{ href: string; label: string; icon: React.ComponentType<{ className?: string }> }> }[];
-  isActive: (href: string) => boolean;
   children: React.ReactNode;
 }) {
   const { isPreviewMode } = usePreviewMode();
@@ -233,37 +182,7 @@ function DashboardShellInner({
           </div>
         )}
 
-        <nav className="flex-1 p-3 space-y-1 overflow-auto">
-          {navSections.map(({ title, items }) => (
-            <div key={title ?? "main"}>
-              {title && (
-                <p className="px-3 pt-3 pb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  {title}
-                </p>
-              )}
-              {items.map(({ href, label, icon: Icon }) => {
-                const active = isActive(href);
-                return (
-                  <Tooltip key={href} content={label} side="right">
-                    <Link
-                      href={href}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
-                        active
-                          ? "nav-active-neon"
-                          : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
-                      )}
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {label}
-                    </Link>
-                  </Tooltip>
-                );
-              })}
-            </div>
-          ))}
-        </nav>
+        <div className="flex-1 overflow-auto" />
         <div className="p-3 border-t border-zinc-200/80 dark:border-zinc-600/20 space-y-2">
           {isFreelancer && profile.slug && (
             <Link
@@ -294,6 +213,7 @@ function DashboardShellInner({
         <TrialBanner profile={profile} />
         <div className="flex-1 p-5 sm:p-6 lg:p-8">
           <Breadcrumbs />
+          <DashboardTabs isFreelancer={isFreelancer} />
           {children}
         </div>
       </main>

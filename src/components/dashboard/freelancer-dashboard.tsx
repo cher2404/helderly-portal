@@ -179,7 +179,7 @@ export function FreelancerDashboard({
               </div>
             ) : (
               <ul className="space-y-2">
-                {projects.map((project) => {
+                {filteredProjects.map((project) => {
                   const nextMeeting = nextByProject.get(project.id);
                   return (
                     <li key={project.id}>

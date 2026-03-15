@@ -30,6 +30,7 @@ import { PaywallOverlay } from "./paywall-overlay";
 import { NotificationsBell } from "./notifications-bell";
 import { WelcomeModal } from "./welcome-modal";
 import { Tooltip } from "@/components/ui/tooltip";
+import { Breadcrumbs } from "./breadcrumbs";
 import { isTrialActive } from "@/lib/trial";
 import type { Notification } from "@/lib/database.types";
 import { PreviewModeProvider, usePreviewMode } from "@/contexts/preview-mode-context";

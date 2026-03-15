@@ -24,8 +24,9 @@ export default async function DashboardLayout({
     <AccentWrapper accentColor={profile.accent_color}>
       <ThemeSync theme={profile.theme} />
       <div className="premium-dashboard min-h-screen font-sans antialiased">
-        <ErrorBoundary>
-          <DashboardShell
+        <BreadcrumbProvider>
+          <ErrorBoundary>
+            <DashboardShell
             profile={profile}
             initialProjects={projects}
             initialNotifications={notifications}

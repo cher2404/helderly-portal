@@ -87,3 +87,4 @@ Als je op een eigen server (VPS) wilt draaien in plaats van Vercel:
 3. In nginx of bij je DNS: **helderly.io** laten wijzen naar deze server.
 
 Voor een snelle en stabiele start is Vercel het makkelijkst; de **code** is hetzelfde, je krijgt hem op helderly.io door het domein in Vercel te koppelen.
+

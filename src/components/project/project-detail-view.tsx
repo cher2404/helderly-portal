@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   DndContext,
@@ -55,10 +56,11 @@ import type {
 } from "@/lib/database.types";
 import type { ProjectHealthStatus } from "@/lib/database.types";
 import { ProjectLayoutProvider, useProjectLayout } from "./project-layout-provider";
-import { ProjectPageTabs } from "./project-page-tabs";
+import { ProjectPageTabs, getProjectTab } from "./project-page-tabs";
+import { ProjectDashboardKpi } from "./project-dashboard-kpi";
 import { SortableDashboardWidget, renderWidgetContent, type ProjectWidgetPropsWithSetProject } from "./project-dashboard-widgets";
 import { WidgetGallery } from "./widget-gallery";
-import type { WidgetId } from "@/lib/project-widgets";
+import { WIDGET_META, type WidgetId } from "@/lib/project-widgets";
 import { usePreviewMode } from "@/contexts/preview-mode-context";
 
 type Props = {
@@ -104,6 +106,8 @@ export function ProjectDetailView({
 
   const supabase = useMemo(() => createClient(), []);
   const isFreelancer = profile.role === "admin";
+  const searchParams = useSearchParams();
+  const projectTab = getProjectTab(searchParams);
 
   const closeModal = useCallback(() => {
     setModal(null);
@@ -153,7 +157,7 @@ export function ProjectDetailView({
       initialLayoutConfig={project.layout_config ?? null}
       isFreelancer={isFreelancer}
     >
-      <ProjectPageTabs projectId={initialProject.id} />
+      <ProjectPageTabs projectId={initialProject.id} isFreelancer={isFreelancer} />
       <ProjectDetailContent
         initialProject={initialProject}
         project={project}
@@ -180,6 +184,7 @@ export function ProjectDetailView({
         setTemplateName={setTemplateName}
         isFreelancer={isFreelancer}
         closeModal={closeModal}
+        projectTab={projectTab}
       />
     </ProjectLayoutProvider>
   );
@@ -211,6 +216,7 @@ function ProjectDetailContent({
   setTemplateName,
   isFreelancer,
   closeModal,
+  projectTab,
 }: {
   initialProject: Project;
   project: Project;
@@ -237,9 +243,22 @@ function ProjectDetailContent({
   setTemplateName: React.Dispatch<React.SetStateAction<string>>;
   isFreelancer: boolean;
   closeModal: () => void;
+  projectTab: string;
 }) {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteSending, setInviteSending] = useState(false);
+  const tabToWidgetId: Record<string, WidgetId> = {
+    milestones: "milestones",
+    decisions: "decisions",
+    meetings: "meetings",
+    budget: "budget_clarity",
+    faq: "faq",
+    contact: "contact_history",
+    scratchpad: "scratchpad",
+  };
+  const widgetIdForTab = tabToWidgetId[projectTab];
+  const isDashboardView = projectTab === "dashboard";
+  const isSingleWidgetView = widgetIdForTab != null;
   const {
     editMode,
     setEditMode,
@@ -397,7 +416,7 @@ function ProjectDetailContent({
               <kbd className="rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700/50 px-1.5 py-0.5 font-mono text-zinc-700 dark:text-zinc-300 shadow-sm">N</kbd>
               <span>quick new</span>
             </span>
-            {!isPreviewMode && (
+            {!isPreviewMode && !isDashboardView && !isSingleWidgetView && (
               <Button
                 variant={effectiveEditMode ? "secondary" : "outline"}
                 size="sm"
@@ -408,7 +427,7 @@ function ProjectDetailContent({
                 Edit layout
               </Button>
             )}
-            {effectiveEditMode && (
+            {effectiveEditMode && !isDashboardView && !isSingleWidgetView && (
               <>
                 <Button variant="outline" size="sm" className="rounded-[12px]" onClick={resetLayout}>
                   <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
@@ -425,7 +444,7 @@ function ProjectDetailContent({
                 )}
               </>
             )}
-            {!isPreviewMode && (
+            {!isPreviewMode && !isDashboardView && (
               <>
                 <Button variant="outline" size="sm" className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]" onClick={() => { setModal("contact"); setError(null); }}>
                   <Phone className="h-3.5 w-3.5 mr-1.5" />
@@ -631,37 +650,73 @@ function ProjectDetailContent({
 
       <WidgetGallery isOpen={galleryOpen} onClose={() => setGalleryOpen(false)} />
 
-      {/* Modular widget grid */}
-      <div
-        className={`relative rounded-[12px] transition-colors ${effectiveEditMode ? "min-h-[400px] bg-zinc-100 dark:bg-zinc-500/5" : ""}`}
-      >
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
+      {/* Dashboard: alleen KPI's; andere tabs: één invul-sectie */}
+      {isDashboardView && (
+        <ProjectDashboardKpi
+          projectId={initialProject.id}
+          project={project}
+          stages={stages}
+          appointments={appointments}
+          contactLogs={contactLogs}
+          assets={assets}
+          decisions={decisions}
+          faqs={faqs}
+          isFreelancer={isFreelancer}
+        />
+      )}
+
+      {isSingleWidgetView && (
+        <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 overflow-hidden">
+          <div className="border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex items-center justify-between gap-2">
+            <div>
+              <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">{WIDGET_META[widgetIdForTab].label}</h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{WIDGET_META[widgetIdForTab].description}</p>
+            </div>
+            {projectTab === "contact" && isFreelancer && (
+              <Button variant="outline" size="sm" className="rounded-lg" onClick={() => { setModal("contact"); setError(null); }}>
+                <Phone className="h-4 w-4 mr-1.5" />
+                Log contact
+              </Button>
+            )}
+          </div>
+          <div className="p-4">
+            {renderWidgetContent(widgetIdForTab, widgetProps)}
+          </div>
+        </div>
+      )}
+
+      {!isDashboardView && !isSingleWidgetView && (
+        <div
+          className={`relative rounded-[12px] transition-colors ${effectiveEditMode ? "min-h-[400px] bg-zinc-100 dark:bg-zinc-500/5" : ""}`}
         >
-          <SortableContext
-            items={visibleWidgetsFiltered.map((w) => w.id)}
-            strategy={verticalListSortingStrategy}
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            <LayoutGroup>
-              <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {visibleWidgetsFiltered.map((widget, index) => (
-                  <motion.div key={widget.id} layout transition={{ type: "spring", stiffness: 350, damping: 30 }}>
-                    <SortableDashboardWidget
-                      widgetId={widget.id as WidgetId}
-                      index={index}
-                      isSortable={isFreelancer && !isPreviewMode}
-                    >
-                      {renderWidgetContent(widget.id as WidgetId, widgetProps)}
-                    </SortableDashboardWidget>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </LayoutGroup>
-          </SortableContext>
-        </DndContext>
-      </div>
+            <SortableContext
+              items={visibleWidgetsFiltered.map((w) => w.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <LayoutGroup>
+                <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {visibleWidgetsFiltered.map((widget, index) => (
+                    <motion.div key={widget.id} layout transition={{ type: "spring", stiffness: 350, damping: 30 }}>
+                      <SortableDashboardWidget
+                        widgetId={widget.id as WidgetId}
+                        index={index}
+                        isSortable={isFreelancer && !isPreviewMode}
+                      >
+                        {renderWidgetContent(widget.id as WidgetId, widgetProps)}
+                      </SortableDashboardWidget>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </LayoutGroup>
+            </SortableContext>
+          </DndContext>
+        </div>
+      )}
     </div>
   );
 }

@@ -55,6 +55,7 @@ import type {
 } from "@/lib/database.types";
 import type { ProjectHealthStatus } from "@/lib/database.types";
 import { ProjectLayoutProvider, useProjectLayout } from "./project-layout-provider";
+import { ProjectPageTabs } from "./project-page-tabs";
 import { SortableDashboardWidget, renderWidgetContent, type ProjectWidgetPropsWithSetProject } from "./project-dashboard-widgets";
 import { WidgetGallery } from "./widget-gallery";
 import type { WidgetId } from "@/lib/project-widgets";
@@ -152,6 +153,7 @@ export function ProjectDetailView({
       initialLayoutConfig={project.layout_config ?? null}
       isFreelancer={isFreelancer}
     >
+      <ProjectPageTabs projectId={initialProject.id} />
       <ProjectDetailContent
         initialProject={initialProject}
         project={project}

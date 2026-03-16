@@ -58,7 +58,7 @@ export function FreelancerDashboard({
           Dashboard
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-          Overzicht van je projecten, acties en recente bestanden.
+          Overzicht van alle lopende projecten, acties en recente bestanden.
         </p>
       </div>
 

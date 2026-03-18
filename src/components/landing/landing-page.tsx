@@ -43,7 +43,14 @@ export function LandingPage() {
       {/* Top nav: direct naar Dashboard / Inloggen */}
       <nav className="sticky top-0 z-50 border-b border-zinc-800/80 bg-zinc-950/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
-          <span className="text-sm font-medium text-zinc-400">Helderly</span>
+          <Link href={ROUTES.home} className="flex items-center gap-2.5">
+            <div className="animate-logo-icon w-7 h-7 bg-[#6366f1] rounded-[7px] flex flex-col justify-center px-1.5 gap-1 shrink-0">
+              <span className="block h-[2.5px] w-full bg-white rounded-full" />
+              <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
+              <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
+            </div>
+            <span className="animate-logo-word text-sm font-semibold text-zinc-100">Helderly</span>
+          </Link>
           <div className="flex items-center gap-3">
             <Link
               href={ROUTES.login}
@@ -86,8 +93,8 @@ export function LandingPage() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed"
           >
-            The minimalist client portal for freelancers who value their brand.
-            Stop the email chaos and start professionalizing your workflow.
+            The minimalist client portal for freelancers who value their brand. Stop the email chaos and start
+            professionalizing your workflow.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -122,11 +129,10 @@ export function LandingPage() {
                   <span className="w-3 h-3 rounded-full bg-zinc-600" />
                 </div>
                 <div className="flex-1 flex justify-center">
-                  <span className="text-xs text-zinc-500 font-mono">
-                    app.helderly.io/dashboard
-                  </span>
+                  <span className="text-xs text-zinc-500 font-mono">app.helderly.io/dashboard</span>
                 </div>
               </div>
+
               {/* Mock dashboard content */}
               <div className="flex min-h-[280px] sm:min-h-[320px]">
                 <aside className="hidden sm:flex w-48 border-r border-zinc-800 bg-zinc-900/30 p-4 flex-col gap-2">
@@ -177,12 +183,8 @@ export function LandingPage() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">
-            Built for clarity
-          </h2>
-          <p className="mt-3 text-zinc-400 max-w-xl mx-auto">
-            Everything your clients need, without the noise.
-          </p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">Built for clarity</h2>
+          <p className="mt-3 text-zinc-400 max-w-xl mx-auto">Everything your clients need, without the noise.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -198,12 +200,8 @@ export function LandingPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06] text-zinc-300 group-hover:text-zinc-50 transition-colors">
                 <feature.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 text-lg font-semibold text-zinc-50">
-                {feature.title}
-              </h3>
-              <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="mt-4 text-lg font-semibold text-zinc-50">{feature.title}</h3>
+              <p className="mt-2 text-sm text-zinc-400 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>
@@ -218,15 +216,9 @@ export function LandingPage() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest mb-2">
-            For Freelancers
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">
-            Why Helderly?
-          </h2>
-          <p className="mt-3 text-zinc-400 max-w-xl mx-auto">
-            Stop juggling tools. Give clients one place that makes you look pro and keeps projects moving.
-          </p>
+          <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest mb-2">For Freelancers</p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">Why Helderly?</h2>
+          <p className="mt-3 text-zinc-400 max-w-xl mx-auto">Stop juggling tools. Give clients one place that makes you look pro and keeps projects moving.</p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -240,13 +232,10 @@ export function LandingPage() {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-800 text-amber-400/90">
               <Sparkles className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">
-              Look 10x more professional
-            </h3>
-            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-              Stop sending Drive links. Give your clients a branded experience with your logo, your colors, and one clear portal.
-            </p>
+            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">Look 10x more professional</h3>
+            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">Stop sending Drive links. Give your clients a branded experience with your logo, your colors, and one clear portal.</p>
           </motion.div>
+
           <motion.div
             className="relative rounded-[12px] border border-zinc-800 bg-zinc-900/50 p-6 sm:p-8 transition-all duration-300 hover:border-zinc-700 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
             initial={{ opacity: 0, y: 24 }}
@@ -257,13 +246,10 @@ export function LandingPage() {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-800 text-emerald-400/90">
               <CheckCircle2 className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">
-              Get approvals faster
-            </h3>
-            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-              Use the integrated approval workflow so clients can approve or request revisions in one click. No more chasing sign-offs.
-            </p>
+            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">Get approvals faster</h3>
+            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">Use the integrated approval workflow so clients can approve or request revisions in one click. No more chasing sign-offs.</p>
           </motion.div>
+
           <motion.div
             className="relative rounded-[12px] border border-zinc-800 bg-zinc-900/50 p-6 sm:p-8 transition-all duration-300 hover:border-zinc-700 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.03)]"
             initial={{ opacity: 0, y: 24 }}
@@ -274,12 +260,8 @@ export function LandingPage() {
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-800 text-violet-400/90">
               <BellOff className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">
-              Silence the &quot;Status?&quot; emails
-            </h3>
-            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-              Your clients can see progress in real time, 24/7. Timeline, files, and milestones in one place—so you spend less time on updates.
-            </p>
+            <h3 className="mt-4 text-lg font-semibold text-zinc-50 tracking-tight">Silence the &quot;Status?&quot; emails</h3>
+            <p className="mt-2 text-sm text-zinc-400 leading-relaxed">Your clients can see progress in real time, 24/7. Timeline, files, and milestones in one place—so you spend less time on updates.</p>
           </motion.div>
         </div>
       </section>
@@ -293,12 +275,8 @@ export function LandingPage() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">
-            The difference
-          </h2>
-          <p className="mt-3 text-zinc-400 max-w-lg mx-auto">
-            Same work. Less chaos. One portal.
-          </p>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-zinc-50 tracking-tight">The difference</h2>
+          <p className="mt-3 text-zinc-400 max-w-lg mx-auto">Same work. Less chaos. One portal.</p>
         </motion.div>
 
         <motion.div
@@ -315,25 +293,31 @@ export function LandingPage() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-800 text-zinc-500">
                   <X className="h-4 w-4" />
                 </div>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">
-                  The Old Way
-                </h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">The Old Way</h3>
               </div>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3 text-sm text-zinc-400">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-600" />
-                  <span><strong className="text-zinc-300">Email chaos</strong> — Threads, forwards, and &quot;which version?&quot;</span>
+                  <span>
+                    <strong className="text-zinc-300">Email chaos</strong> — Threads, forwards, and &quot;which
+                    version?&quot;
+                  </span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-zinc-400">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-600" />
-                  <span><strong className="text-zinc-300">Lost files</strong> — Drive links, Dropbox, WeTransfer. Nothing in one place.</span>
+                  <span>
+                    <strong className="text-zinc-300">Lost files</strong> — Drive links, Dropbox, WeTransfer. Nothing in one place.
+                  </span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-zinc-400">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-zinc-600" />
-                  <span><strong className="text-zinc-300">Manual updates</strong> — Screenshots, status emails, and &quot;Status?&quot; pings.</span>
+                  <span>
+                    <strong className="text-zinc-300">Manual updates</strong> — Screenshots, status emails, and &quot;Status?&quot; pings.
+                  </span>
                 </li>
               </ul>
             </div>
+
             {/* The Helderly Way */}
             <div className="p-6 sm:p-8 bg-zinc-800/20 border-t sm:border-t-0 sm:border-l border-zinc-800">
               <div className="flex items-center gap-2 mb-6">
@@ -349,19 +333,25 @@ export function LandingPage() {
                   <span className="mt-1.5 flex h-1.5 w-1.5 shrink-0 items-center justify-center rounded-full bg-emerald-500/50">
                     <Check className="h-2.5 w-2.5 text-emerald-400" />
                   </span>
-                  <span><strong className="text-zinc-50">One portal</strong> — Client logs in, sees everything. No digging through inbox.</span>
+                  <span>
+                    <strong className="text-zinc-50">One portal</strong> — Client logs in, sees everything. No digging through inbox.
+                  </span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-zinc-300">
                   <span className="mt-1.5 flex h-1.5 w-1.5 shrink-0 items-center justify-center rounded-full bg-emerald-500/50">
                     <Check className="h-2.5 w-2.5 text-emerald-400" />
                   </span>
-                  <span><strong className="text-zinc-50">Approved assets</strong> — One-click approve or request revision. Clear audit trail.</span>
+                  <span>
+                    <strong className="text-zinc-50">Approved assets</strong> — One-click approve or request revision. Clear audit trail.
+                  </span>
                 </li>
                 <li className="flex items-start gap-3 text-sm text-zinc-300">
                   <span className="mt-1.5 flex h-1.5 w-1.5 shrink-0 items-center justify-center rounded-full bg-emerald-500/50">
                     <Check className="h-2.5 w-2.5 text-emerald-400" />
                   </span>
-                  <span><strong className="text-zinc-50">Clear timeline</strong> — Real-time progress, milestones, and meetings. 24/7 visibility.</span>
+                  <span>
+                    <strong className="text-zinc-50">Clear timeline</strong> — Real-time progress, milestones, and meetings. 24/7 visibility.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -378,9 +368,7 @@ export function LandingPage() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest">
-            Trusted by independent creators
-          </p>
+          <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest">Trusted by independent creators</p>
           <div className="mt-4 flex flex-wrap justify-center gap-x-10 gap-y-2 text-zinc-500 text-sm">
             <span>Freelance designers</span>
             <span>•</span>
@@ -401,9 +389,7 @@ export function LandingPage() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-semibold text-zinc-50">
-            Ready to simplify client work?
-          </h2>
+          <h2 className="text-2xl font-semibold text-zinc-50">Ready to simplify client work?</h2>
           <p className="mt-2 text-zinc-400">Join the waitlist. No spam, ever.</p>
           <Link
             href={ROUTES.signUp}
@@ -417,7 +403,12 @@ export function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-zinc-800/80 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-6 h-6 bg-[#6366f1] rounded-[6px] flex flex-col justify-center px-1.5 gap-[3px] shrink-0">
+              <span className="block h-[2px] w-full bg-white rounded-full" />
+              <span className="block h-[2px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
+              <span className="block h-[2px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
+            </div>
             <span className="text-zinc-50 font-medium">Helderly</span>
             <span className="text-zinc-600">·</span>
             <span className="text-sm text-zinc-500">by Conexy</span>
@@ -444,3 +435,4 @@ export function LandingPage() {
     </div>
   );
 }
+

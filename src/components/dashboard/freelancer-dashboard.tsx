@@ -76,13 +76,15 @@ export function FreelancerDashboard({
           {pendingAssetsCount > 0 && (
             <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
               <FileText className="h-4 w-4 shrink-0" />
-              <strong>{pendingAssetsCount}</strong> {pendingAssetsCount === 1 ? "bestand" : "bestanden"} wachten op goedkeuring
+              <strong>{pendingAssetsCount}</strong>{" "}
+              {pendingAssetsCount === 1 ? "bestand" : "bestanden"} wachten op goedkeuring
             </span>
           )}
           {meetingsTodayCount > 0 && (
             <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
               <Calendar className="h-4 w-4 shrink-0" />
-              <strong>{meetingsTodayCount}</strong> {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
+              <strong>{meetingsTodayCount}</strong>{" "}
+              {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
             </span>
           )}
         </div>
@@ -281,9 +283,6 @@ export function FreelancerDashboard({
           onClose={() => setShowCreateModal(false)}
           title="Nieuw project aanmaken"
         >
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
-            Nieuw project aanmaken
-          </h2>
           <ProjectBuilderForm
             templates={initialTemplates}
             onSuccess={() => setShowCreateModal(false)}
@@ -293,3 +292,4 @@ export function FreelancerDashboard({
     </div>
   );
 }
+

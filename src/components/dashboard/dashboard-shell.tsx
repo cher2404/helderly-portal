@@ -145,6 +145,11 @@ function DashboardShellInner({
   children: React.ReactNode;
 }) {
   const { isPreviewMode } = usePreviewMode();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname, setMobileOpen]);
 
   return (
     <>
@@ -287,7 +292,7 @@ function DashboardShellInner({
 
       <main className="lg:pl-56 min-h-screen pt-14 lg:pt-0 flex flex-col">
         <TrialBanner profile={profile} />
-        <div className="flex-1 p-5 sm:p-6 lg:p-8">
+        <div className="flex-1 p-5 sm:p-6 lg:p-8 max-w-6xl">
           <Breadcrumbs />
           {children}
         </div>

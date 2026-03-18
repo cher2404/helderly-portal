@@ -42,19 +42,19 @@ export function WelcomeModal({ profile }: { profile: Profile }) {
           >
             <div className="flex items-center gap-3 text-[var(--primary-accent)] mb-4">
               <Sparkles className="h-8 w-8" />
-              <h2 className="text-lg font-semibold text-zinc-100">Welcome to Helderly</h2>
+              <h2 className="text-lg font-semibold text-zinc-100">Welkom bij Helderly</h2>
             </div>
             <p className="text-sm text-zinc-400 mb-4">
-              Create your first project, add milestones, and invite your client. They’ll get a magic link to view progress and give feedback.
+              Maak je eerste project aan, voeg milestones toe en nodig je klant uit. Je klant krijgt een magic link om de voortgang te volgen en feedback te geven.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <Link href={ROUTES.dashboard}>
                 <Button onClick={dismiss} className="w-full sm:w-auto bg-[var(--primary-accent)] text-white hover:opacity-90">
-                  Go to Dashboard
+                  Naar dashboard
                 </Button>
               </Link>
               <Button variant="ghost" size="sm" onClick={dismiss} className="text-zinc-400">
-                Dismiss
+                Sluiten
               </Button>
             </div>
           </motion.div>

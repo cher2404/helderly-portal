@@ -129,12 +129,12 @@ export function DocumentsClient({
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          {isAdmin ? "Documents" : "Files"}
+          {isAdmin ? "Documenten" : "Bestanden"}
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           {isAdmin
-            ? "Upload files and share them with your client."
-            : "View and download files shared with you."}
+            ? "Upload bestanden en deel ze met je klant."
+            : "Bekijk en download alle projectbestanden."}
         </p>
       </div>
 
@@ -175,9 +175,9 @@ export function DocumentsClient({
           {isAdmin && selectedProjectId && (
             <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl">
               <CardHeader>
-                <CardTitle className="text-base">Upload file</CardTitle>
+                <CardTitle className="text-base">Bestand uploaden</CardTitle>
                 <CardDescription>
-                  Free: max 5MB. Pro: up to 100MB.{" "}
+                  Gratis: max 5MB. Pro: tot 100MB.{" "}
                   {!isPro && (
                     <Link href={ROUTES.pricing} className="text-zinc-300 hover:underline">Upgrade</Link>
                   )}
@@ -189,7 +189,7 @@ export function DocumentsClient({
                     <Input type="file" className="cursor-pointer rounded-xl border-white/10 bg-white/[0.04]" />
                   </div>
                   <Button type="submit" disabled={uploading} className="rounded-xl bg-[var(--primary-accent)] hover:opacity-90">
-                    {uploading ? "Uploading…" : "Upload"}
+                    {uploading ? "Uploaden…" : "Upload"}
                   </Button>
                 </form>
                 {uploadError && <p className="mt-2 text-sm text-red-400">{uploadError}</p>}
@@ -199,8 +199,8 @@ export function DocumentsClient({
 
           <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03]">
             <CardHeader>
-              <CardTitle className="text-zinc-900 dark:text-zinc-50">Asset grid</CardTitle>
-              <CardDescription>Click to open or download. {!isAdmin && "Use Approve or Request Revision to give feedback."}</CardDescription>
+              <CardTitle className="text-zinc-900 dark:text-zinc-50">Bestanden</CardTitle>
+              <CardDescription>Klik om te openen of te downloaden. Gebruik Goedkeuren of Revisie aanvragen om feedback te geven.</CardDescription>
             </CardHeader>
             <CardContent>
               {assets.length === 0 ? (

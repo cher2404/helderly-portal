@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Plus, LayoutTemplate } from "lucide-react";
 import { createProject } from "@/app/actions/projects";
 import type { Template } from "@/lib/database.types";
+import { cn } from "@/lib/utils";
 
 type Props = { templates?: Template[] };
 
@@ -15,6 +16,7 @@ export function ProjectBuilderForm({ templates = [] }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [templateId, setTemplateId] = useState<string>("");
+  const [isPending, startTransition] = useTransition();
 
   return (
     <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
@@ -29,17 +31,23 @@ export function ProjectBuilderForm({ templates = [] }: Props) {
       </CardHeader>
       <CardContent>
         <form
-          action={async (formData) => {
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formEl = e.currentTarget;
+            const formData = new FormData(formEl);
             setError(null);
             setSuccess(false);
             if (templateId) formData.set("template_id", templateId);
-            const result = await createProject(formData);
-            if (result.error) {
-              setError(result.error);
-              return;
-            }
-            setSuccess(true);
-            setTemplateId("");
+            startTransition(async () => {
+              const result = await createProject(formData);
+              if (result.error) {
+                setError(result.error);
+                return;
+              }
+              setSuccess(true);
+              setTemplateId("");
+              formEl.reset();
+            });
           }}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
         >
@@ -97,9 +105,13 @@ export function ProjectBuilderForm({ templates = [] }: Props) {
           <div className="flex items-end">
             <Button
               type="submit"
-              className="w-full rounded-xl bg-[var(--primary-accent)] hover:opacity-90"
+              disabled={isPending}
+              className={cn(
+                "w-full rounded-xl bg-[var(--primary-accent)] hover:opacity-90",
+                isPending && "opacity-50 cursor-not-allowed"
+              )}
             >
-              Create project
+              {isPending ? "Bezig..." : "Create project"}
             </Button>
           </div>
         </form>

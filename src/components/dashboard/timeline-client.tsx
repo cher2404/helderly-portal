@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Project, Profile } from "@/lib/database.types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +21,7 @@ export function TimelineClient({ initialProjects, profile }: Props) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [createError, setCreateError] = useState<string | null>(null);
   const [updateError, setUpdateError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const supabase = useMemo(() => createClient(), []);
   const isAdmin = profile?.role === "admin";
@@ -50,11 +51,13 @@ export function TimelineClient({ initialProjects, profile }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-zinc-50">Project Timeline</h1>
-        <p className="text-zinc-400 mt-1">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          Timeline
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           {isAdmin
-            ? "Create projects and update progress. Clients see updates in real time."
-            : "Steps to completion for your projects."}
+            ? "Voortgang en mijlpalen per project."
+            : "Voortgang en mijlpalen per project."}
         </p>
       </div>
 
@@ -68,10 +71,16 @@ export function TimelineClient({ initialProjects, profile }: Props) {
           </CardHeader>
           <CardContent>
             <form
-              action={async (formData) => {
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formEl = e.currentTarget;
+                const formData = new FormData(formEl);
                 setCreateError(null);
-                const result = await createProject(formData);
-                if (result.error) setCreateError(result.error);
+                startTransition(async () => {
+                  const result = await createProject(formData);
+                  if (result.error) setCreateError(result.error);
+                  else formEl.reset();
+                });
               }}
               className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
             >
@@ -112,7 +121,9 @@ export function TimelineClient({ initialProjects, profile }: Props) {
                 />
               </div>
               <div className="sm:col-span-2 lg:col-span-4">
-                <Button type="submit">Create project</Button>
+                <Button type="submit" disabled={isPending} className={isPending ? "opacity-50 cursor-not-allowed" : ""}>
+                  {isPending ? "Bezig..." : "Create project"}
+                </Button>
               </div>
             </form>
             {createError && (

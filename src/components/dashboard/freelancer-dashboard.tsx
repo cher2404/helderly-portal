@@ -4,12 +4,16 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { FolderOpen, FileText, Clock, Inbox, Calendar } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, projectSegment } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Project, Asset, Profile, Appointment, Template } from "@/lib/database.types";
 import { ProjectBuilderForm } from "./project-builder-form";
 import { StatusDot } from "@/components/ui/status-dot";
 import { Tooltip } from "@/components/ui/tooltip";
+
+function formatDate(dateStr: string): string {
+  return new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "short" }).format(new Date(dateStr));
+}
 
 type Props = {
   initialProjects: Project[];
@@ -102,12 +106,12 @@ export function FreelancerDashboard({
             </CardContent>
           </Card>
         </Tooltip>
-        <Tooltip content="Files awaiting approval">
+        <Tooltip content="Bestanden wachten op goedkeuring">
           <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
                 <FileText className="h-4 w-4" />
-                Pending approval
+                Wacht op goedkeuring
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -184,7 +188,7 @@ export function FreelancerDashboard({
                   return (
                     <li key={project.id}>
                       <Link
-                        href={ROUTES.project(project.id)}
+                        href={ROUTES.project(projectSegment(project))}
                         className="flex items-center justify-between gap-4 rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
                       >
                         <div className="flex items-center gap-3 min-w-0">
@@ -193,14 +197,24 @@ export function FreelancerDashboard({
                             <p className="font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-[var(--primary-accent)] truncate">
                               {project.name}
                             </p>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-2 mt-0.5">
-                              <span>{project.progress_percentage}%</span>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className="flex-1 h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full bg-[var(--primary-accent)] transition-all"
+                                  style={{ width: `${project.progress_percentage}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-zinc-500 dark:text-zinc-400 shrink-0 w-8 text-right">
+                                {project.progress_percentage}%
+                              </span>
+                            </div>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-2 mt-1">
                               {nextMeeting && (
                                 <>
                                   <span>·</span>
                                   <span className="flex items-center gap-1 truncate">
                                     <Calendar className="h-3 w-3 shrink-0" />
-                                    {nextMeeting.title} {nextMeeting.appointment_date}
+                                    {nextMeeting.title} {formatDate(nextMeeting.appointment_date)}
                                   </span>
                                 </>
                               )}
@@ -221,8 +235,8 @@ export function FreelancerDashboard({
       <section>
         <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
           <CardHeader>
-            <CardTitle className="text-zinc-900 dark:text-zinc-50">Recent uploads</CardTitle>
-            <CardDescription>Latest files across projects.</CardDescription>
+            <CardTitle className="text-zinc-900 dark:text-zinc-50">Recente uploads</CardTitle>
+            <CardDescription>Laatste bestanden over alle projecten.</CardDescription>
           </CardHeader>
           <CardContent>
             {recentAssets.length === 0 ? (

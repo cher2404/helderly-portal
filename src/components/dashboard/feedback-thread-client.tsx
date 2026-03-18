@@ -128,7 +128,7 @@ export function FeedbackThreadClient({
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Ask a question or leave feedback..."
+                  placeholder="Stel een vraag of geef feedback..."
                   className="flex-1 rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] px-4 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[var(--primary-accent)]/30"
                 />
                 <Button type="submit" disabled={sending} className="rounded-xl">

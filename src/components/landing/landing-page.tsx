@@ -76,7 +76,7 @@ export function LandingPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-zinc-50 leading-[1.1]"
+            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-zinc-50 leading-[1.1] hero-heading"
           >
             Give your clients the clarity they deserve.
           </motion.h1>

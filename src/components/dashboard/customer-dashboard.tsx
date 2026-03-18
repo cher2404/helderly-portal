@@ -36,7 +36,7 @@ export function CustomerDashboard({
 
       {projects.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-white/[0.04] p-8 mb-4">
+          <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-white/[0.04] p-8 mb-4">
             <Inbox className="h-16 w-16 text-zinc-400 dark:text-zinc-500" />
           </div>
           <p className="text-zinc-700 dark:text-zinc-400 font-medium text-lg">Nog geen project</p>
@@ -47,7 +47,7 @@ export function CustomerDashboard({
       ) : (
         <>
           <section className="grid gap-4 sm:grid-cols-2">
-            <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
+            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                   <FolderOpen className="h-4 w-4" />
@@ -61,7 +61,7 @@ export function CustomerDashboard({
                 </p>
               </CardContent>
             </Card>
-            <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
+            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                   <FileText className="h-4 w-4" />
@@ -76,7 +76,7 @@ export function CustomerDashboard({
           </section>
 
           <section>
-            <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl">
+            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl">
               <CardHeader>
                 <CardTitle className="text-zinc-900 dark:text-zinc-50">Projecten</CardTitle>
                 <CardDescription>Open een project om bestanden te bekijken en feedback te geven.</CardDescription>
@@ -87,7 +87,7 @@ export function CustomerDashboard({
                     <li key={project.id}>
                       <Link
                         href={ROUTES.project(projectSegment(project))}
-                        className="flex items-center justify-between gap-4 rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
+                        className="flex items-center justify-between gap-4 rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
                       >
                         <div className="min-w-0">
                           <p className="font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-[var(--primary-accent)] truncate">

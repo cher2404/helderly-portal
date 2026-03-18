@@ -94,7 +94,7 @@ export function FreelancerDashboard({
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Tooltip content="Actieve projecten">
-          <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
+          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                 <FolderOpen className="h-4 w-4" />
@@ -107,7 +107,7 @@ export function FreelancerDashboard({
           </Card>
         </Tooltip>
         <Tooltip content="Bestanden wachten op goedkeuring">
-          <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
+          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
                 <FileText className="h-4 w-4" />
@@ -120,7 +120,7 @@ export function FreelancerDashboard({
           </Card>
         </Tooltip>
         <Tooltip content="Totaal aantal projecten">
-          <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors sm:col-span-2 lg:col-span-1">
+          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors sm:col-span-2 lg:col-span-1">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
                 <Clock className="h-4 w-4" />
@@ -139,7 +139,7 @@ export function FreelancerDashboard({
       </section>
 
       <section>
-        <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
+        <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
           <CardHeader>
             <CardTitle className="text-zinc-900 dark:text-zinc-50">Jouw projecten</CardTitle>
             <CardDescription>Status, voortgang en volgende afspraak per project.</CardDescription>
@@ -153,7 +153,7 @@ export function FreelancerDashboard({
                     type="button"
                     onClick={() => setStatusFilter(key)}
                     className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                      "rounded-[12px] px-3 py-1.5 text-xs font-medium transition-colors",
                       statusFilter === key
                         ? "bg-[var(--primary-accent)] text-white"
                         : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
@@ -189,7 +189,7 @@ export function FreelancerDashboard({
                     <li key={project.id}>
                       <Link
                         href={ROUTES.project(projectSegment(project))}
-                        className="flex items-center justify-between gap-4 rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
+                        className="flex items-center justify-between gap-4 rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <StatusDot status={project.health_status ?? "on_track"} />
@@ -233,7 +233,7 @@ export function FreelancerDashboard({
       </section>
 
       <section>
-        <Card className="rounded-2xl border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
+        <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
           <CardHeader>
             <CardTitle className="text-zinc-900 dark:text-zinc-50">Recente uploads</CardTitle>
             <CardDescription>Laatste bestanden over alle projecten.</CardDescription>
@@ -249,7 +249,7 @@ export function FreelancerDashboard({
                 {recentAssets.slice(0, 5).map((asset) => (
                   <li
                     key={asset.id}
-                    className="flex items-center justify-between rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] px-4 py-2.5"
+                    className="flex items-center justify-between rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] px-4 py-2.5"
                   >
                     <span className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{asset.file_name}</span>
                     <a

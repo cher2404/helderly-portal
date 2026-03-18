@@ -43,7 +43,7 @@ export function LandingPage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative pt-16 pb-0 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto overflow-hidden">
+      <section className="relative pt-16 pb-0 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Orbs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
           <div className="absolute -top-32 -left-20 h-[400px] w-[400px] rounded-full bg-[#6366f1]/15 blur-[80px]" style={{ animation: "orbFloat1 8s ease-in-out infinite" }} />

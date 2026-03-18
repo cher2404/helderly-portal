@@ -73,21 +73,24 @@ export function FreelancerDashboard({
       {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
         <div
           className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-500/20 bg-amber-500/6 px-4 py-3 text-sm"
-          style={{ animation: "fade-in-up 0.5s ease-out 0.1s both" }}
+          style={{ animation: "slideInLeft 0.4s ease-out 0.1s both" }}
         >
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="animate-dot-pulse absolute h-2 w-2 rounded-full bg-amber-400 opacity-75" />
-            <span className="relative h-2 w-2 rounded-full bg-amber-400" />
+            <span
+              className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"
+              style={{ animation: "dotPing 1.5s ease-in-out infinite" }}
+            />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-400" />
           </span>
           {pendingAssetsCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-200">
+            <span className="flex items-center gap-2 text-amber-200 dark:text-amber-200">
               <FileText className="h-4 w-4 shrink-0" />
               <strong>{pendingAssetsCount}</strong>{" "}
               {pendingAssetsCount === 1 ? "bestand wacht" : "bestanden wachten"} op goedkeuring
             </span>
           )}
           {meetingsTodayCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-200">
+            <span className="flex items-center gap-2 text-amber-200 dark:text-amber-200">
               <Calendar className="h-4 w-4 shrink-0" />
               <strong>{meetingsTodayCount}</strong>{" "}
               {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
@@ -100,22 +103,22 @@ export function FreelancerDashboard({
         {/* Actieve projecten */}
         <Link
           href={ROUTES.dashboard}
-          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:-translate-y-0.5 hover:border-[var(--primary-accent)]/30 hover:bg-zinc-800/50 dark:border-white/[0.06] dark:bg-white/[0.03]"
-          style={{ animationDelay: "0.05s" }}
+          className="group relative overflow-hidden rounded-[14px] border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] p-5 transition-all hover:-translate-y-0.5 hover:border-[var(--primary-accent)]/30 hover:shadow-lg"
+          style={{ animation: "kpiCardIn 0.4s ease-out 0.05s both" }}
         >
           <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-[var(--primary-accent)]/15">
             <FolderOpen className="h-4 w-4 text-[var(--primary-accent)]" />
           </div>
           <p
-            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-            style={{ animationDelay: "0.3s" }}
+            className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animation: "kpiNumPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both" }}
           >
             {activeCount}
           </p>
           <p className="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Actieve projecten
           </p>
-          <span className="absolute right-4 top-4 text-zinc-700 dark:text-zinc-700 transition-all group-hover:text-[var(--primary-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+          <span className="absolute right-4 top-4 text-zinc-300 dark:text-zinc-700 transition-all group-hover:text-[var(--primary-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-sm">
             ↗
           </span>
         </Link>
@@ -123,37 +126,37 @@ export function FreelancerDashboard({
         {/* Wacht op goedkeuring */}
         <Link
           href={ROUTES.documents}
-          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:-translate-y-0.5 hover:border-amber-500/30 hover:bg-zinc-800/50 dark:border-white/[0.06] dark:bg-white/[0.03]"
-          style={{ animationDelay: "0.12s" }}
+          className="group relative overflow-hidden rounded-[14px] border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] p-5 transition-all hover:-translate-y-0.5 hover:border-amber-500/30 hover:shadow-lg"
+          style={{ animation: "kpiCardIn 0.4s ease-out 0.12s both" }}
         >
           <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-amber-500/10">
-            <FileText className="h-4 w-4 text-amber-400" />
+            <FileText className="h-4 w-4 text-amber-500" />
           </div>
           <p
-            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-            style={{ animationDelay: "0.4s" }}
+            className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animation: "kpiNumPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.4s both" }}
           >
             {pendingFiles}
           </p>
           <p className="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Wacht op goedkeuring
           </p>
-          <span className="absolute right-4 top-4 text-zinc-700 dark:text-zinc-700 transition-all group-hover:text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+          <span className="absolute right-4 top-4 text-zinc-300 dark:text-zinc-700 transition-all group-hover:text-amber-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-sm">
             ↗
           </span>
         </Link>
 
         {/* Totaal */}
         <div
-          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 sm:col-span-2 lg:col-span-1 transition-all hover:-translate-y-0.5 hover:border-[var(--primary-accent)]/30 dark:border-white/[0.06] dark:bg-white/[0.03]"
-          style={{ animationDelay: "0.19s" }}
+          className="relative overflow-hidden rounded-[14px] border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] p-5 sm:col-span-2 lg:col-span-1"
+          style={{ animation: "kpiCardIn 0.4s ease-out 0.19s both" }}
         >
           <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-emerald-500/10">
-            <Clock className="h-4 w-4 text-emerald-400" />
+            <Clock className="h-4 w-4 text-emerald-500" />
           </div>
           <p
-            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-            style={{ animationDelay: "0.5s" }}
+            className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animation: "kpiNumPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.5s both" }}
           >
             {projects.length}
           </p>

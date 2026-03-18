@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Project, Asset, Profile } from "@/lib/database.types";
+import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, FileText } from "lucide-react";
@@ -155,9 +156,13 @@ export function DashboardClient({
                       {asset.file_name}
                     </span>
                     <a
-                      href={asset.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#"
+                      onClick={async (ev) => {
+                        ev.preventDefault();
+                        const signedUrl = await getSignedUrlFromAsset(asset);
+                        if (!signedUrl) return;
+                        window.open(signedUrl, "_blank", "noopener,noreferrer");
+                      }}
                       className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
                     >
                       <Download className="h-4 w-4" />

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { updateAssetStatus } from "@/app/actions/projects";
 import { cn } from "@/lib/utils";
 import { showToast } from "@/components/ui/toast";
+import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 
 type Props = {
   initialProjects: Project[];
@@ -108,11 +109,12 @@ export function DocumentsClient({
         setUploadError(uploadError.message);
         return;
       }
-      const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
       const { error: insertError } = await supabase.from("assets").insert({
         project_id: selectedProjectId,
         file_name: file.name,
-        file_url: urlData.publicUrl,
+        // Store the storage object path; we generate signed URLs for actual downloads.
+        file_path: path,
+        file_url: path,
         status: "pending",
       });
       if (insertError) {
@@ -121,6 +123,51 @@ export function DocumentsClient({
       }
       form.reset();
       // Realtime subscription will add the new asset to the list
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleClientUpload(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setUploadError(null);
+    const form = e.currentTarget;
+    const fileInput = form.querySelector<HTMLInputElement>('input[type="file"]');
+    if (!fileInput?.files?.length || !selectedProjectId) return;
+    const file = fileInput.files[0];
+    if (file.size > maxUploadBytes) {
+      setUploadError(
+        isPro
+          ? "File is too large (max 100MB)."
+          : "File too large for Free plan (max 5MB). Upgrade to Pro for up to 100MB."
+      );
+      return;
+    }
+    setUploading(true);
+    try {
+      const safeName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+      const path = `${selectedProjectId}/${safeName}`;
+      const { error: uploadError } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { upsert: false });
+      if (uploadError) {
+        setUploadError(uploadError.message);
+        return;
+      }
+      const { error: insertError } = await supabase.from("assets").insert({
+        project_id: selectedProjectId,
+        file_name: file.name,
+        file_path: path,
+        file_url: path,
+        // Clients upload their own documents; mark them as approved so
+        // they're immediately available to the freelancer.
+        status: "approved",
+      });
+      if (insertError) {
+        setUploadError(insertError.message);
+        return;
+      }
+      form.reset();
     } finally {
       setUploading(false);
     }
@@ -198,6 +245,26 @@ export function DocumentsClient({
             </Card>
           )}
 
+          {!isAdmin && selectedProjectId && (
+            <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl">
+              <CardHeader>
+                <CardTitle className="text-base">Bestand uploaden</CardTitle>
+                <CardDescription>Upload jouw documenten voor dit project.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleClientUpload} className="flex flex-wrap items-end gap-3">
+                  <div className="flex-1 min-w-[200px]">
+                    <Input type="file" className="cursor-pointer rounded-xl border-white/10 bg-white/[0.04]" />
+                  </div>
+                  <Button type="submit" disabled={uploading} className="rounded-xl bg-[var(--primary-accent)] hover:opacity-90">
+                    {uploading ? "Uploaden…" : "Upload"}
+                  </Button>
+                </form>
+                {uploadError && <p className="mt-2 text-sm text-red-400">{uploadError}</p>}
+              </CardContent>
+            </Card>
+          )}
+
           <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03]">
             <CardHeader>
               <CardTitle className="text-zinc-900 dark:text-zinc-50">Bestanden</CardTitle>
@@ -228,7 +295,19 @@ export function DocumentsClient({
                             : "border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] hover:border-zinc-300 dark:hover:border-white/[0.1]"
                         )}
                       >
-                        <a href={asset.file_url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center flex-1 w-full min-w-0">
+                        <a
+                          href="#"
+                          onClick={async (ev) => {
+                            ev.preventDefault();
+                            const signedUrl = await getSignedUrlFromAsset(asset);
+                            if (!signedUrl) {
+                              showToast("Kon bestand niet openen", "error");
+                              return;
+                            }
+                            window.open(signedUrl, "_blank", "noopener,noreferrer");
+                          }}
+                          className="flex flex-col items-center flex-1 w-full min-w-0"
+                        >
                           <div className={cn("rounded-xl p-4 mb-2", isApproved ? "bg-emerald-500/10" : "bg-zinc-200/50 dark:bg-white/[0.06]")}>
                             <Icon className={cn("h-8 w-8", isApproved ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-500 dark:text-zinc-400")} />
                           </div>

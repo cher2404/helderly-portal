@@ -44,6 +44,7 @@ import {
   saveInternalNote,
   updateProjectHours,
 } from "@/app/actions/projects";
+import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 import type {
   Project,
   ProjectStage,
@@ -448,9 +449,16 @@ function DocumentsWidgetContent({ assets }: ProjectWidgetProps) {
           </span>
           {!isPlaceholder && (
             <a
-              href={a.file_url}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#"
+              onClick={async (ev) => {
+                ev.preventDefault();
+                const signedUrl = await getSignedUrlFromAsset(a);
+                if (!signedUrl) {
+                  showToast("Kon bestand niet openen", "error");
+                  return;
+                }
+                window.open(signedUrl, "_blank", "noopener,noreferrer");
+              }}
               className="text-zinc-400 hover:text-sky-300"
             >
               <Download className="h-4 w-4" />

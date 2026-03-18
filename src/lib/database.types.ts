@@ -146,6 +146,7 @@ export interface Asset {
   id: string;
   project_id: string;
   file_name: string;
+  file_path?: string | null;
   file_url: string;
   status: AssetStatus;
   created_at: string;

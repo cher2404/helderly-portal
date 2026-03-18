@@ -10,6 +10,7 @@ import type { Project, Asset, Profile, Appointment, Template } from "@/lib/datab
 import { ProjectBuilderForm } from "./project-builder-form";
 import { StatusDot } from "@/components/ui/status-dot";
 import { Tooltip } from "@/components/ui/tooltip";
+import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 
 function formatDate(dateStr: string): string {
   return new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "short" }).format(new Date(dateStr));
@@ -253,9 +254,13 @@ export function FreelancerDashboard({
                   >
                     <span className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{asset.file_name}</span>
                     <a
-                      href={asset.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#"
+                      onClick={async (ev) => {
+                        ev.preventDefault();
+                        const signedUrl = await getSignedUrlFromAsset(asset);
+                        if (!signedUrl) return;
+                        window.open(signedUrl, "_blank", "noopener,noreferrer");
+                      }}
                       className="text-sm text-[var(--primary-accent)] hover:underline"
                     >
                       Downloaden

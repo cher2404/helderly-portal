@@ -5,6 +5,7 @@ import { AccentWrapper } from "@/components/dashboard/accent-wrapper";
 import { ThemeSync } from "@/components/dashboard/theme-sync";
 import { BreadcrumbProvider } from "@/contexts/breadcrumb-context";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { Toaster } from "@/components/ui/toast";
 
 export default async function DashboardLayout({
   children,
@@ -24,6 +25,7 @@ export default async function DashboardLayout({
     <AccentWrapper accentColor={profile.accent_color}>
       <ThemeSync theme={profile.theme} />
       <div className="premium-dashboard min-h-screen font-sans antialiased">
+        <Toaster />
         <BreadcrumbProvider>
           <ErrorBoundary>
             <DashboardShell

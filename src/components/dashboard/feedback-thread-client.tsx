@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { addProjectMessage } from "@/app/actions/projects";
 import type { Project, ProjectMessage, Profile } from "@/lib/database.types";
+import { showToast } from "@/components/ui/toast";
 
 type Props = {
   projects: Project[];
@@ -56,8 +57,13 @@ export function FeedbackThreadClient({
     setSending(true);
     const result = await addProjectMessage(selectedProject.id, newMessage.trim());
     setSending(false);
-    if (result.error) setError(result.error);
-    else setNewMessage("");
+    if (result.error) {
+      setError(result.error);
+      showToast("Er ging iets mis bij het versturen van feedback", "error");
+    } else {
+      setNewMessage("");
+      showToast("Feedback verstuurd", "success");
+    }
   }
 
   const isFreelancer = profile.role === "admin";

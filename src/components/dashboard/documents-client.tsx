@@ -12,6 +12,7 @@ import { ROUTES, MAX_UPLOAD_BYTES_FREE, MAX_UPLOAD_BYTES_PRO } from "@/lib/const
 import Link from "next/link";
 import { updateAssetStatus } from "@/app/actions/projects";
 import { cn } from "@/lib/utils";
+import { showToast } from "@/components/ui/toast";
 
 type Props = {
   initialProjects: Project[];
@@ -248,7 +249,15 @@ export function DocumentsClient({
                             <Button
                               size="sm"
                               className="rounded-lg bg-[var(--primary-accent)] hover:opacity-90 text-white text-xs"
-                              onClick={async () => { await updateAssetStatus(asset.id, "approved"); setAssets((prev) => prev.map((a) => (a.id === asset.id ? { ...a, status: "approved" as const } : a))); }}
+                              onClick={async () => {
+                                const result = await updateAssetStatus(asset.id, "approved");
+                                if (result.error) {
+                                  showToast("Er ging iets mis bij het goedkeuren", "error");
+                                  return;
+                                }
+                                setAssets((prev) => prev.map((a) => (a.id === asset.id ? { ...a, status: "approved" as const } : a)));
+                                showToast("Bestand goedgekeurd", "success");
+                              }}
                             >
                               <Check className="h-3.5 w-3.5 mr-1" /> Approve
                             </Button>
@@ -256,7 +265,15 @@ export function DocumentsClient({
                               size="sm"
                               variant="outline"
                               className="rounded-lg border-zinc-300 dark:border-zinc-600 text-xs"
-                              onClick={async () => { await updateAssetStatus(asset.id, "needs_changes"); setAssets((prev) => prev.map((a) => (a.id === asset.id ? { ...a, status: "needs_changes" as const } : a))); }}
+                              onClick={async () => {
+                                const result = await updateAssetStatus(asset.id, "needs_changes");
+                                if (result.error) {
+                                  showToast("Er ging iets mis bij het aanvragen van revisie", "error");
+                                  return;
+                                }
+                                setAssets((prev) => prev.map((a) => (a.id === asset.id ? { ...a, status: "needs_changes" as const } : a)));
+                                showToast("Revisie aangevraagd", "success");
+                              }}
                             >
                               <RotateCcw className="h-3.5 w-3.5 mr-1" /> Request revision
                             </Button>

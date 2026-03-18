@@ -25,6 +25,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { showToast } from "@/components/ui/toast";
 import {
   LinearCard,
   LinearCardHeader,
@@ -238,27 +239,36 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
     const result = await createStageMilestone(projectId, title, isFreelancer);
     if (result.error) {
       setAddError(result.error);
+      showToast("Er ging iets mis bij het aanmaken van de milestone", "error");
       return;
     }
     if (result.stage) setStages((prev) => [...prev, result.stage!].sort((a, b) => a.sort_order - b.sort_order));
     setShowAddForm(false);
     setAddTitle("");
+    showToast("Milestone aangemaakt", "success");
   };
 
   const handleApprove = async (stage: ProjectStage) => {
-    const err = await updateStageMilestone(projectId, stage.id, { status: "active" });
-    if (!err) setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, status: "active" as MilestoneStatus } : s)));
+    const result = await updateStageMilestone(projectId, stage.id, { status: "active" });
+    if (result.error) {
+      showToast("Er ging iets mis bij het goedkeuren van de milestone", "error");
+      return;
+    }
+    setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, status: "active" as MilestoneStatus } : s)));
+    showToast("Milestone goedgekeurd", "success");
   };
 
   const handleEditSave = async (stage: ProjectStage) => {
     const title = editTitle.trim();
     if (!title) return;
-    const err = await updateStageMilestone(projectId, stage.id, { title });
-    if (!err) {
-      setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, title } : s)));
-      setEditingId(null);
-      setEditTitle("");
+    const result = await updateStageMilestone(projectId, stage.id, { title });
+    if (result.error) {
+      showToast("Er ging iets mis bij het opslaan van de milestone", "error");
+      return;
     }
+    setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, title } : s)));
+    setEditingId(null);
+    setEditTitle("");
   };
 
   return (

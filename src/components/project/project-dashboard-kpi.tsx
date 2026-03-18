@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 const HOURLY_RATE = 80;
 
 type Props = {
+  projectSegment: string;
   projectId: string;
   project: Project;
   stages: ProjectStage[];
@@ -69,6 +70,7 @@ function KpiCard({
 }
 
 export function ProjectDashboardKpi({
+  projectSegment,
   projectId,
   project,
   stages,
@@ -89,7 +91,7 @@ export function ProjectDashboardKpi({
   const estimatedEur = estimated * HOURLY_RATE;
   const spentEur = actual * HOURLY_RATE;
 
-  const projectHref = (tab: string) => `${ROUTES.project(projectId)}?tab=${tab}`;
+  const projectHref = (tab: string) => `${ROUTES.project(projectSegment)}?tab=${tab}`;
 
   return (
     <div className="space-y-6">

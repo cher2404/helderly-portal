@@ -11,7 +11,7 @@ import {
   LinearCardContent,
 } from "@/components/ui/linear-card";
 
-type Client = { id: string; email: string; projectName: string; projectId: string };
+type Client = { id: string; email: string; projectName: string; projectId: string; projectSlug: string | null };
 
 type Props = { clients: Client[] };
 
@@ -19,21 +19,21 @@ export function ClientsClient({ clients }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Clients
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          Klanten
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-          Customer CRM — view and open projects by client.
+          Overzicht van al je klanten en hun projecten.
         </p>
       </div>
       <LinearCard>
         <LinearCardHeader>
-          <LinearCardTitle>Clients & projects</LinearCardTitle>
-          <LinearCardDescription>People invited to your projects.</LinearCardDescription>
+          <LinearCardTitle>Klanten & projecten</LinearCardTitle>
+          <LinearCardDescription>Mensen die je hebt uitgenodigd voor jouw projecten.</LinearCardDescription>
         </LinearCardHeader>
         <LinearCardContent>
           {clients.length === 0 ? (
-            <p className="text-sm text-zinc-500 py-6">No clients yet. Add a client email when creating a project.</p>
+            <p className="text-sm text-zinc-500 py-6">Nog geen klanten. Voeg een klant-e-mail toe bij het aanmaken van een project.</p>
           ) : (
             <ul className="space-y-2">
               {clients.map((c) => (
@@ -56,7 +56,7 @@ export function ClientsClient({ clients }: Props) {
                       Email
                     </a>
                     <Link
-                      href={ROUTES.project(c.projectId)}
+                      href={ROUTES.project(c.projectSlug ?? c.projectId)}
                       className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--primary-accent)] hover:underline"
                     >
                       <FolderOpen className="h-3.5 w-3.5" />

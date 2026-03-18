@@ -1,6 +1,7 @@
 import { cache } from "react";
 import type { Project, Asset, Profile, ProjectStage, ProjectMessage, Appointment, ContactLog, Decision, ProjectFaq, InternalNote, Template, TemplateStage, TemplateFaq, Notification } from "@/lib/database.types";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { isUuid } from "@/lib/utils";
 
 export type { Project, Asset, Profile, ProjectStage, ProjectMessage, Appointment, ContactLog, Decision, ProjectFaq, InternalNote, Template, TemplateStage, TemplateFaq, Notification };
 
@@ -121,14 +122,16 @@ export async function getProjectMessages(projectId: string): Promise<ProjectMess
   return (data ?? []) as ProjectMessage[];
 }
 
-export async function getProject(projectId: string): Promise<Project | null> {
+/** Get project by id (UUID) or slug. RLS limits to projects the user owns or is client of. */
+export async function getProject(idOrSlug: string): Promise<Project | null> {
   const supabase = await createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
+  const byId = isUuid(idOrSlug);
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .eq("id", projectId)
+    .eq(byId ? "id" : "slug", idOrSlug)
     .single();
   if (error || !data) return null;
   return data as Project;

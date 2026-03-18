@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   const { data: project, error: projectError } = await supabase
     .from("projects")
-    .select("id, name, owner_id")
+    .select("id, name, owner_id, slug")
     .eq("id", projectId)
     .single();
   if (projectError || !project || project.owner_id !== user.id) {
@@ -47,7 +47,8 @@ export async function POST(request: Request) {
   }
 
   const origin = request.headers.get("origin") ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:4000";
-  const redirectTo = `${origin}${ROUTES.project(projectId)}`;
+  const segment = project.slug ?? projectId;
+  const redirectTo = `${origin}${ROUTES.project(segment)}`;
 
   const admin = createAdminClient();
   const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({

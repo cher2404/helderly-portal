@@ -28,7 +28,7 @@ const PROJECT_TAB_IDS = [
   "scratchpad",
 ] as const;
 
-type Props = { projectId: string; isFreelancer: boolean };
+type Props = { projectSegment: string; projectId: string; isFreelancer: boolean };
 
 const tabConfig: Record<
   string,
@@ -47,23 +47,23 @@ const tabConfig: Record<
   feedback: { label: "Feedback", icon: MessageSquare, samePage: false },
 };
 
-export function ProjectPageTabs({ projectId, isFreelancer }: Props) {
+export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Props) {
   const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
   const tab = searchParams?.get("tab") ?? "dashboard";
-  const isProjectPage = pathname === ROUTES.project(projectId);
+  const isProjectPage = pathname === ROUTES.project(projectSegment);
 
   const buildHref = (key: string) => {
     const c = tabConfig[key];
-    if (!c) return ROUTES.project(projectId);
+    if (!c) return ROUTES.project(projectSegment);
     if (c.samePage) {
-      if (key === "dashboard") return ROUTES.project(projectId);
-      return `${ROUTES.project(projectId)}?tab=${key}`;
+      if (key === "dashboard") return ROUTES.project(projectSegment);
+      return `${ROUTES.project(projectSegment)}?tab=${key}`;
     }
     if (key === "documents") return `${ROUTES.documents}?project=${projectId}`;
     if (key === "timeline") return `${ROUTES.timeline}?project=${projectId}`;
     if (key === "feedback") return `${ROUTES.messages}?project=${projectId}`;
-    return ROUTES.project(projectId);
+    return ROUTES.project(projectSegment);
   };
 
   const isActive = (key: string) => {

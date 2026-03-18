@@ -15,6 +15,7 @@ export default async function ClientsPage() {
       email: p.client_email ?? "—",
       projectName: p.name,
       projectId: p.id,
+      projectSlug: p.slug ?? null,
     }));
 
   return <ClientsClient clients={clients} />;

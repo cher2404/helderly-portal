@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GlassModal } from "@/components/ui/glass-modal";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, projectSegment } from "@/lib/constants";
 import { useBreadcrumbProjectName } from "@/contexts/breadcrumb-context";
 import {
   createAppointment,
@@ -157,7 +157,7 @@ export function ProjectDetailView({
       initialLayoutConfig={project.layout_config ?? null}
       isFreelancer={isFreelancer}
     >
-      <ProjectPageTabs projectId={initialProject.id} isFreelancer={isFreelancer} />
+      <ProjectPageTabs projectSegment={projectSegment(project)} projectId={project.id} isFreelancer={isFreelancer} />
       <ProjectDetailContent
         initialProject={initialProject}
         project={project}
@@ -653,7 +653,8 @@ function ProjectDetailContent({
       {/* Dashboard: alleen KPI's; andere tabs: één invul-sectie */}
       {isDashboardView && (
         <ProjectDashboardKpi
-          projectId={initialProject.id}
+          projectSegment={projectSegment(project)}
+          projectId={project.id}
           project={project}
           stages={stages}
           appointments={appointments}

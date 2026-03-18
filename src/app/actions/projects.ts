@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ProjectStatus, StageStatus, AppointmentStatus, ProjectHealthStatus, AssetStatus, ProjectLayoutConfig, MilestoneStatus } from "@/lib/database.types";
 import { createNotification } from "@/app/actions/notifications";
+import { slugify } from "@/lib/utils";
 
 export async function createProject(formData: FormData) {
   const supabase = await createClient();
@@ -27,10 +28,30 @@ export async function createProject(formData: FormData) {
     return { error: "Client email or client ID is required" };
   }
 
+  let slug = slugify(name.trim());
+  const { data: existing } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("owner_id", user.id)
+    .eq("slug", slug)
+    .limit(1);
+  if (existing?.length) {
+    let n = 2;
+    while (true) {
+      const { data: dup } = await supabase.from("projects").select("id").eq("owner_id", user.id).eq("slug", `${slug}-${n}`).limit(1);
+      if (!dup?.length) {
+        slug = `${slug}-${n}`;
+        break;
+      }
+      n++;
+    }
+  }
+
   const { data: project, error } = await supabase
     .from("projects")
     .insert({
       name: name.trim(),
+      slug,
       client_id: clientId || null,
       client_email: clientEmail,
       owner_id: user.id,
@@ -38,7 +59,7 @@ export async function createProject(formData: FormData) {
       progress_percentage: 0,
       deadline: deadline || null,
     })
-    .select("id")
+    .select("id, slug")
     .single();
 
   if (error) return { error: error.message };

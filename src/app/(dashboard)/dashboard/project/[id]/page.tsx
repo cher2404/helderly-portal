@@ -10,6 +10,7 @@ import {
   getInternalNotes,
 } from "@/lib/supabase/queries";
 import { redirect } from "next/navigation";
+import { isUuid } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import {
   Calendar,
@@ -83,8 +84,11 @@ export default async function ProjectPage({
   if (!profile) redirect("/login");
 
   const { id } = await params;
+  const project = await getProject(id);
+  if (!project) redirect("/dashboard");
+
+  const projectId = project.id;
   const [
-    project,
     stages,
     appointments,
     contactLogs,
@@ -93,17 +97,18 @@ export default async function ProjectPage({
     faqs,
     internalNotes,
   ] = await Promise.all([
-    getProject(id),
-    getProjectStages(id),
-    getAppointments(id),
-    getContactLogs(id),
-    getAssets(id),
-    getDecisions(id),
-    getProjectFaqs(id),
-    profile.role === "admin" ? getInternalNotes(id) : Promise.resolve(null),
+    getProjectStages(projectId),
+    getAppointments(projectId),
+    getContactLogs(projectId),
+    getAssets(projectId),
+    getDecisions(projectId),
+    getProjectFaqs(projectId),
+    profile.role === "admin" ? getInternalNotes(projectId) : Promise.resolve(null),
   ]);
 
-  if (!project) redirect("/dashboard");
+  if (project.slug && isUuid(id)) {
+    redirect(`/dashboard/project/${project.slug}`);
+  }
 
   return (
     <ProjectDetailView

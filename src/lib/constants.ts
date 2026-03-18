@@ -13,8 +13,13 @@ export const ROUTES = {
   documents: "/dashboard/documents",
   messages: "/dashboard/messages",
   settings: "/dashboard/settings",
-  project: (id: string) => `/dashboard/project/${id}`,
+  project: (idOrSlug: string) => `/dashboard/project/${idOrSlug}`,
 } as const;
+
+/** Use in links: project slug for readable URLs, fallback to id. */
+export function projectSegment(project: { slug?: string | null; id: string }): string {
+  return project.slug ?? project.id;
+}
 
 export type UserRole = "client" | "freelancer";
 

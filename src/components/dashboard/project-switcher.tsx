@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChevronDown, Search, FolderOpen, Check } from "lucide-react";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, projectSegment } from "@/lib/constants";
 import type { Project } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
 import { StatusDot } from "@/components/ui/status-dot";
@@ -18,10 +18,12 @@ export function ProjectSwitcher({ projects, currentProjectId, className }: Props
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
-  const pathname = usePathname();
   const ref = useRef<HTMLDivElement>(null);
 
-  const currentProject = currentProjectId ? projects.find((p) => p.id === currentProjectId) : null;
+  const resolvedCurrentId = currentProjectId;
+  const currentProject = resolvedCurrentId
+    ? projects.find((p) => p.id === resolvedCurrentId || projectSegment(p) === resolvedCurrentId) ?? null
+    : null;
   const filtered =
     query.trim() === ""
       ? projects
@@ -40,8 +42,6 @@ export function ProjectSwitcher({ projects, currentProjectId, className }: Props
   }, []);
 
   const displayLabel = currentProject ? currentProject.name : "All projects";
-  const isProjectPage = pathname.startsWith("/dashboard/project/");
-  const resolvedCurrentId = currentProjectId ?? (isProjectPage ? pathname.split("/").pop() ?? null : null);
 
   return (
     <div ref={ref} className={cn("relative", className)}>
@@ -99,13 +99,13 @@ export function ProjectSwitcher({ projects, currentProjectId, className }: Props
               </button>
             </li>
             {filtered.map((project) => {
-              const isActive = resolvedCurrentId === project.id;
+              const isActive = resolvedCurrentId === projectSegment(project);
               return (
                 <li key={project.id}>
                   <button
                     type="button"
                     onClick={() => {
-                      router.push(ROUTES.project(project.id));
+                      router.push(ROUTES.project(projectSegment(project)));
                       setOpen(false);
                     }}
                     className={cn(

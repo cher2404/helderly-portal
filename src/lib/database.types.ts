@@ -47,6 +47,7 @@ export interface ProjectLayoutConfig {
 export interface Project {
   id: string;
   name: string;
+  slug: string | null;
   status: ProjectStatus;
   progress_percentage: number;
   client_id: string | null;

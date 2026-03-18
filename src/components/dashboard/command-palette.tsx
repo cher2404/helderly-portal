@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search, FolderOpen, LayoutDashboard, Settings, ListTodo, Gavel, HelpCircle } from "lucide-react";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, projectSegment } from "@/lib/constants";
 import type { Project } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
 import { StatusDot } from "@/components/ui/status-dot";
@@ -167,7 +167,7 @@ export function CommandPalette({ projects }: Props) {
             <li key={project.id}>
               <button
                 type="button"
-                onClick={() => go("href" in project ? project.href : ROUTES.project(project.id))}
+                onClick={() => go("href" in project ? project.href : ROUTES.project(projectSegment(project)))}
                 className={cn(
                   "w-full flex items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800",
                   "text-zinc-900 dark:text-zinc-100"

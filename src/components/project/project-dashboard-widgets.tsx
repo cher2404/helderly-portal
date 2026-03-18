@@ -286,7 +286,7 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
           }}
         >
           <Plus className="h-4 w-4 mr-1" />
-          Add milestone <kbd className="ml-1 px-1.5 py-0.5 text-xs rounded bg-zinc-200 dark:bg-zinc-700">M</kbd>
+          Mijlpaal toevoegen <kbd className="ml-1 px-1.5 py-0.5 text-xs rounded bg-zinc-200 dark:bg-zinc-700">M</kbd>
         </Button>
       </div>
       {showAddForm && (
@@ -387,8 +387,8 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
                         setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, stage_status: v } : s)));
                       }}
                     >
-                      <option value="blocked">Blocked</option>
-                      <option value="in_progress">In progress</option>
+                      <option value="blocked">Geblokkeerd</option>
+                      <option value="in_progress">In uitvoering</option>
                       <option value="done">Done</option>
                     </select>
                   </div>
@@ -410,7 +410,7 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
 
 function ContactHistoryWidgetContent({ contactLogs }: ProjectWidgetProps) {
   return contactLogs.length === 0 ? (
-    <p className="text-sm text-zinc-500 py-4">No contact logged yet.</p>
+    <p className="text-sm text-zinc-500 py-4">Nog geen contact gelogd.</p>
   ) : (
     <ul className="space-y-3">
       {contactLogs.map((log) => {
@@ -557,7 +557,7 @@ function MeetingsWidgetContent({
         </div>
       )}
       {appointments.length === 0 ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 py-4">No meetings yet.</p>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 py-4">Nog geen afspraken.</p>
       ) : (
         <ul className="space-y-3">
           {appointments.map((apt) => (

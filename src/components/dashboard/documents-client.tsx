@@ -6,7 +6,6 @@ import type { Project, Asset, Profile } from "@/lib/database.types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Download, FileText, FileImage, FileSpreadsheet, Check, RotateCcw } from "lucide-react";
 import { ROUTES, MAX_UPLOAD_BYTES_FREE, MAX_UPLOAD_BYTES_PRO } from "@/lib/constants";
 import Link from "next/link";
@@ -20,6 +19,7 @@ import { LoadingIcon } from "@/components/ui/loading-icon";
 type Props = {
   initialProjects: Project[];
   profile: Profile | null;
+  initialProjectId?: string | null;
 };
 
 const BUCKET = "project-assets";
@@ -34,10 +34,11 @@ function getFileIcon(fileName: string) {
 export function DocumentsClient({
   initialProjects,
   profile,
+  initialProjectId,
 }: Props) {
   const [projects] = useState<Project[]>(initialProjects);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    initialProjects[0]?.id ?? null
+    initialProjectId ?? initialProjects[0]?.id ?? null
   );
   const [assets, setAssets] = useState<Asset[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -215,18 +216,45 @@ export function DocumentsClient({
         </Card>
       ) : (
         <>
-          <div className="flex flex-wrap items-center gap-3">
-            <Label className="text-zinc-500 dark:text-zinc-400">Project</Label>
+          {selectedProjectId &&
+            (() => {
+              const project = projects.find((p) => p.id === selectedProjectId);
+              return project ? (
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Link
+                      href={ROUTES.project(selectedProjectId)}
+                      className="font-medium text-zinc-900 dark:text-zinc-50 hover:text-[var(--primary-accent)] transition-colors"
+                    >
+                      {project.name}
+                    </Link>
+                    <span className="text-zinc-400">·</span>
+                    <span className="text-zinc-500 dark:text-zinc-400">Bestanden</span>
+                  </div>
+                  <button
+                    onClick={() => setSelectedProjectId(null)}
+                    className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                  >
+                    Alle projecten →
+                  </button>
+                </div>
+              ) : null;
+            })()}
+
+          {projects.length > 1 && (
             <select
-              className="rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[var(--primary-accent)]/30"
               value={selectedProjectId ?? ""}
               onChange={(e) => setSelectedProjectId(e.target.value || null)}
+              className="rounded-[12px] border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[var(--primary-accent)]/30"
             >
+              <option value="">Alle projecten</option>
               {projects.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
               ))}
             </select>
-          </div>
+          )}
 
           {isAdmin && selectedProjectId && (
             <Card className="rounded-2xl border-zinc-200 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl">

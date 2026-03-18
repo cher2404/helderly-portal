@@ -398,10 +398,10 @@ function ProjectDetailContent({
               size="sm"
               className="rounded-xl border-zinc-300 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-500/10 text-zinc-700 dark:text-zinc-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-zinc-900 dark:hover:text-zinc-100"
               onClick={togglePreviewMode}
-              aria-label={isPreviewMode ? "Exit preview mode" : "Preview as client"}
+              aria-label={isPreviewMode ? "Sluit klantweergave" : "Open klantweergave"}
             >
               {isPreviewMode ? <EyeOff className="h-3.5 w-3.5 mr-1.5" /> : <Eye className="h-3.5 w-3.5 mr-1.5" />}
-              {isPreviewMode ? "Exit preview" : "Preview as client"}
+              {isPreviewMode ? "Sluit preview" : "Klantweergave"}
             </Button>
             {project.client_email && !isPreviewMode && (
               <a
@@ -409,13 +409,9 @@ function ProjectDetailContent({
                 className="inline-flex items-center gap-1.5 rounded-xl border border-slate-500/20 bg-slate-500/10 px-3 py-2 text-sm font-medium text-slate-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100 transition-colors"
               >
                 <Mail className="h-3.5 w-3.5" />
-                Email client
+                E-mail klant
               </a>
             )}
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-100 dark:bg-zinc-500/10 px-2 py-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <kbd className="rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700/50 px-1.5 py-0.5 font-mono text-zinc-700 dark:text-zinc-300 shadow-sm">N</kbd>
-              <span>quick new</span>
-            </span>
             {!isPreviewMode && !isDashboardView && !isSingleWidgetView && (
               <Button
                 variant={effectiveEditMode ? "secondary" : "outline"}
@@ -444,29 +440,74 @@ function ProjectDetailContent({
                 )}
               </>
             )}
-            {!isPreviewMode && !isDashboardView && (
+            {!isPreviewMode && (
               <>
-                <Button variant="outline" size="sm" className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]" onClick={() => { setModal("contact"); setError(null); }}>
-                  <Phone className="h-3.5 w-3.5 mr-1.5" />
-                  Log call
-                </Button>
-                <Button variant="outline" size="sm" className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]" onClick={() => { setModal("meeting"); setError(null); }}>
-                  <Plus className="h-3.5 w-3.5 mr-1.5" />
-                  Meeting
-                </Button>
-                <Button variant="outline" size="sm" className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]" onClick={() => { setModal("decision"); setError(null); }}>
-                  <Gavel className="h-3.5 w-3.5 mr-1.5" />
-                  Decision
-                </Button>
-                <Link href={`${ROUTES.documents}?project=${initialProject.id}`}>
-                  <Button variant="outline" size="sm" className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]">
-                    <Plus className="h-3.5 w-3.5 mr-1.5" />
-                    Add file
+                {projectTab === "contact" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
+                    onClick={() => {
+                      setModal("contact");
+                      setError(null);
+                    }}
+                  >
+                    <Phone className="h-3.5 w-3.5 mr-1.5" />
+                    Gesprek loggen
                   </Button>
-                </Link>
-                <Button variant="outline" size="sm" className="rounded-[12px]" onClick={() => { setModal("template"); setTemplateName(initialProject.name + " template"); setError(null); }}>
+                )}
+                {projectTab === "meetings" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
+                    onClick={() => {
+                      setModal("meeting");
+                      setError(null);
+                    }}
+                  >
+                    <Plus className="h-3.5 w-3.5 mr-1.5" />
+                    Afspraak
+                  </Button>
+                )}
+                {projectTab === "decisions" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
+                    onClick={() => {
+                      setModal("decision");
+                      setError(null);
+                    }}
+                  >
+                    <Gavel className="h-3.5 w-3.5 mr-1.5" />
+                    Beslissing
+                  </Button>
+                )}
+                {(projectTab === "dashboard" || !projectTab) && (
+                  <Link href={`${ROUTES.documents}?project=${initialProject.id}`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1.5" />
+                      Bestand uploaden
+                    </Button>
+                  </Link>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-[12px]"
+                  onClick={() => {
+                    setModal("template");
+                    setTemplateName(initialProject.name + " template");
+                    setError(null);
+                  }}
+                >
                   <LayoutTemplate className="h-3.5 w-3.5 mr-1.5" />
-                  Save as template
+                  Opslaan als template
                 </Button>
               </>
             )}
@@ -507,7 +548,7 @@ function ProjectDetailContent({
         </form>
       </GlassModal>
 
-      <GlassModal open={modal === "template"} onClose={() => setModal(null)} title="Save as template" description="Reuse this project's milestones and FAQ for new projects.">
+      <GlassModal open={modal === "template"} onClose={() => setModal(null)} title="Opslaan als template" description="Hergebruik mijlpalen en FAQ voor nieuwe projecten.">
         <form onSubmit={async (e) => { e.preventDefault(); if (!templateName.trim()) return; setError(null); const r = await createTemplateFromProject(initialProject.id, templateName.trim()); if (r.error) setError(r.error); else setModal(null); }} className="space-y-4">
           <div className="space-y-1.5">
             <Label className="text-zinc-600 dark:text-zinc-400 text-xs">Template name</Label>
@@ -580,7 +621,7 @@ function ProjectDetailContent({
               <option value="call">Call</option>
               <option value="email">Email</option>
               <option value="whatsapp">WhatsApp</option>
-              <option value="meeting">Meeting</option>
+              <option value="meeting">Afspraak</option>
             </select>
           </div>
           <div className="sm:col-span-2 space-y-1.5">
@@ -605,7 +646,7 @@ function ProjectDetailContent({
           className="grid gap-4"
         >
           <div className="space-y-1.5">
-            <Label className="text-zinc-400 text-xs">Decision title</Label>
+            <Label className="text-zinc-400 text-xs">Titel beslissing</Label>
             <Input name="title" placeholder="e.g. Brand colors approved" required />
           </div>
           <div className="space-y-1.5">

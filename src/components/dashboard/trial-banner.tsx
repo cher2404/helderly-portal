@@ -19,17 +19,17 @@ export function TrialBanner({ profile }: Props) {
     >
       <Sparkles className="h-4 w-4 shrink-0 text-[var(--primary-accent)]" />
       <span>
-        You have{" "}
+        Je hebt nog{" "}
         <strong className="font-medium text-zinc-900 dark:text-zinc-100">
-          {daysLeft} {daysLeft === 1 ? "day" : "days"}
+          {daysLeft} {daysLeft === 1 ? "dag" : "dagen"}
         </strong>{" "}
-        left in your trial.
+        over in je proefperiode.
       </span>
       <Link
         href={ROUTES.pricing}
         className="ml-2 inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium transition-colors bg-[var(--primary-accent)] text-white hover:opacity-90"
       >
-        Upgrade to Pro
+        Upgraden naar Pro
       </Link>
     </div>
   );

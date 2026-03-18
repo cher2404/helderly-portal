@@ -36,7 +36,7 @@ const tabConfig: Record<
   { label: string; icon: React.ComponentType<{ className?: string }>; samePage: boolean }
 > = {
   dashboard: { label: "Dashboard", icon: LayoutDashboard, samePage: true },
-  milestones: { label: "Milestones", icon: Target, samePage: true },
+  milestones: { label: "Mijlpalen", icon: Target, samePage: true },
   decisions: { label: "Beslissingen", icon: Gavel, samePage: true },
   meetings: { label: "Afspraken", icon: Clock, samePage: true },
   budget: { label: "Budget", icon: TrendingUp, samePage: true },
@@ -86,9 +86,9 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
   const isActive = (key: string) => {
     if (key === "dashboard") return isProjectPage && (tab === "dashboard" || !searchParams?.get("tab"));
     if (tabConfig[key]?.samePage) return isProjectPage && tab === key;
-    if (key === "documents") return pathname === ROUTES.documents;
-    if (key === "timeline") return pathname === ROUTES.timeline;
-    if (key === "feedback") return pathname === ROUTES.messages;
+    if (key === "documents") return pathname === ROUTES.documents && searchParams?.get("project") === projectId;
+    if (key === "timeline") return pathname === ROUTES.timeline && searchParams?.get("project") === projectId;
+    if (key === "feedback") return pathname === ROUTES.messages && searchParams?.get("project") === projectId;
     return false;
   };
 

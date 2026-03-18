@@ -34,10 +34,10 @@ export function PaywallOverlay({ show }: Props) {
                 <Lock className="h-7 w-7" />
               </div>
               <h2 className="text-xl font-semibold text-zinc-100">
-                Your 30-day trial has ended
+                Je proefperiode van 30 dagen is afgelopen
               </h2>
               <p className="mt-2 text-sm text-zinc-400">
-                Upgrade to Pro to keep using your dashboard and all features.
+                Upgrade naar Pro om het dashboard en alle functies te blijven gebruiken.
               </p>
               <Link href={ROUTES.pricing} className="mt-6 w-full sm:w-auto">
                 <Button
@@ -45,12 +45,9 @@ export function PaywallOverlay({ show }: Props) {
                   className="w-full gap-2 bg-[var(--primary-accent)] text-white hover:opacity-90 sm:w-auto"
                 >
                   <Sparkles className="h-4 w-4" />
-                  Upgrade to Pro — €19/month
+                  Upgraden naar Pro — €19/maand
                 </Button>
               </Link>
-              <p className="mt-4 text-xs text-zinc-500">
-                Non-dismissible. Payment is required to continue.
-              </p>
             </div>
           </motion.div>
         </motion.div>

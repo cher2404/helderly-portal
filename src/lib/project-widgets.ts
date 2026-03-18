@@ -17,11 +17,11 @@ export const WIDGET_META: Record<
   WidgetId,
   { label: string; description: string; freelancerOnly: boolean }
 > = {
-  milestones: { label: "Milestones", description: "Due dates and status.", freelancerOnly: false },
+  milestones: { label: "Milestones", description: "Deadlines en voortgang.", freelancerOnly: false },
   contact_history: { label: "Contact history", description: "Moments of interaction.", freelancerOnly: false },
   documents: { label: "Documents", description: "Files and deliverables.", freelancerOnly: false },
   decisions: { label: "Decisions", description: "What was agreed. Client can confirm.", freelancerOnly: false },
-  meetings: { label: "Meetings", description: "Appointments and calls.", freelancerOnly: false },
+  meetings: { label: "Meetings", description: "Afspraken en gesprekken.", freelancerOnly: false },
   budget_clarity: { label: "Budget clarity", description: "Estimated vs hours spent.", freelancerOnly: false },
   faq: { label: "FAQ", description: "Project-specific Q&A.", freelancerOnly: false },
   scratchpad: { label: "AI-Powered Ideas (Scratchpad)", description: "Private notes & AI suggestions.", freelancerOnly: true },

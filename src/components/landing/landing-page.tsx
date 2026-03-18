@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ROUTES } from "@/lib/constants";
+import type { CSSProperties } from "react";
 import {
   FolderOpen,
   Calendar,
@@ -69,7 +70,13 @@ export function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <section className="relative overflow-hidden pt-20 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        {/* Achtergrond orbs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div className="orb-1 absolute -top-32 -left-20 h-[400px] w-[400px] rounded-full bg-[#6366f1]/15 blur-[80px]" />
+          <div className="orb-2 absolute -top-16 -right-16 h-[300px] w-[300px] rounded-full bg-[#8b5cf6]/10 blur-[80px]" />
+          <div className="orb-3 absolute bottom-0 left-1/3 h-[200px] w-[200px] rounded-full bg-[#6366f1]/08 blur-[80px]" />
+        </div>
         <div className="text-center max-w-3xl mx-auto">
           <motion.p
             initial={{ opacity: 0, y: 24 }}
@@ -104,8 +111,14 @@ export function LandingPage() {
           >
             <Link
               href={ROUTES.signUp}
-              className="group inline-flex items-center justify-center rounded-xl bg-zinc-50 text-zinc-900 font-medium px-8 py-3.5 text-sm shadow-lg shadow-zinc-950/50 transition-all duration-300 hover:bg-white hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_12px_24px_-8px_rgba(0,0,0,0.4)] hover:scale-[1.02] active:scale-[0.98]"
+              className="relative overflow-hidden group inline-flex items-center justify-center rounded-xl bg-zinc-50 text-zinc-900 font-medium px-8 py-3.5 text-sm shadow-lg shadow-zinc-950/50 transition-all duration-300 hover:bg-white hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_12px_24px_-8px_rgba(0,0,0,0.4)] hover:scale-[1.02] active:scale-[0.98]"
             >
+              {/* Shimmer */}
+              <span
+                className="pointer-events-none absolute top-0 h-full w-[50%] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                style={{ animation: "shimmer-slide 3s ease-in-out infinite 1s", left: "-100%" }}
+                aria-hidden
+              />
               Get Early Access
             </Link>
           </motion.div>
@@ -154,7 +167,17 @@ export function LandingPage() {
                   </div>
                 </aside>
                 <main className="flex-1 p-6 space-y-4">
-                  <div className="h-6 w-48 bg-zinc-800 rounded-lg" />
+                  <div className="h-6 w-48 bg-zinc-800 rounded-lg overflow-hidden">
+                    <div
+                      className="animate-bar-fill h-full rounded-lg bg-[#6366f1]"
+                      style={
+                        {
+                          width: "0%",
+                          ["--target-width"]: "65%",
+                        } as CSSProperties & Record<string, string>
+                      }
+                    />
+                  </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[1, 2].map((i) => (
                       <div
@@ -168,6 +191,16 @@ export function LandingPage() {
                     <div className="h-3 w-24 bg-zinc-800 rounded" />
                   </div>
                 </main>
+              </div>
+
+              {/* Notification pop — verschijnt na 1.5s */}
+              <div className="animate-pop-in absolute -right-4 top-8 z-10 flex items-center gap-2.5 rounded-[10px] border border-zinc-700/80 bg-zinc-900 px-3 py-2 shadow-xl hidden sm:flex">
+                <span className="animate-dot-pulse h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+                <span className="text-xs text-zinc-300">
+                  <strong className="text-white font-medium">Klant heeft goedgekeurd</strong>
+                  {" · "}
+                  logo-final.svg
+                </span>
               </div>
             </div>
           </div>
@@ -191,11 +224,11 @@ export function LandingPage() {
           {features.map((feature, i) => (
             <motion.div
               key={feature.title}
-              className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.06]"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              className="group relative feature-card-hover rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-2xl p-6 sm:p-8 transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.06]"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: i * 0.1, duration: 0.4 }}
+              transition={{ delay: i * 0.15, duration: 0.5, ease: "easeOut" }}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06] text-zinc-300 group-hover:text-zinc-50 transition-colors">
                 <feature.icon className="h-5 w-5" />

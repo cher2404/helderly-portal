@@ -11,7 +11,6 @@ import { ProjectBuilderForm } from "./project-builder-form";
 import { GlassModal } from "@/components/ui/glass-modal";
 import { OnboardingChecklist } from "./onboarding-checklist";
 import { StatusDot } from "@/components/ui/status-dot";
-import { Tooltip } from "@/components/ui/tooltip";
 import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 
 function formatDate(dateStr: string): string {
@@ -72,16 +71,23 @@ export function FreelancerDashboard({
 
       <OnboardingChecklist profile={profile} projects={projects} />
       {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
-        <div className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm">
+        <div
+          className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-500/20 bg-amber-500/6 px-4 py-3 text-sm"
+          style={{ animation: "fade-in-up 0.5s ease-out 0.1s both" }}
+        >
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="animate-dot-pulse absolute h-2 w-2 rounded-full bg-amber-400 opacity-75" />
+            <span className="relative h-2 w-2 rounded-full bg-amber-400" />
+          </span>
           {pendingAssetsCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+            <span className="flex items-center gap-2 text-amber-200">
               <FileText className="h-4 w-4 shrink-0" />
               <strong>{pendingAssetsCount}</strong>{" "}
-              {pendingAssetsCount === 1 ? "bestand" : "bestanden"} wachten op goedkeuring
+              {pendingAssetsCount === 1 ? "bestand wacht" : "bestanden wachten"} op goedkeuring
             </span>
           )}
           {meetingsTodayCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+            <span className="flex items-center gap-2 text-amber-200">
               <Calendar className="h-4 w-4 shrink-0" />
               <strong>{meetingsTodayCount}</strong>{" "}
               {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
@@ -91,45 +97,70 @@ export function FreelancerDashboard({
       )}
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Tooltip content="Actieve projecten">
-          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                <FolderOpen className="h-4 w-4" />
-                Actieve projecten
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{activeCount}</p>
-            </CardContent>
-          </Card>
-        </Tooltip>
-        <Tooltip content="Bestanden wachten op goedkeuring">
-          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
-                <FileText className="h-4 w-4" />
-                Wacht op goedkeuring
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{pendingFiles}</p>
-            </CardContent>
-          </Card>
-        </Tooltip>
-        <Tooltip content="Totaal aantal projecten">
-          <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03] hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors sm:col-span-2 lg:col-span-1">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Totaal projecten
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{projects.length}</p>
-            </CardContent>
-          </Card>
-        </Tooltip>
+        {/* Actieve projecten */}
+        <Link
+          href={ROUTES.dashboard}
+          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:-translate-y-0.5 hover:border-[var(--primary-accent)]/30 hover:bg-zinc-800/50 dark:border-white/[0.06] dark:bg-white/[0.03]"
+          style={{ animationDelay: "0.05s" }}
+        >
+          <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-[var(--primary-accent)]/15">
+            <FolderOpen className="h-4 w-4 text-[var(--primary-accent)]" />
+          </div>
+          <p
+            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animationDelay: "0.3s" }}
+          >
+            {activeCount}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Actieve projecten
+          </p>
+          <span className="absolute right-4 top-4 text-zinc-700 dark:text-zinc-700 transition-all group-hover:text-[var(--primary-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            ↗
+          </span>
+        </Link>
+
+        {/* Wacht op goedkeuring */}
+        <Link
+          href={ROUTES.documents}
+          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 transition-all hover:-translate-y-0.5 hover:border-amber-500/30 hover:bg-zinc-800/50 dark:border-white/[0.06] dark:bg-white/[0.03]"
+          style={{ animationDelay: "0.12s" }}
+        >
+          <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-amber-500/10">
+            <FileText className="h-4 w-4 text-amber-400" />
+          </div>
+          <p
+            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animationDelay: "0.4s" }}
+          >
+            {pendingFiles}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Wacht op goedkeuring
+          </p>
+          <span className="absolute right-4 top-4 text-zinc-700 dark:text-zinc-700 transition-all group-hover:text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            ↗
+          </span>
+        </Link>
+
+        {/* Totaal */}
+        <div
+          className="animate-kpi-card group relative overflow-hidden rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-5 sm:col-span-2 lg:col-span-1 transition-all hover:-translate-y-0.5 hover:border-[var(--primary-accent)]/30 dark:border-white/[0.06] dark:bg-white/[0.03]"
+          style={{ animationDelay: "0.19s" }}
+        >
+          <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-[8px] bg-emerald-500/10">
+            <Clock className="h-4 w-4 text-emerald-400" />
+          </div>
+          <p
+            className="animate-kpi-num text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
+            style={{ animationDelay: "0.5s" }}
+          >
+            {projects.length}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Totaal projecten
+          </p>
+        </div>
       </section>
 
       <div id="create-project" className="flex justify-end">
@@ -194,7 +225,7 @@ export function FreelancerDashboard({
                     <li key={project.id}>
                       <Link
                         href={ROUTES.project(projectSegment(project))}
-                        className="flex items-center justify-between gap-4 rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
+                        className="flex items-center justify-between gap-4 rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group hover:translate-x-1 hover:border-[var(--primary-accent)]/20"
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <StatusDot status={project.health_status ?? "on_track"} />
@@ -226,7 +257,12 @@ export function FreelancerDashboard({
                             </p>
                           </div>
                         </div>
-                        <FolderOpen className="h-4 w-4 shrink-0 text-zinc-400 group-hover:text-[var(--primary-accent)]" />
+                        <div className="flex items-center gap-2 shrink-0">
+                          <FolderOpen className="h-4 w-4 shrink-0 text-zinc-400 group-hover:text-[var(--primary-accent)]" />
+                          <span className="shrink-0 text-zinc-700 opacity-0 transition-all group-hover:opacity-100 group-hover:text-[var(--primary-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                            ↗
+                          </span>
+                        </div>
                       </Link>
                     </li>
                   );

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { MessageSquare, Send } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import type { Project, ProjectMessage, Profile } from "@/lib/database.types";
 import { showToast } from "@/components/ui/toast";
 import { SkeletonList } from "@/components/ui/skeleton";
 import { LoadingIcon } from "@/components/ui/loading-icon";
+import { ROUTES } from "@/lib/constants";
 
 type Props = {
   projects: Project[];
@@ -93,6 +95,27 @@ export function FeedbackThreadClient({
           {isFreelancer ? "View client feedback and questions." : "Ask questions or leave feedback about this project."}
         </p>
       </div>
+
+      {selectedProject && (
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-sm">
+            <Link
+              href={ROUTES.project(selectedProject.id)}
+              className="font-medium text-zinc-900 dark:text-zinc-50 hover:text-[var(--primary-accent)] transition-colors"
+            >
+              {selectedProject.name}
+            </Link>
+            <span className="text-zinc-400">·</span>
+            <span className="text-zinc-500 dark:text-zinc-400">Feedback</span>
+          </div>
+          <Link
+            href={ROUTES.messages}
+            className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+          >
+            Alle projecten →
+          </Link>
+        </div>
+      )}
 
       {projects.length > 1 && (
         <div className="flex flex-wrap gap-2">

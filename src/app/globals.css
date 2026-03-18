@@ -198,4 +198,189 @@ body {
   .animate-logo-word {
     animation: helderly-word-in 0.4s ease-out 0.55s both;
   }
+
+  /* Zwevende orb animaties */
+  @keyframes orb-float-1 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    33% {
+      transform: translate(30px, -20px) scale(1.05);
+    }
+    66% {
+      transform: translate(-20px, 30px) scale(0.95);
+    }
+  }
+  @keyframes orb-float-2 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(-40px, 20px) scale(1.08);
+    }
+  }
+  @keyframes orb-float-3 {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-30px);
+    }
+  }
+  .orb-1 {
+    animation: orb-float-1 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    animation: orb-float-2 10s ease-in-out infinite;
+  }
+  .orb-3 {
+    animation: orb-float-3 12s ease-in-out infinite;
+  }
+
+  /* Shimmer op knop */
+  @keyframes shimmer-slide {
+    0% {
+      left: -100%;
+    }
+    60%,
+    100% {
+      left: 150%;
+    }
+  }
+
+  /* Gradient slide op progress bar */
+  @keyframes gradient-slide {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  /* Bar fill animatie */
+  @keyframes bar-fill-anim {
+    from {
+      width: 0% !important;
+    }
+    to {
+      width: var(--target-width, 65%);
+    }
+  }
+
+  /* Card fade in omhoog */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Pop animatie */
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Pulse dot */
+  @keyframes dot-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.6;
+    }
+  }
+
+  .animate-bar-fill {
+    animation: bar-fill-anim 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out both;
+  }
+  .animate-pop-in {
+    animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 1.5s both;
+  }
+  .animate-dot-pulse {
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+
+  /* KPI kaart animaties */
+  @keyframes kpi-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes kpi-num-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .animate-kpi-card {
+    animation: kpi-card-in 0.4s ease-out both;
+  }
+  .animate-kpi-num {
+    animation: kpi-num-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes stagePulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+}
+
+/* Feature hover glow (landing strip) */
+.feature-card-hover {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.feature-card-hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #6366f1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.feature-card-hover:hover::before {
+  transform: scaleX(1);
+}
+.feature-card-hover:hover {
+  background: rgba(99, 102, 241, 0.03);
 }

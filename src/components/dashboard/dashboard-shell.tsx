@@ -148,6 +148,13 @@ function DashboardShellInner({
   const pathname = usePathname();
   const [spinKey, setSpinKey] = useState(0);
 
+  function getNavHref(navHref: string, projectId: string | null): string {
+    if (!projectId) return navHref;
+    if (navHref === ROUTES.documents) return `${ROUTES.documents}?project=${projectId}`;
+    if (navHref === ROUTES.messages) return `${ROUTES.messages}?project=${projectId}`;
+    return navHref;
+  }
+
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname, setMobileOpen]);
@@ -256,7 +263,7 @@ function DashboardShellInner({
                 return (
                   <Tooltip key={href} content={label} side="right">
                     <Link
-                      href={href}
+                      href={getNavHref(href, currentProjectId)}
                       onClick={() => setMobileOpen(false)}
                       className={cn(
                         "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",

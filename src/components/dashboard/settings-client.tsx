@@ -26,7 +26,6 @@ const THEMES: { value: ThemePreference; label: string; icon: React.ElementType }
 export function SettingsClient({ profile }: Props) {
   const [loading, setLoading] = useState(false);
   const [accentSaving, setAccentSaving] = useState(false);
-  const [themeSaving, setThemeSaving] = useState(false);
   const [businessSaving, setBusinessSaving] = useState(false);
   const [businessError, setBusinessError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -70,11 +69,8 @@ export function SettingsClient({ profile }: Props) {
   }
 
   async function handleThemeSelect(value: ThemePreference) {
-    setThemeSaving(true);
     setTheme(value);
-    const r = await updateProfileTheme(value);
-    setThemeSaving(false);
-    if (r.error) console.error(r.error);
+    void updateProfileTheme(value);
   }
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -287,7 +283,6 @@ export function SettingsClient({ profile }: Props) {
               variant={currentTheme === value ? "default" : "outline"}
               size="sm"
               onClick={() => handleThemeSelect(value)}
-              disabled={themeSaving}
               className={currentTheme === value ? "bg-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/90" : ""}
             >
               <Icon className="h-3.5 w-3.5 mr-1.5" />

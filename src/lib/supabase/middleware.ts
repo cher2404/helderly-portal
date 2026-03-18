@@ -1,9 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { ROUTES } from "@/lib/constants";
+import { ROUTES, TRIAL_DAYS } from "@/lib/constants";
 import { isOwnerEmail } from "@/lib/owner";
-
-const TRIAL_DAYS = 30;
 
 function isTrialExpired(profile: { trial_starts_at: string | null; subscription_status: string } | null): boolean {
   if (!profile) return true;

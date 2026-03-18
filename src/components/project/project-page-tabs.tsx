@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
   LayoutDashboard,
   Calendar,
@@ -53,6 +54,22 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
   const tab = searchParams?.get("tab") ?? "dashboard";
   const isProjectPage = pathname === ROUTES.project(projectSegment);
 
+  const primaryTabs = ["dashboard", "milestones", "documents", "feedback"] as const;
+  const freelancerSecondaryTabs = [
+    "decisions",
+    "meetings",
+    "budget",
+    "faq",
+    "contact",
+    "scratchpad",
+    "timeline",
+  ] as const;
+  const clientSecondaryTabs: string[] = [];
+  const secondaryTabs = isFreelancer ? freelancerSecondaryTabs : clientSecondaryTabs;
+
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
+
   const buildHref = (key: string) => {
     const c = tabConfig[key];
     if (!c) return ROUTES.project(projectSegment);
@@ -75,27 +92,23 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
     return false;
   };
 
-  const tabsToShow: string[] = [
-    "dashboard",
-    "milestones",
-    "documents",
-    "decisions",
-    "meetings",
-    "budget",
-    "faq",
-    "contact",
-    ...(isFreelancer ? (["scratchpad"] as const) : []),
-    "timeline",
-    "feedback",
-  ];
+  const isSecondaryActive = secondaryTabs.some((key) => isActive(key));
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false);
+    }
+    if (moreOpen) document.addEventListener("click", onClickOutside);
+    return () => document.removeEventListener("click", onClickOutside);
+  }, [moreOpen]);
 
   return (
     <nav
       role="tablist"
       aria-label="Project tabs"
-      className="flex flex-wrap items-center gap-1 border-b border-zinc-200 dark:border-zinc-700 pb-3 mb-6"
+      className="flex flex-wrap items-center gap-1 border-b border-zinc-200 dark:border-zinc-700 pb-3 mb-6 relative"
     >
-      {tabsToShow.map((key) => {
+      {primaryTabs.map((key) => {
         const config = tabConfig[key];
         if (!config) return null;
         const href = buildHref(key);
@@ -105,6 +118,7 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
           <Link
             key={key}
             href={href}
+            onClick={() => setMoreOpen(false)}
             className={cn(
               "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors border",
               active
@@ -117,6 +131,51 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
           </Link>
         );
       })}
+
+      {secondaryTabs.length > 0 && (
+        <div ref={moreRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setMoreOpen((o) => !o)}
+            className={cn(
+              "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors border",
+              isSecondaryActive || moreOpen
+                ? "nav-active-neon"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
+            )}
+          >
+            Meer {isSecondaryActive ? "●" : "▾"}
+          </button>
+
+          {moreOpen && (
+            <div className="absolute top-full left-0 mt-1 z-20 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-[12px] shadow-lg py-1 min-w-[160px]">
+              {secondaryTabs.map((key) => {
+                const config = tabConfig[key];
+                if (!config) return null;
+                const href = buildHref(key);
+                const active = isActive(key);
+                const Icon = config.icon;
+                return (
+                  <Link
+                    key={key}
+                    href={href}
+                    onClick={() => setMoreOpen(false)}
+                    className={cn(
+                      "flex items-center gap-2.5 px-4 py-2 text-sm font-medium transition-colors",
+                      active
+                        ? "text-[var(--primary-accent)] bg-[var(--primary-accent)]/5"
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    )}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    {config.label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

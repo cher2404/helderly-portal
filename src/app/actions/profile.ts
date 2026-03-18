@@ -13,7 +13,6 @@ export async function updateProfileTheme(theme: ThemePreference) {
     .update({ theme, updated_at: new Date().toISOString() })
     .eq("user_id", user.id);
   if (error) return { error: error.message };
-  revalidatePath("/dashboard/settings");
   return { error: null };
 }
 

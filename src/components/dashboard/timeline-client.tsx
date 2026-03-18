@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useMemo, useTransition } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Project, Profile } from "@/lib/database.types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createProject, updateProjectProgress } from "@/app/actions/projects";
+import { updateProjectProgress } from "@/app/actions/projects";
 import type { ProjectStatus } from "@/lib/database.types";
 
 type Props = {
@@ -19,19 +17,19 @@ const STATUS_OPTIONS: ProjectStatus[] = ["active", "on_hold", "completed", "draf
 
 export function TimelineClient({ initialProjects, profile }: Props) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
-  const [createError, setCreateError] = useState<string | null>(null);
   const [updateError, setUpdateError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
 
   const supabase = useMemo(() => createClient(), []);
   const isAdmin = profile?.role === "admin";
 
   useEffect(() => {
+    const ownerId = profile?.user_id;
+    if (!ownerId) return;
     const channel = supabase
       .channel("timeline-realtime")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "projects" },
+        { event: "*", schema: "public", table: "projects", filter: `owner_id=eq.${ownerId}` },
         () => {
           supabase
             .from("projects")
@@ -46,7 +44,7 @@ export function TimelineClient({ initialProjects, profile }: Props) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase]);
+  }, [supabase, profile?.user_id]);
 
   return (
     <div className="space-y-6">
@@ -60,78 +58,6 @@ export function TimelineClient({ initialProjects, profile }: Props) {
             : "Voortgang en mijlpalen per project."}
         </p>
       </div>
-
-      {isAdmin && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Create project</CardTitle>
-            <p className="text-sm text-zinc-400">
-              Client ID is the Supabase Auth user UUID of the client (from Authentication → Users).
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formEl = e.currentTarget;
-                const formData = new FormData(formEl);
-                setCreateError(null);
-                startTransition(async () => {
-                  const result = await createProject(formData);
-                  if (result.error) setCreateError(result.error);
-                  else formEl.reset();
-                });
-              }}
-              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-            >
-              <div className="space-y-2">
-                <Label htmlFor="name">Project name</Label>
-                <Input id="name" name="name" placeholder="Website redesign" required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="client_id">Client user ID (UUID)</Label>
-                <Input
-                  id="client_id"
-                  name="client_id"
-                  placeholder="uuid-from-supabase-auth"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
-                <select
-                  id="status"
-                  name="status"
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-3 py-2 text-sm text-zinc-100"
-                >
-                  {STATUS_OPTIONS.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="progress">Progress %</Label>
-                <Input
-                  id="progress"
-                  name="progress"
-                  type="number"
-                  min={0}
-                  max={100}
-                  defaultValue={0}
-                />
-              </div>
-              <div className="sm:col-span-2 lg:col-span-4">
-                <Button type="submit" disabled={isPending} className={isPending ? "opacity-50 cursor-not-allowed" : ""}>
-                  {isPending ? "Bezig..." : "Create project"}
-                </Button>
-              </div>
-            </form>
-            {createError && (
-              <p className="mt-2 text-sm text-red-400">{createError}</p>
-            )}
-          </CardContent>
-        </Card>
-      )}
 
       <Card>
         <CardHeader>

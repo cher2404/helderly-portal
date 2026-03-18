@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: { default: "Helderly — Client Portal", template: "%s | Helderly" },
   description: "Clean, calm client portal for project collaboration. Manage projects, milestones, and client feedback in one place.",
   openGraph: { title: "Helderly — Client Portal", description: "Clean, calm client portal for project collaboration." },
+  icons: {
+    icon: "/favicon-animated.svg",
+  },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:4000"),
 };
 

@@ -65,7 +65,7 @@ function ThemeToggle() {
       type="button"
       onClick={() => {
         setTheme(next);
-        updateProfileTheme(next);
+        void updateProfileTheme(next);
       }}
       className="rounded-lg border border-zinc-200 dark:border-zinc-700 p-1.5 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
@@ -146,10 +146,15 @@ function DashboardShellInner({
 }) {
   const { isPreviewMode } = usePreviewMode();
   const pathname = usePathname();
+  const [spinKey, setSpinKey] = useState(0);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname, setMobileOpen]);
+
+  useEffect(() => {
+    setSpinKey((k) => k + 1);
+  }, [pathname]);
 
   return (
     <>
@@ -182,14 +187,19 @@ function DashboardShellInner({
           {profile.logo_url ? (
             <Link href={ROUTES.dashboard} className="flex items-center gap-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={profile.logo_url} alt="Logo" className="h-8 max-w-[140px] object-contain object-left" />
+              <img
+                key={spinKey}
+                src={profile.logo_url}
+                alt="Logo"
+                className="h-8 max-w-[140px] object-contain object-left animate-helderly-spin"
+              />
             </Link>
           ) : (
             <Link
               href={ROUTES.dashboard}
               className="font-semibold text-zinc-800 dark:text-zinc-100 tracking-tight flex items-center gap-2 text-sm"
             >
-              <FolderKanban className="h-4 w-4 text-[var(--primary-accent)]" />
+              <FolderKanban key={spinKey} className="h-4 w-4 text-[var(--primary-accent)] animate-helderly-spin" />
               Helderly
             </Link>
           )}

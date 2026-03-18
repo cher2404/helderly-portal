@@ -14,6 +14,8 @@ import { updateAssetStatus } from "@/app/actions/projects";
 import { cn } from "@/lib/utils";
 import { showToast } from "@/components/ui/toast";
 import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
+import { SkeletonList } from "@/components/ui/skeleton";
+import { LoadingIcon } from "@/components/ui/loading-icon";
 
 type Props = {
   initialProjects: Project[];
@@ -40,6 +42,7 @@ export function DocumentsClient({
   const [assets, setAssets] = useState<Asset[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const supabase = useMemo(() => createClient(), []);
   const isAdmin = profile?.role === "admin";
@@ -49,14 +52,19 @@ export function DocumentsClient({
   useEffect(() => {
     if (!selectedProjectId) {
       setAssets([]);
+      setLoading(false);
       return;
     }
+    setLoading(true);
     supabase
       .from("assets")
       .select("*")
       .eq("project_id", selectedProjectId)
       .order("created_at", { ascending: false })
-      .then(({ data }) => setAssets((data as Asset[]) ?? []));
+      .then(({ data }) => {
+        setAssets((data as Asset[]) ?? []);
+        setLoading(false);
+      });
 
     const channel = supabase
       .channel(`assets-${selectedProjectId}`)
@@ -271,7 +279,12 @@ export function DocumentsClient({
               <CardDescription>Klik om te openen of te downloaden. Gebruik Goedkeuren of Revisie aanvragen om feedback te geven.</CardDescription>
             </CardHeader>
             <CardContent>
-              {assets.length === 0 ? (
+            {loading ? (
+              <>
+                <LoadingIcon label="Bestanden laden..." />
+                <SkeletonList rows={3} />
+              </>
+            ) : assets.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <FileText className="h-12 w-12 text-zinc-500 dark:text-zinc-600 mb-2" />
                   <p className="text-sm text-zinc-500 dark:text-zinc-400">Nog geen bestanden in dit project.</p>

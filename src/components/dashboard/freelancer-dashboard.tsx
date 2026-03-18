@@ -2,12 +2,14 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { FolderOpen, FileText, Clock, Inbox, Calendar } from "lucide-react";
+import { FolderOpen, FileText, Clock, Inbox, Calendar, Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTES, projectSegment } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Project, Asset, Profile, Appointment, Template } from "@/lib/database.types";
 import { ProjectBuilderForm } from "./project-builder-form";
+import { GlassModal } from "@/components/ui/glass-modal";
+import { OnboardingChecklist } from "./onboarding-checklist";
 import { StatusDot } from "@/components/ui/status-dot";
 import { Tooltip } from "@/components/ui/tooltip";
 import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
@@ -38,6 +40,7 @@ export function FreelancerDashboard({
   const [projects] = useState(initialProjects);
   const [recentAssets] = useState(initialRecentAssets);
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed">("all");
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const filteredProjects =
     statusFilter === "all"
       ? projects
@@ -67,15 +70,7 @@ export function FreelancerDashboard({
         </p>
       </div>
 
-      {/* Onboarding: toon korte checklist als nog geen slug of geen projecten */}
-      {!profile.slug && (
-        <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 px-4 py-3 text-sm">
-          <p className="font-medium text-zinc-700 dark:text-zinc-300">Quick start</p>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Stel in <Link href={ROUTES.settings} className="text-[var(--primary-accent)] hover:underline">Instellingen</Link> je inloglink voor klanten in, zodat ze bij jou kunnen inloggen.
-          </p>
-        </div>
-      )}
+      <OnboardingChecklist profile={profile} projects={projects} />
       {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
         <div className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 px-4 py-3 text-sm">
           {pendingAssetsCount > 0 && (
@@ -135,9 +130,16 @@ export function FreelancerDashboard({
         </Tooltip>
       </section>
 
-      <section id="create-project">
-        <ProjectBuilderForm templates={initialTemplates} />
-      </section>
+      <div id="create-project" className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setShowCreateModal(true)}
+          className="inline-flex items-center gap-2 rounded-[12px] px-4 py-2.5 text-sm font-medium text-white bg-[var(--primary-accent)] hover:opacity-90 transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Nieuw project
+        </button>
+      </div>
 
       <section>
         <Card className="rounded-[12px] border-zinc-200 bg-white dark:border-white/[0.06] dark:bg-white/[0.03]">
@@ -272,6 +274,22 @@ export function FreelancerDashboard({
           </CardContent>
         </Card>
       </section>
+
+      {showCreateModal && (
+        <GlassModal
+          open={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          title="Nieuw project aanmaken"
+        >
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
+            Nieuw project aanmaken
+          </h2>
+          <ProjectBuilderForm
+            templates={initialTemplates}
+            onSuccess={() => setShowCreateModal(false)}
+          />
+        </GlassModal>
+      )}
     </div>
   );
 }

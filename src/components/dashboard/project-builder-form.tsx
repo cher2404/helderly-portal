@@ -10,9 +10,9 @@ import { createProject } from "@/app/actions/projects";
 import type { Template } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
 
-type Props = { templates?: Template[] };
+type Props = { templates?: Template[]; onSuccess?: () => void };
 
-export function ProjectBuilderForm({ templates = [] }: Props) {
+export function ProjectBuilderForm({ templates = [], onSuccess }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [templateId, setTemplateId] = useState<string>("");
@@ -47,6 +47,7 @@ export function ProjectBuilderForm({ templates = [] }: Props) {
               setSuccess(true);
               setTemplateId("");
               formEl.reset();
+              onSuccess?.();
             });
           }}
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"

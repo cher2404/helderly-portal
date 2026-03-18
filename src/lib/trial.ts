@@ -1,6 +1,5 @@
+import { TRIAL_DAYS } from "@/lib/constants";
 import type { Profile } from "@/lib/database.types";
-
-const TRIAL_DAYS = 30;
 
 /**
  * Trial is active if the user has an active Stripe subscription,

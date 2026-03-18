@@ -1,27 +1,32 @@
 "use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { FolderOpen, FileText, Inbox } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ROUTES, projectSegment } from "@/lib/constants";
-import type { Project, Asset, Profile } from "@/lib/database.types";
+import { FolderOpen, FileText, Inbox, Calendar, MessageSquare, Gavel, CheckCircle2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ROUTES } from "@/lib/constants";
+import type { Project, Asset, Profile, Decision, ProjectStage } from "@/lib/database.types";
 
 type Props = {
   initialProjects: Project[];
   initialRecentAssets: Asset[];
   profile: Profile;
+  initialDecisions?: Decision[];
+  initialStages?: ProjectStage[];
 };
 
 export function CustomerDashboard({
   initialProjects,
   initialRecentAssets,
   profile,
+  initialDecisions = [],
+  initialStages = [],
 }: Props) {
-  const [projects] = useState(initialProjects);
-  const [recentAssets] = useState(initialRecentAssets);
+  const project = initialProjects[0];
   const firstName = profile?.full_name?.split(/\s+/)[0];
-  const totalFiles = recentAssets.length;
+
+  const pendingAssets = initialRecentAssets.filter((a) => a.status === "pending");
+  const unconfirmedDecisions = initialDecisions.filter((d) => !d.confirmed_by_client);
+  const nextStage = initialStages.find((s) => !s.is_completed);
+  const hasActions = pendingAssets.length > 0 || unconfirmedDecisions.length > 0;
 
   return (
     <div className="space-y-8">
@@ -30,11 +35,11 @@ export function CustomerDashboard({
           {firstName ? `Welkom, ${firstName}` : "Mijn project"}
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
-          Bekijk de timeline, download bestanden en geef feedback.
+          Hier vind je altijd de laatste stand van zaken.
         </p>
       </div>
 
-      {projects.length === 0 ? (
+      {!project ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-white/[0.04] p-8 mb-4">
             <Inbox className="h-16 w-16 text-zinc-400 dark:text-zinc-500" />
@@ -46,64 +51,102 @@ export function CustomerDashboard({
         </div>
       ) : (
         <>
-          <section className="grid gap-4 sm:grid-cols-2">
-            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                  <FolderOpen className="h-4 w-4" />
-                  Projecten
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{projects.length}</p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  {projects.length === 1 ? "project" : "projecten"}
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl hover:border-zinc-300 dark:hover:border-white/[0.1] transition-colors">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Bestanden
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{totalFiles}</p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">beschikbaar om te downloaden</p>
+          {/* Projectstatus */}
+          <section>
+            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03]">
+              <CardContent className="p-5">
+                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">Huidig project</p>
+                <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">{project.name}</p>
+                <div className="flex items-center gap-2 mt-3">
+                  <div className="flex-1 h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-[var(--primary-accent)] transition-all"
+                      style={{ width: `${project.progress_percentage}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400 w-8 text-right shrink-0">
+                    {project.progress_percentage}%
+                  </span>
+                </div>
+                {nextStage && (
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2">
+                    Huidige stap: <span className="text-zinc-700 dark:text-zinc-300">{nextStage.title}</span>
+                  </p>
+                )}
               </CardContent>
             </Card>
           </section>
 
+          {/* Openstaande acties */}
           <section>
-            <Card className="rounded-[12px] border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.03] backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle className="text-zinc-900 dark:text-zinc-50">Projecten</CardTitle>
-                <CardDescription>Open een project om bestanden te bekijken en feedback te geven.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {projects.map((project) => (
-                    <li key={project.id}>
-                      <Link
-                        href={ROUTES.project(projectSegment(project))}
-                        className="flex items-center justify-between gap-4 rounded-[12px] border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-white/[0.02] p-4 hover:border-zinc-300 hover:bg-zinc-100/50 dark:hover:bg-white/[0.05] dark:hover:border-white/[0.1] transition-all group"
-                      >
-                        <div className="min-w-0">
-                          <p className="font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-[var(--primary-accent)] truncate">
-                            {project.name}
-                          </p>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                            {project.progress_percentage}% · {project.status}
-                          </p>
-                        </div>
-                        <FolderOpen className="h-4 w-4 shrink-0 text-zinc-400 group-hover:text-[var(--primary-accent)]" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            {hasActions ? (
+              <Card className="rounded-[12px] border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-amber-800 dark:text-amber-200">Jouw aandacht gevraagd</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {pendingAssets.length > 0 && (
+                    <Link
+                      href={ROUTES.documents}
+                      className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300 hover:underline"
+                    >
+                      <FileText className="h-4 w-4 shrink-0" />
+                      {pendingAssets.length}{" "}
+                      {pendingAssets.length === 1 ? "bestand wacht" : "bestanden wachten"} op jouw goedkeuring
+                    </Link>
+                  )}
+                  {unconfirmedDecisions.length > 0 && (
+                    <Link
+                      href={ROUTES.project(project.id)}
+                      className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-300 hover:underline"
+                    >
+                      <Gavel className="h-4 w-4 shrink-0" />
+                      {unconfirmedDecisions.length}{" "}
+                      {unconfirmedDecisions.length === 1 ? "beslissing wacht" : "beslissingen wachten"} op jouw akkoord
+                    </Link>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="flex items-center gap-3 rounded-[12px] border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-3">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <p className="text-sm text-emerald-700 dark:text-emerald-300">Alles up to date — geen acties nodig.</p>
+              </div>
+            )}
+          </section>
+
+          {/* Snelle links naar project */}
+          <section>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={ROUTES.project(project.id)}
+                className="inline-flex items-center gap-2 rounded-[12px] border border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.08] transition-colors"
+              >
+                <FolderOpen className="h-4 w-4" />
+                Projectoverzicht
+              </Link>
+              <Link
+                href={ROUTES.timeline}
+                className="inline-flex items-center gap-2 rounded-[12px] border border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.08] transition-colors"
+              >
+                <Calendar className="h-4 w-4" />
+                Timeline
+              </Link>
+              <Link
+                href={ROUTES.documents}
+                className="inline-flex items-center gap-2 rounded-[12px] border border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.08] transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+                Bestanden
+              </Link>
+              <Link
+                href={ROUTES.messages}
+                className="inline-flex items-center gap-2 rounded-[12px] border border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.08] transition-colors"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Feedback
+              </Link>
+            </div>
           </section>
         </>
       )}

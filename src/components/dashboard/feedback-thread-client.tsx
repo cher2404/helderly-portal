@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { addProjectMessage } from "@/app/actions/projects";
 import type { Project, ProjectMessage, Profile } from "@/lib/database.types";
 import { showToast } from "@/components/ui/toast";
+import { SkeletonList } from "@/components/ui/skeleton";
+import { LoadingIcon } from "@/components/ui/loading-icon";
 
 type Props = {
   projects: Project[];
@@ -28,10 +30,23 @@ export function FeedbackThreadClient({
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     if (!selectedProject) return;
+    setLoading(true);
+
+    supabase
+      .from("project_messages")
+      .select("*")
+      .eq("project_id", selectedProject.id)
+      .order("created_at", { ascending: true })
+      .then(({ data }) => {
+        if (data) setMessages(data as ProjectMessage[]);
+        setLoading(false);
+      });
+
     const channel = supabase
       .channel(`messages-${selectedProject.id}`)
       .on(
@@ -109,7 +124,12 @@ export function FeedbackThreadClient({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3 max-h-[400px] overflow-y-auto">
-              {messages.length === 0 ? (
+              {loading ? (
+                <>
+                  <LoadingIcon label="Berichten laden..." />
+                  <SkeletonList rows={3} />
+                </>
+              ) : messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <MessageSquare className="h-10 w-10 text-zinc-600 mb-2" />
                   <p className="text-sm text-zinc-500">No messages yet. Start the conversation.</p>

@@ -6,6 +6,8 @@ import {
   getPendingAssetsCount,
   getMeetingsTodayCount,
   getTemplates,
+  getProjectStages,
+  getDecisions,
 } from "@/lib/supabase/queries";
 import { redirect } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -48,6 +50,12 @@ export default async function DashboardPage() {
     isFreelancer ? getTemplates() : Promise.resolve([]),
   ]);
 
+  const firstProjectId = projectIds[0];
+  const [decisions, stages] = await Promise.all([
+    !isFreelancer && firstProjectId ? getDecisions(firstProjectId) : Promise.resolve([]),
+    !isFreelancer && firstProjectId ? getProjectStages(firstProjectId) : Promise.resolve([]),
+  ]);
+
   return isFreelancer ? (
     <FreelancerDashboard
       initialProjects={projects}
@@ -63,6 +71,8 @@ export default async function DashboardPage() {
       initialProjects={projects}
       initialRecentAssets={recentAssets}
       profile={profile}
+      initialDecisions={decisions}
+      initialStages={stages}
     />
   );
 }

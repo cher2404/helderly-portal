@@ -185,9 +185,26 @@ export interface Notification {
   created_at: string;
 }
 
+export interface IntakeSubmission {
+  id: string;
+  freelancer_id: string;
+  name: string;
+  email: string;
+  description: string;
+  budget: string | null;
+  timeline: string | null;
+  status: string;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
+      intake_submissions: {
+        Row: IntakeSubmission;
+        Insert: Omit<IntakeSubmission, "id" | "created_at" | "status"> & { id?: string; created_at?: string; status?: string };
+        Update: Partial<IntakeSubmission>;
+      };
       notifications: { Row: Notification; Insert: Omit<Notification, "id" | "created_at"> & { created_at?: string }; Update: Partial<Notification> };
       profiles: { Row: Profile; Insert: Omit<Profile, "id" | "created_at" | "updated_at"> & { created_at?: string; updated_at?: string }; Update: Partial<Profile> };
       projects: { Row: Project; Insert: Omit<Project, "id" | "created_at" | "updated_at"> & { created_at?: string; updated_at?: string }; Update: Partial<Project> };

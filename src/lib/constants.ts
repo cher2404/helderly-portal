@@ -13,6 +13,8 @@ export const ROUTES = {
   documents: "/dashboard/documents",
   messages: "/dashboard/messages",
   settings: "/dashboard/settings",
+  intake: (slug: string) => `/intake/${slug}`,
+  intakeSubmissions: "/dashboard/intake",
   project: (idOrSlug: string) => `/dashboard/project/${idOrSlug}`,
 } as const;
 

@@ -272,6 +272,19 @@ export function SettingsClient({ profile }: Props) {
                     {copied ? <Check className="h-4 w-4 text-emerald-500" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
+                {profile.slug && (
+                  <div className="mt-3 rounded-[10px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50 p-3">
+                    <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1">
+                      Intake-pagina voor nieuwe klanten
+                    </p>
+                    <p className="text-xs font-mono text-zinc-700 dark:text-zinc-300 break-all">
+                      helderly.io/intake/{profile.slug}
+                    </p>
+                    <p className="text-xs text-zinc-400 dark:text-zinc-600 mt-1">
+                      Deel deze link met potentiële klanten — zij kunnen direct een aanvraag indienen.
+                    </p>
+                  </div>
+                )}
               </>
             )}
             {businessSaving && <span className="text-xs text-zinc-500">Opslaan…</span>}

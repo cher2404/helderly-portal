@@ -38,6 +38,7 @@ import { PreviewModeProvider, usePreviewMode } from "@/contexts/preview-mode-con
 const freelancerNav = [
   { href: ROUTES.dashboard, label: "Dashboard", icon: LayoutDashboard },
   { href: ROUTES.clients, label: "Klanten", icon: Users },
+  { href: ROUTES.intakeSubmissions, label: "Aanvragen", icon: Inbox },
 ];
 
 const freelancerOverviewNav = [

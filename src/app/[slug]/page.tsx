@@ -13,6 +13,7 @@ const RESERVED_SLUGS = new Set([
   "dashboard",
   "owner",
   "api",
+  "intake",
   "favicon.ico",
   "_next",
 ]);

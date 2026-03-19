@@ -5,25 +5,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from "@dnd-kit/core";
-import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { LayoutGroup, motion } from "framer-motion";
-import {
   Phone,
-  Plus,
   ChevronLeft,
-  Gavel,
   LayoutTemplate,
-  LayoutGrid,
-  RotateCcw,
-  LayoutPanelLeft,
   Box,
   Eye,
   EyeOff,
@@ -58,8 +42,7 @@ import type { ProjectHealthStatus } from "@/lib/database.types";
 import { ProjectLayoutProvider, useProjectLayout } from "./project-layout-provider";
 import { ProjectPageTabs, getProjectTab } from "./project-page-tabs";
 import { ProjectDashboardKpi } from "./project-dashboard-kpi";
-import { SortableDashboardWidget, renderWidgetContent, type ProjectWidgetPropsWithSetProject } from "./project-dashboard-widgets";
-import { WidgetGallery } from "./widget-gallery";
+import { renderWidgetContent, type ProjectWidgetPropsWithSetProject } from "./project-dashboard-widgets";
 import { WIDGET_META, type WidgetId } from "@/lib/project-widgets";
 import { usePreviewMode } from "@/contexts/preview-mode-context";
 
@@ -259,18 +242,8 @@ function ProjectDetailContent({
   const widgetIdForTab = tabToWidgetId[projectTab];
   const isDashboardView = projectTab === "dashboard";
   const isSingleWidgetView = widgetIdForTab != null;
-  const {
-    editMode,
-    setEditMode,
-    visibleWidgets,
-    moveWidget,
-    saveLayout,
-    resetLayout,
-    hiddenWidgetIds,
-    isSaving,
-  } = useProjectLayout();
+  const { visibleWidgets } = useProjectLayout();
   const { isPreviewMode, togglePreviewMode } = usePreviewMode();
-  const [galleryOpen, setGalleryOpen] = useState(false);
 
   const visibleWidgetsFiltered = useMemo(
     () =>
@@ -280,26 +253,6 @@ function ProjectDetailContent({
     [isPreviewMode, visibleWidgets]
   );
 
-  const effectiveEditMode = editMode && !isPreviewMode;
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      if (isPreviewMode) return;
-      const { active, over } = event;
-      if (!over || active.id === over.id) return;
-      const oldIndex = visibleWidgets.findIndex((w) => w.id === active.id);
-      const newIndex = visibleWidgets.findIndex((w) => w.id === over.id);
-      if (oldIndex === -1 || newIndex === -1) return;
-      moveWidget(oldIndex, newIndex);
-      setTimeout(() => saveLayout(), 0);
-    },
-    [isPreviewMode, visibleWidgets, moveWidget, saveLayout]
-  );
 
   const widgetProps: ProjectWidgetPropsWithSetProject = useMemo(
     () => ({
@@ -412,90 +365,8 @@ function ProjectDetailContent({
                 E-mail klant
               </a>
             )}
-            {!isPreviewMode && !isDashboardView && !isSingleWidgetView && (
-              <Button
-                variant={effectiveEditMode ? "secondary" : "outline"}
-                size="sm"
-                className="rounded-xl border-zinc-700 bg-zinc-800/50 text-zinc-200 hover:bg-[#6366f1]/15 hover:border-[#6366f1]/25 hover:text-zinc-100"
-                onClick={() => setEditMode(!editMode)}
-              >
-                <LayoutGrid className="h-3.5 w-3.5 mr-1.5" />
-                Bewerk indeling
-              </Button>
-            )}
-            {effectiveEditMode && !isDashboardView && !isSingleWidgetView && (
-              <>
-                <Button variant="outline" size="sm" className="rounded-[12px]" onClick={resetLayout}>
-                  <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                  Herstel indeling
-                </Button>
-                <Button variant="outline" size="sm" className="rounded-[12px]" onClick={() => saveLayout()} disabled={isSaving}>
-                  {isSaving ? "Opslaan…" : "Indeling opslaan"}
-                </Button>
-                {hiddenWidgetIds.length > 0 && (
-                  <Button variant="outline" size="sm" className="rounded-[12px]" onClick={() => setGalleryOpen(true)}>
-                    <LayoutPanelLeft className="h-3.5 w-3.5 mr-1.5" />
-                    Widget toevoegen
-                  </Button>
-                )}
-              </>
-            )}
             {!isPreviewMode && (
               <>
-                {projectTab === "contact" && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
-                    onClick={() => {
-                      setModal("contact");
-                      setError(null);
-                    }}
-                  >
-                    <Phone className="h-3.5 w-3.5 mr-1.5" />
-                    Gesprek loggen
-                  </Button>
-                )}
-                {projectTab === "meetings" && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
-                    onClick={() => {
-                      setModal("meeting");
-                      setError(null);
-                    }}
-                  >
-                    <Plus className="h-3.5 w-3.5 mr-1.5" />
-                    Afspraak
-                  </Button>
-                )}
-                {projectTab === "decisions" && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
-                    onClick={() => {
-                      setModal("decision");
-                      setError(null);
-                    }}
-                  >
-                    <Gavel className="h-3.5 w-3.5 mr-1.5" />
-                    Beslissing
-                  </Button>
-                )}
-                {(projectTab === "dashboard" || !projectTab) && (
-                  <Link href={`${ROUTES.documents}?project=${initialProject.id}`}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-xl border-white/20 bg-white/5 text-zinc-300 hover:bg-white/10 hover:text-zinc-100 [&_svg]:drop-shadow-[0_0_6px_rgba(96,165,250,0.3)]"
-                    >
-                      <Plus className="h-3.5 w-3.5 mr-1.5" />
-                      Bestand uploaden
-                    </Button>
-                  </Link>
-                )}
                 <Button
                   variant="outline"
                   size="sm"
@@ -689,22 +560,74 @@ function ProjectDetailContent({
         </form>
       </GlassModal>
 
-      <WidgetGallery isOpen={galleryOpen} onClose={() => setGalleryOpen(false)} />
-
       {/* Dashboard: alleen KPI's; andere tabs: één invul-sectie */}
       {isDashboardView && (
-        <ProjectDashboardKpi
-          projectSegment={projectSegment(project)}
-          projectId={project.id}
-          project={project}
-          stages={stages}
-          appointments={appointments}
-          contactLogs={contactLogs}
-          assets={assets}
-          decisions={decisions}
-          faqs={faqs}
-          isFreelancer={isFreelancer}
-        />
+        <>
+          <ProjectDashboardKpi
+            projectSegment={projectSegment(project)}
+            projectId={project.id}
+            project={project}
+            stages={stages}
+            appointments={appointments}
+            contactLogs={contactLogs}
+            assets={assets}
+            decisions={decisions}
+            faqs={faqs}
+            isFreelancer={isFreelancer}
+          />
+
+          {isFreelancer && !isPreviewMode && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
+              {[
+                {
+                  label: "Bestand uploaden",
+                  color: "bg-[#6366f1]/10 text-[#818cf8] border-[#6366f1]/20",
+                  href: `${ROUTES.documents}?project=${initialProject.id}`,
+                },
+                {
+                  label: "Mijlpaal toevoegen",
+                  color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+                  href: `${ROUTES.project(projectSegment(project))}?tab=milestones`,
+                },
+                {
+                  label: "Beslissing toevoegen",
+                  color: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+                  action: () => {
+                    setModal("decision");
+                    setError(null);
+                  },
+                },
+                {
+                  label: "Afspraak inplannen",
+                  color: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+                  action: () => {
+                    setModal("meeting");
+                    setError(null);
+                  },
+                },
+              ].map(({ label, color, action, href }) =>
+                href ? (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={`flex items-center justify-center gap-1.5 rounded-[10px] border px-3 py-2 text-xs font-medium transition-all hover:opacity-80 ${color}`}
+                  >
+                    + {label}
+                  </Link>
+                ) : (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={action}
+                    className={`flex items-center justify-center gap-1.5 rounded-[10px] border px-3 py-2 text-xs font-medium transition-all hover:opacity-80 ${color}`}
+                  >
+                    + {label}
+                  </button>
+                )
+              )}
+            </div>
+          )}
+        </>
       )}
 
       {isSingleWidgetView && (
@@ -728,35 +651,15 @@ function ProjectDetailContent({
       )}
 
       {!isDashboardView && !isSingleWidgetView && (
-        <div
-          className={`relative rounded-[12px] transition-colors ${effectiveEditMode ? "min-h-[400px] bg-zinc-100 dark:bg-zinc-500/5" : ""}`}
-        >
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={visibleWidgetsFiltered.map((w) => w.id)}
-              strategy={verticalListSortingStrategy}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {visibleWidgetsFiltered.map((widget) => (
+            <div
+              key={widget.id}
+              className="rounded-[12px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 p-4"
             >
-              <LayoutGroup>
-                <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {visibleWidgetsFiltered.map((widget, index) => (
-                    <motion.div key={widget.id} layout transition={{ type: "spring", stiffness: 350, damping: 30 }}>
-                      <SortableDashboardWidget
-                        widgetId={widget.id as WidgetId}
-                        index={index}
-                        isSortable={isFreelancer && !isPreviewMode}
-                      >
-                        {renderWidgetContent(widget.id as WidgetId, widgetProps)}
-                      </SortableDashboardWidget>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </LayoutGroup>
-            </SortableContext>
-          </DndContext>
+              {renderWidgetContent(widget.id as WidgetId, widgetProps)}
+            </div>
+          ))}
         </div>
       )}
     </div>

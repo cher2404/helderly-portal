@@ -17,7 +17,12 @@ export function OnboardingChecklist({ profile, projects }: Props) {
     },
   ];
 
-  if (steps.every((s) => s.done)) return null;
+  const accountAgeDays = profile.created_at
+    ? (Date.now() - new Date(profile.created_at).getTime()) / (1000 * 60 * 60 * 24)
+    : 0;
+
+  // Verberg als alles klaar is óf het account ouder is dan 7 dagen.
+  if (steps.every((s) => s.done) || accountAgeDays > 7) return null;
 
   return (
     <div className="rounded-[12px] border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 px-4 py-3">

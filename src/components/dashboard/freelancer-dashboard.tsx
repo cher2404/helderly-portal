@@ -13,6 +13,13 @@ import { OnboardingChecklist } from "./onboarding-checklist";
 import { StatusDot } from "@/components/ui/status-dot";
 import { getSignedUrlFromAsset } from "@/lib/supabase/storage";
 
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Goedemorgen";
+  if (h < 18) return "Goedemiddag";
+  return "Goedenavond";
+}
+
 function formatDate(dateStr: string): string {
   return new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "short" }).format(new Date(dateStr));
 }
@@ -57,12 +64,22 @@ export function FreelancerDashboard({
 
   const activeCount = projects.filter((p) => p.status === "active").length;
   const pendingFiles = recentAssets.filter((a) => a.status === "pending").length;
+  const pendingAsset = recentAssets.find((a) => a.status === "pending") ?? null;
+  const pendingAssetProjectName = pendingAsset
+    ? projects.find((p) => p.id === pendingAsset.project_id)?.name ?? null
+    : null;
+  const todaysMeeting = initialUpcomingAppointments[0] ?? null;
+  const todaysMeetingProjectName = todaysMeeting
+    ? projects.find((p) => p.id === todaysMeeting.project_id)?.name ?? null
+    : null;
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Dashboard
+          {profile.full_name
+            ? `${getGreeting()}, ${profile.full_name.split(" ")[0]} 👋`
+            : "Dashboard"}
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mt-1">
           Overzicht van alle lopende projecten, acties en recente bestanden.
@@ -71,30 +88,50 @@ export function FreelancerDashboard({
 
       <OnboardingChecklist profile={profile} projects={projects} />
       {(pendingAssetsCount > 0 || meetingsTodayCount > 0) && (
-        <div
-          className="flex flex-wrap items-center gap-4 rounded-[12px] border border-amber-500/20 bg-amber-500/6 px-4 py-3 text-sm"
-          style={{ animation: "slideInLeft 0.4s ease-out 0.1s both" }}
-        >
-          <span className="relative flex h-2 w-2 shrink-0">
-            <span
-              className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"
-              style={{ animation: "dotPing 1.5s ease-in-out infinite" }}
-            />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-400" />
-          </span>
+        <div className="space-y-3">
           {pendingAssetsCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-200 dark:text-amber-200">
-              <FileText className="h-4 w-4 shrink-0" />
-              <strong>{pendingAssetsCount}</strong>{" "}
-              {pendingAssetsCount === 1 ? "bestand wacht" : "bestanden wachten"} op goedkeuring
-            </span>
+            <div className="flex items-center gap-3 rounded-[12px] border border-[#6366f1]/20 bg-[#6366f1]/6 px-4 py-3">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-[#6366f1] opacity-75 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#6366f1]" />
+              </span>
+              <p className="text-sm text-zinc-300 flex-1">
+                <strong className="text-white">
+                  {pendingAssetsCount} {pendingAssetsCount === 1 ? "bestand wacht" : "bestanden wachten"}
+                </strong>{" "}
+                op goedkeuring van je klant
+                {pendingAsset ? (
+                  <span className="block text-xs text-[#818cf8] mt-1 truncate">
+                    {pendingAsset.file_name}
+                    {pendingAssetProjectName ? ` · ${pendingAssetProjectName}` : ""}
+                  </span>
+                ) : null}
+              </p>
+              <Link
+                href={ROUTES.documents}
+                className="text-xs font-medium text-[#818cf8] hover:underline shrink-0"
+              >
+                Bekijken →
+              </Link>
+            </div>
           )}
+
           {meetingsTodayCount > 0 && (
-            <span className="flex items-center gap-2 text-amber-200 dark:text-amber-200">
-              <Calendar className="h-4 w-4 shrink-0" />
-              <strong>{meetingsTodayCount}</strong>{" "}
-              {meetingsTodayCount === 1 ? "afspraak" : "afspraken"} vandaag
-            </span>
+            <div className="flex items-center gap-3 rounded-[12px] border border-amber-500/20 bg-amber-500/6 px-4 py-3">
+              <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+              <p className="text-sm text-zinc-300 flex-1">
+                <strong className="text-white">
+                  {meetingsTodayCount} {meetingsTodayCount === 1 ? "afspraak" : "afspraken"}
+                </strong>{" "}
+                vandaag ingepland
+                {todaysMeeting ? (
+                  <span className="block text-xs text-amber-200/90 mt-1 truncate">
+                    {todaysMeeting.title}
+                    {todaysMeetingProjectName ? ` · ${todaysMeetingProjectName}` : ""}
+                  </span>
+                ) : null}
+              </p>
+            </div>
           )}
         </div>
       )}

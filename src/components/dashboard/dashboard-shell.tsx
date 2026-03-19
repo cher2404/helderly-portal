@@ -23,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/constants";
 import type { Profile, Project, ThemePreference } from "@/lib/database.types";
 import { updateProfileTheme } from "@/app/actions/profile";
-import { ProjectSwitcher } from "./project-switcher";
 import { CommandPalette } from "./command-palette";
 import { TrialBanner } from "./trial-banner";
 import { PaywallOverlay } from "./paywall-overlay";
@@ -39,11 +38,14 @@ import { PreviewModeProvider, usePreviewMode } from "@/contexts/preview-mode-con
 const freelancerNav = [
   { href: ROUTES.dashboard, label: "Dashboard", icon: LayoutDashboard },
   { href: ROUTES.clients, label: "Klanten", icon: Users },
-  { href: ROUTES.documents, label: "Documenten", icon: FileText },
-  { href: ROUTES.timeline, label: "Timeline", icon: Calendar },
-  { href: ROUTES.messages, label: "Feedback", icon: MessageSquare },
-  { href: ROUTES.settings, label: "Instellingen", icon: Settings },
 ];
+
+const freelancerOverviewNav = [
+  { href: ROUTES.documents, label: "Alle bestanden", icon: FileText },
+  { href: ROUTES.messages, label: "Alle feedback", icon: MessageSquare },
+];
+
+const freelancerBottomNav = [{ href: ROUTES.settings, label: "Instellingen", icon: Settings }];
 
 const customerNav = [
   { href: ROUTES.dashboard, label: "Mijn project", icon: Inbox },
@@ -90,9 +92,7 @@ export function DashboardShell({ profile, initialProjects, initialNotifications,
   const isProjectPage = pathname.startsWith("/dashboard/project/");
   const currentProjectId = isProjectPage ? pathname.split("/").pop() ?? null : null;
 
-  const navSections = isFreelancer
-    ? [{ title: null, items: freelancerNav }]
-    : [{ title: null, items: customerNav }];
+  const navSections = isFreelancer ? [] : [{ title: null, items: customerNav }];
 
   const isActive = (href: string) => {
     if (href === ROUTES.dashboard) return pathname === href || isProjectPage;
@@ -233,12 +233,7 @@ function DashboardShellInner({
               <FolderKanban className="h-4 w-4 shrink-0" />
               Nieuw project
             </Link>
-            {initialProjects.length > 0 ? (
-              <ProjectSwitcher
-                projects={initialProjects}
-                currentProjectId={currentProjectId}
-              />
-            ) : (
+            {initialProjects.length === 0 && (
               <Link
                 href={ROUTES.dashboard}
                 className="flex items-center justify-center gap-2 rounded-[12px] border border-slate-300 dark:border-slate-500/20 border-dashed px-3 py-2.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:border-[var(--primary-accent)]/40 hover:text-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/5 transition-colors"
@@ -251,35 +246,120 @@ function DashboardShellInner({
         )}
 
         <nav className="flex-1 p-3 space-y-1 overflow-auto">
-          {navSections.map(({ title, items }) => (
-            <div key={title ?? "main"}>
-              {title && (
-                <p className="px-3 pt-3 pb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  {title}
+          {isFreelancer ? (
+            <>
+              {/* Hoofdnavigatie */}
+              <div className="space-y-0.5">
+                {freelancerNav.map(({ href, label, icon: Icon }) => {
+                  const active = isActive(href);
+                  return (
+                    <Tooltip key={href} content={label} side="right">
+                      <Link
+                        href={getNavHref(href, currentProjectId)}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
+                          active
+                            ? "nav-active-neon"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
+                        )}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        {label}
+                      </Link>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+
+              {/* Separator met label */}
+              <div className="mt-4 mb-1">
+                <p className="px-3 text-[10px] font-medium uppercase tracking-wider text-zinc-600">
+                  Overzicht
                 </p>
-              )}
-              {items.map(({ href, label, icon: Icon }) => {
-                const active = isActive(href);
-                return (
-                  <Tooltip key={href} content={label} side="right">
-                    <Link
-                      href={getNavHref(href, currentProjectId)}
-                      onClick={() => setMobileOpen(false)}
-                      className={cn(
-                        "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
-                        active
-                          ? "nav-active-neon"
-                          : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
-                      )}
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {label}
-                    </Link>
-                  </Tooltip>
-                );
-              })}
-            </div>
-          ))}
+              </div>
+
+              {/* Overzichtnavigatie */}
+              <div className="space-y-0.5">
+                {freelancerOverviewNav.map(({ href, label, icon: Icon }) => {
+                  const active = isActive(href);
+                  return (
+                    <Tooltip key={href} content={label} side="right">
+                      <Link
+                        href={getNavHref(href, currentProjectId)}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
+                          active
+                            ? "nav-active-neon"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
+                        )}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        {label}
+                      </Link>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+
+              {/* Bottom navigatie */}
+              <div className="mt-4 pt-3 border-t border-zinc-200/70 dark:border-zinc-600/20">
+                <div className="space-y-0.5">
+                  {freelancerBottomNav.map(({ href, label, icon: Icon }) => {
+                    const active = isActive(href);
+                    return (
+                      <Tooltip key={href} content={label} side="right">
+                        <Link
+                          href={getNavHref(href, currentProjectId)}
+                          onClick={() => setMobileOpen(false)}
+                          className={cn(
+                            "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
+                            active
+                              ? "nav-active-neon"
+                              : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
+                          )}
+                        >
+                          <Icon className="h-4 w-4 shrink-0" />
+                          {label}
+                        </Link>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          ) : (
+            navSections.map(({ title, items }) => (
+              <div key={title ?? "main"}>
+                {title && (
+                  <p className="px-3 pt-3 pb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                    {title}
+                  </p>
+                )}
+                {items.map(({ href, label, icon: Icon }) => {
+                  const active = isActive(href);
+                  return (
+                    <Tooltip key={href} content={label} side="right">
+                      <Link
+                        href={getNavHref(href, currentProjectId)}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex items-center gap-2.5 rounded-[12px] px-3 py-2 text-sm font-medium tracking-tight transition-colors border",
+                          active
+                            ? "nav-active-neon"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
+                        )}
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        {label}
+                      </Link>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            ))
+          )}
         </nav>
         <div className="p-3 border-t border-zinc-200/80 dark:border-zinc-600/20 space-y-2">
           {isFreelancer && profile.slug && (

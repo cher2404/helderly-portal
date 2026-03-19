@@ -197,7 +197,7 @@ export function SettingsClient({ profile }: Props) {
             <div>
               <Label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Accent color</Label>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 mb-2">Primary buttons, progress bars, and active states.</p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <input
                   type="color"
                   defaultValue={profile.accent_color ?? "#6366f1"}
@@ -210,6 +210,14 @@ export function SettingsClient({ profile }: Props) {
                   onBlur={(e) => saveAccent(e.target.value)}
                   className="w-28 font-mono text-sm rounded-lg border-zinc-200 dark:border-zinc-700"
                 />
+                <button
+                  type="button"
+                  onClick={() => saveAccent("#6366f1")}
+                  className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors border border-zinc-700 rounded-lg px-3 py-2 hover:border-zinc-500 whitespace-nowrap"
+                  title="Herstel naar standaard indigo"
+                >
+                  Herstel standaard
+                </button>
               </div>
               {accentSaving && <span className="text-xs text-zinc-500 ml-2">Saving…</span>}
             </div>

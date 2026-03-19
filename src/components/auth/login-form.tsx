@@ -88,7 +88,7 @@ export function LoginForm({ branding }: Props) {
   }
 
   return (
-    <Card className="rounded-[12px] border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80">
+    <Card className="rounded-[14px] border-zinc-800 bg-zinc-900/50">
       <CardHeader className="space-y-1 text-center">
         {isBranded ? (
           <>
@@ -98,10 +98,10 @@ export function LoginForm({ branding }: Props) {
                 <img src={branding.logoUrl} alt={branding.businessName} className="h-10 max-w-[180px] object-contain" />
               </div>
             ) : null}
-            <CardTitle className="text-xl text-zinc-900 dark:text-zinc-50">
+            <CardTitle className="text-xl text-zinc-50">
               Log in bij {branding.businessName}
             </CardTitle>
-            <CardDescription className="text-zinc-500 dark:text-zinc-400">
+            <CardDescription className="text-zinc-400">
               Klantenportaal — log in met je e-mail.
             </CardDescription>
           </>
@@ -109,12 +109,12 @@ export function LoginForm({ branding }: Props) {
           <>
             <Link
               href={ROUTES.home}
-              className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 block mb-2"
+              className="text-2xl font-semibold tracking-tight text-zinc-50 block mb-2"
             >
               Helderly
             </Link>
-            <CardTitle className="text-xl text-zinc-900 dark:text-zinc-50">Inloggen</CardTitle>
-            <CardDescription className="text-zinc-500 dark:text-zinc-400">
+            <CardTitle className="text-xl text-zinc-50">Inloggen</CardTitle>
+            <CardDescription className="text-zinc-400">
               Kies je accounttype. Gebruik een magic link voor inloggen zonder wachtwoord.
             </CardDescription>
           </>
@@ -122,7 +122,7 @@ export function LoginForm({ branding }: Props) {
       </CardHeader>
       <CardContent className="space-y-4">
         {!isBranded && (
-          <div className="flex rounded-lg border border-zinc-200 dark:border-zinc-800 p-1 bg-zinc-50 dark:bg-zinc-900/50">
+          <div className="flex rounded-lg border border-zinc-800 p-1 bg-zinc-900/50">
             <button
               type="button"
               onClick={() => setRole("client")}
@@ -153,7 +153,7 @@ export function LoginForm({ branding }: Props) {
         )}
 
         {magicSent ? (
-          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300">
+          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
             Check je e-mail voor de inloglink. Klik erop om naar het dashboard te gaan.
           </div>
         ) : (
@@ -169,13 +169,13 @@ export function LoginForm({ branding }: Props) {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
-                  className="rounded-lg border-zinc-200 dark:border-zinc-800"
+                  className="rounded-lg border-zinc-800 bg-zinc-900/50 text-zinc-100 placeholder:text-zinc-600"
                 />
               </div>
               <Button
                 type="submit"
                 variant="outline"
-                className="w-full rounded-lg border-zinc-200 dark:border-zinc-700"
+                className="w-full rounded-lg border-zinc-700 bg-transparent text-zinc-200 hover:bg-zinc-800"
                 disabled={loading}
               >
                 <Mail className="h-4 w-4 mr-2" />
@@ -188,7 +188,7 @@ export function LoginForm({ branding }: Props) {
                 <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500">of log in met wachtwoord</span>
+                <span className="bg-zinc-900/50 px-2 text-zinc-500">of log in met wachtwoord</span>
               </div>
             </div>
 
@@ -203,7 +203,7 @@ export function LoginForm({ branding }: Props) {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="rounded-lg border-zinc-200 dark:border-zinc-800"
+                  className="rounded-lg border-zinc-800 bg-zinc-900/50 text-zinc-100 placeholder:text-zinc-600"
                 />
               </div>
               {error && (
@@ -222,15 +222,15 @@ export function LoginForm({ branding }: Props) {
           </>
         )}
       </CardContent>
-      <CardFooter className="flex flex-col items-center gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-6">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+      <CardFooter className="flex flex-col items-center gap-2 border-t border-zinc-800 pt-6">
+        <p className="text-sm text-zinc-500">
           Nog geen account?{" "}
-          <Link href={ROUTES.signUp} className="text-[var(--primary-accent)] hover:underline underline-offset-4">
+          <Link href={ROUTES.signUp} className="text-[#6366f1] hover:underline underline-offset-4">
             Aanmelden
           </Link>
         </p>
         {isBranded && (
-          <Link href={ROUTES.login} className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300">
+          <Link href={ROUTES.login} className="text-xs text-zinc-500 hover:text-zinc-300">
             Log in via Helderly
           </Link>
         )}

@@ -51,22 +51,22 @@ export function NotificationsBell({ initialNotifications, unreadCount: initialUn
         )}
       </button>
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-80 rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="absolute right-0 top-full z-50 mt-1 w-80 rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900 max-sm:right-auto max-sm:left-1/2 max-sm:-translate-x-1/2">
           <div className="flex items-center justify-between border-b border-zinc-200 px-3 py-2 dark:border-zinc-800">
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Notifications</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Notificaties</span>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={handleMarkAll}
                 className="text-xs text-[var(--primary-accent)] hover:underline"
               >
-                Mark all read
+                Alles gelezen
               </button>
             )}
           </div>
-          <ul className="max-h-[70vh] overflow-auto">
+          <ul className="max-h-[60vh] overflow-auto">
             {notifications.length === 0 ? (
-              <li className="px-3 py-6 text-center text-sm text-zinc-500">No notifications yet</li>
+              <li className="px-3 py-6 text-center text-sm text-zinc-500">Geen notificaties</li>
             ) : (
               notifications.map((n) => (
                 <li key={n.id}>

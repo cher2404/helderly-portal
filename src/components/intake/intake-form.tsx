@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CustomSelect } from "@/components/ui/custom-select";
 
 type Props = { slug: string; freelancerName: string };
 
@@ -126,30 +127,32 @@ export function IntakeForm({ slug, freelancerName }: Props) {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Budget</label>
-          <select
+          <CustomSelect
             name="budget"
-            className="w-full rounded-[10px] border border-zinc-800 bg-zinc-900/50 px-3 py-2.5 text-sm text-zinc-400 focus:outline-none focus:border-[#6366f1]/50"
-          >
-            <option value="">Niet zeker</option>
-            <option value="< €500">Minder dan €500</option>
-            <option value="€500 – €1.500">€500 – €1.500</option>
-            <option value="€1.500 – €5.000">€1.500 – €5.000</option>
-            <option value="€5.000 – €15.000">€5.000 – €15.000</option>
-            <option value="€15.000+">€15.000 of meer</option>
-          </select>
+            defaultValue=""
+            options={[
+              { value: "", label: "Niet zeker" },
+              { value: "< €500", label: "Minder dan €500" },
+              { value: "€500 – €1.500", label: "€500 – €1.500" },
+              { value: "€1.500 – €5.000", label: "€1.500 – €5.000" },
+              { value: "€5.000 – €15.000", label: "€5.000 – €15.000" },
+              { value: "€15.000+", label: "€15.000 of meer" },
+            ]}
+          />
         </div>
         <div>
           <label className="block text-xs font-medium text-zinc-400 uppercase tracking-wider mb-1.5">Wanneer starten?</label>
-          <select
+          <CustomSelect
             name="timeline"
-            className="w-full rounded-[10px] border border-zinc-800 bg-zinc-900/50 px-3 py-2.5 text-sm text-zinc-400 focus:outline-none focus:border-[#6366f1]/50"
-          >
-            <option value="">Flexibel</option>
-            <option value="Zo snel mogelijk">Zo snel mogelijk</option>
-            <option value="Binnen 1 maand">Binnen 1 maand</option>
-            <option value="Binnen 3 maanden">Binnen 3 maanden</option>
-            <option value="Over 3+ maanden">Over 3+ maanden</option>
-          </select>
+            defaultValue=""
+            options={[
+              { value: "", label: "Flexibel" },
+              { value: "Zo snel mogelijk", label: "Zo snel mogelijk" },
+              { value: "Binnen 1 maand", label: "Binnen 1 maand" },
+              { value: "Binnen 3 maanden", label: "Binnen 3 maanden" },
+              { value: "Over 3+ maanden", label: "Over 3+ maanden" },
+            ]}
+          />
         </div>
       </div>
 

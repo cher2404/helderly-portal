@@ -34,6 +34,7 @@ import {
   LinearCardContent,
 } from "@/components/ui/linear-card";
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { Input } from "@/components/ui/input";
 import {
   createStageMilestone,
@@ -378,19 +379,20 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
                         </Button>
                       </>
                     )}
-                    <select
-                      className="rounded border border-zinc-300 bg-white text-xs text-zinc-700 py-1 px-2 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+                    <CustomSelect
+                      size="sm"
                       value={stage.stage_status ?? "in_progress"}
-                      onChange={async (e) => {
-                        const v = e.target.value as StageStatus;
-                        await updateStageMilestone(projectId, stage.id, { stage_status: v });
-                        setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, stage_status: v } : s)));
+                      onChange={async (v) => {
+                        await updateStageMilestone(projectId, stage.id, { stage_status: v as StageStatus });
+                        setStages((prev) => prev.map((s) => (s.id === stage.id ? { ...s, stage_status: v as StageStatus } : s)));
                       }}
-                    >
-                      <option value="blocked">Geblokkeerd</option>
-                      <option value="in_progress">In uitvoering</option>
-                      <option value="done">Done</option>
-                    </select>
+                      options={[
+                        { value: "in_progress", label: "In uitvoering" },
+                        { value: "done", label: "Voltooid" },
+                        { value: "blocked", label: "Geblokkeerd" },
+                      ]}
+                      className="w-36"
+                    />
                   </div>
                 )}
                 {isEditing && (

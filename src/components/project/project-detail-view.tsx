@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GlassModal } from "@/components/ui/glass-modal";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { ROUTES, projectSegment } from "@/lib/constants";
 import { useBreadcrumbProjectName } from "@/contexts/breadcrumb-context";
 import {
@@ -339,19 +340,20 @@ function ProjectDetailContent({
                 Op schema
               </span>
             ) : isFreelancer ? (
-              <select
-                className="shrink-0 rounded-lg border border-zinc-700 bg-zinc-800/50 text-xs py-1.5 px-2 focus:border-[#6366f1]/40 focus:outline-none"
+              <CustomSelect
+                size="sm"
                 value={project.health_status ?? "on_track"}
-                onChange={async (e) => {
-                  const v = e.target.value as ProjectHealthStatus;
-                  await updateProjectHealth(initialProject.id, v);
-                  setProject((p) => ({ ...p, health_status: v }));
+                onChange={async (v) => {
+                  await updateProjectHealth(initialProject.id, v as ProjectHealthStatus);
+                  setProject((p) => ({ ...p, health_status: v as ProjectHealthStatus }));
                 }}
-              >
-                <option value="on_track">Op schema</option>
-                <option value="needs_attention">Aandacht nodig</option>
-                <option value="blocked">Geblokkeerd</option>
-              </select>
+                options={[
+                  { value: "on_track", label: "Op schema" },
+                  { value: "needs_attention", label: "Aandacht nodig" },
+                  { value: "blocked", label: "Geblokkeerd" },
+                ]}
+                className="w-36 shrink-0"
+              />
             ) : null}
           </div>
         </div>
@@ -500,12 +502,16 @@ function ProjectDetailContent({
           </div>
           <div className="space-y-1.5">
             <Label className="text-zinc-400 text-xs">Channel</Label>
-            <select name="channel" className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100">
-              <option value="call">Call</option>
-              <option value="email">Email</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="meeting">Afspraak</option>
-            </select>
+            <CustomSelect
+              name="channel"
+              defaultValue="call"
+              options={[
+                { value: "call", label: "Telefoongesprek" },
+                { value: "email", label: "E-mail" },
+                { value: "whatsapp", label: "WhatsApp" },
+                { value: "meeting", label: "Afspraak" },
+              ]}
+            />
           </div>
           <div className="sm:col-span-2 space-y-1.5">
             <Label className="text-zinc-600 dark:text-zinc-400 text-xs">Summary</Label>

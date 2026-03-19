@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   openGraph: { title: "Helderly — Client Portal", description: "Clean, calm client portal for project collaboration." },
   icons: {
     icon: "/favicon-animated.svg",
+    apple: "/favicon-animated.svg",
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:4000"),
 };

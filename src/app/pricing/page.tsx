@@ -14,11 +14,12 @@ const YEARLY_PRICE = 15;
 const YEARLY_SAVE = Math.round((1 - (YEARLY_PRICE * 12) / (MONTHLY_PRICE * 12)) * 100);
 
 const PRO_FEATURES = [
-  "Unlimited projects & clients",
-  "Large file uploads (up to 100MB)",
-  "Visual timelines & progress",
-  "Document sharing & approval",
-  "Priority support",
+  "Onbeperkt projecten & klanten",
+  "Grote uploads (tot 100MB)",
+  "Visuele tijdlijn & voortgang",
+  "Bestanden delen & goedkeuren",
+  "Klantportaal in jouw huisstijl",
+  "Prioriteitsondersteuning",
 ];
 
 function PricingContent() {
@@ -37,7 +38,7 @@ function PricingContent() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-      else throw new Error(data.error ?? "Checkout failed");
+      else throw new Error(data.error ?? "Checkout mislukt");
     } catch (e) {
       console.error(e);
       setLoading(false);
@@ -45,26 +46,28 @@ function PricingContent() {
   }
 
   const price = interval === "monthly" ? MONTHLY_PRICE : YEARLY_PRICE;
-  const label = interval === "monthly" ? "per month" : "per month (billed yearly)";
+  const label = interval === "monthly" ? "per maand" : "per maand, jaarlijks";
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       {trialExpired && (
         <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm border-b border-amber-500/30 bg-amber-500/10 text-amber-200">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          <span>Your 30-day trial has ended. Upgrade to Pro to continue using the dashboard.</span>
+          <span>Je proefperiode van 30 dagen is afgelopen. Upgrade naar Pro om het dashboard te blijven gebruiken.</span>
         </div>
       )}
       <header className="border-b border-zinc-800/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href={ROUTES.home} className="font-semibold text-zinc-50">
-            Helderly
+          <Link href={ROUTES.home} className="flex items-center gap-2.5">
+            <div className="w-6 h-6 bg-[#6366f1] rounded-[6px] flex flex-col justify-center px-1.5 gap-[3px] shrink-0">
+              <span className="block h-[2px] w-full bg-white rounded-full" />
+              <span className="block h-[2px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
+              <span className="block h-[2px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
+            </div>
+            <span className="font-semibold text-zinc-50">Helderly</span>
           </Link>
-          <Link
-            href={ROUTES.login}
-            className="text-sm text-zinc-400 hover:text-zinc-50 transition-colors"
-          >
-            Sign in
+          <Link href={ROUTES.login} className="text-sm text-zinc-400 hover:text-zinc-50 transition-colors">
+            Inloggen
           </Link>
         </div>
       </header>
@@ -76,11 +79,11 @@ function PricingContent() {
           transition={{ duration: 0.4 }}
           className="text-center mb-10"
         >
-          <h1 className="text-3xl font-semibold tracking-tight text-zinc-50">
-            Simple pricing
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
+            Eenvoudige prijzen
           </h1>
           <p className="mt-2 text-zinc-400">
-            One plan. Everything you need to look pro.
+            Één abonnement. Alles wat je nodig hebt om professioneel over te komen.
           </p>
         </motion.div>
 
@@ -95,26 +98,22 @@ function PricingContent() {
             onClick={() => setInterval("monthly")}
             className={cn(
               "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors",
-              interval === "monthly"
-                ? "bg-zinc-700 text-zinc-50"
-                : "text-zinc-400 hover:text-zinc-100"
+              interval === "monthly" ? "bg-zinc-700 text-zinc-50" : "text-zinc-400 hover:text-zinc-100"
             )}
           >
-            Monthly
+            Maandelijks
           </button>
           <button
             type="button"
             onClick={() => setInterval("yearly")}
             className={cn(
               "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors flex items-center justify-center gap-2",
-              interval === "yearly"
-                ? "bg-zinc-700 text-zinc-50"
-                : "text-zinc-400 hover:text-zinc-100"
+              interval === "yearly" ? "bg-zinc-700 text-zinc-50" : "text-zinc-400 hover:text-zinc-100"
             )}
           >
-            Yearly
+            Jaarlijks
             <span className="text-xs bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded">
-              Save {YEARLY_SAVE}%
+              {YEARLY_SAVE}% korting
             </span>
           </button>
         </motion.div>
@@ -126,11 +125,11 @@ function PricingContent() {
           className="rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-2xl p-6 sm:p-8"
         >
           <div className="flex items-baseline gap-1">
-            <span className="text-4xl font-semibold text-zinc-50">${price}</span>
+            <span className="text-4xl font-semibold text-zinc-50">€{price}</span>
             <span className="text-zinc-400">{label}</span>
           </div>
           <p className="mt-1 text-sm text-zinc-500">
-            Pro — full access to all features
+            Pro — volledige toegang tot alle functies
           </p>
           <ul className="mt-6 space-y-3">
             {PRO_FEATURES.map((feature) => (
@@ -143,14 +142,14 @@ function PricingContent() {
           <Button
             onClick={handleSubscribe}
             disabled={loading}
-            className="w-full mt-8 h-11"
+            className="w-full mt-8 h-11 bg-[#6366f1] hover:opacity-90 text-white"
           >
-            {loading ? "Redirecting…" : "Get Early Access"}
+            {loading ? "Doorsturen…" : "Start gratis proefperiode"}
           </Button>
         </motion.div>
 
         <p className="mt-6 text-center text-xs text-zinc-500">
-          Cancel anytime. Secure payment via Stripe.
+          Op elk moment opzegbaar. Veilig betalen via Stripe. Betaal met iDEAL, creditcard of Bancontact.
         </p>
       </main>
     </div>

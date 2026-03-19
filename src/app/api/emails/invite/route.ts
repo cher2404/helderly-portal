@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
   const body = await request.json();
   const to = body?.to as string;
-  const projectName = (body?.projectName ?? "Your project") as string;
+  const projectName = (body?.projectName ?? "Jouw project") as string;
   const magicLinkUrl = body?.magicLinkUrl as string;
   if (!to) return NextResponse.json({ error: "Missing to" }, { status: 400 });
   if (!magicLinkUrl) return NextResponse.json({ error: "Missing magicLinkUrl" }, { status: 400 });
@@ -23,9 +23,9 @@ export async function POST(request: Request) {
     subject: `You're invited to ${projectName} on Helderly`,
     html: `
       <h1>You're invited</h1>
-      <p>You've been invited to collaborate on <strong>${projectName}</strong> on Helderly.</p>
+      <p>Je bent uitgenodigd om samen te werken aan <strong>${projectName}</strong> via Helderly.</p>
       <p>Click the link below to sign in and view the project (this link expires after use):</p>
-      <p><a href="${magicLinkUrl}">Sign in to Helderly</a></p>
+      <p><a href="${magicLinkUrl}">Inloggen bij Helderly</a></p>
       <p>— The Helderly team</p>
     `,
   });

@@ -371,7 +371,7 @@ function ProjectDetailContent({
             </div>
             {(project.health_status ?? "on_track") === "on_track" ? (
               <span className="status-pill-lime shrink-0 rounded-full px-2.5 py-1 text-xs font-medium">
-                On track
+                Op schema
               </span>
             ) : isFreelancer ? (
               <select
@@ -383,9 +383,9 @@ function ProjectDetailContent({
                   setProject((p) => ({ ...p, health_status: v }));
                 }}
               >
-                <option value="on_track">On track</option>
-                <option value="needs_attention">Needs attention</option>
-                <option value="blocked">Blocked</option>
+                <option value="on_track">Op schema</option>
+                <option value="needs_attention">Aandacht nodig</option>
+                <option value="blocked">Geblokkeerd</option>
               </select>
             ) : null}
           </div>
@@ -420,22 +420,22 @@ function ProjectDetailContent({
                 onClick={() => setEditMode(!editMode)}
               >
                 <LayoutGrid className="h-3.5 w-3.5 mr-1.5" />
-                Edit layout
+                Bewerk indeling
               </Button>
             )}
             {effectiveEditMode && !isDashboardView && !isSingleWidgetView && (
               <>
                 <Button variant="outline" size="sm" className="rounded-[12px]" onClick={resetLayout}>
                   <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                  Reset to default
+                  Herstel indeling
                 </Button>
                 <Button variant="outline" size="sm" className="rounded-[12px]" onClick={() => saveLayout()} disabled={isSaving}>
-                  {isSaving ? "Saving…" : "Save layout"}
+                  {isSaving ? "Opslaan…" : "Indeling opslaan"}
                 </Button>
                 {hiddenWidgetIds.length > 0 && (
                   <Button variant="outline" size="sm" className="rounded-[12px]" onClick={() => setGalleryOpen(true)}>
                     <LayoutPanelLeft className="h-3.5 w-3.5 mr-1.5" />
-                    Add widget
+                    Widget toevoegen
                   </Button>
                 )}
               </>

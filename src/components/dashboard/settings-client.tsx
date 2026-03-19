@@ -301,7 +301,7 @@ export function SettingsClient({ profile }: Props) {
           <CardDescription>
             {isPro
               ? "You're on the Pro plan. Manage your subscription or payment method below."
-              : "Upgrade to Pro for large file uploads and full access."}
+              : "Upgrade naar Pro voor grote uploads en volledige toegang."}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-3">
@@ -325,7 +325,7 @@ export function SettingsClient({ profile }: Props) {
           </Button>
           {!isPro && (
             <Button asChild size="sm" className="bg-[var(--primary-accent)] hover:bg-[var(--primary-accent)]/90">
-              <Link href={ROUTES.pricing}>Upgrade to Pro</Link>
+              <Link href={ROUTES.pricing}>Upgraden naar Pro</Link>
             </Button>
           )}
         </CardContent>

@@ -103,7 +103,7 @@ export function DocumentsClient({
       setUploadError(
         isPro
           ? "File is too large (max 100MB)."
-          : "File too large for Free plan (max 5MB). Upgrade to Pro for up to 100MB."
+          : "Bestand te groot voor het gratis plan (max 5MB). Upgrade naar Pro voor tot 100MB."
       );
       return;
     }
@@ -148,7 +148,7 @@ export function DocumentsClient({
       setUploadError(
         isPro
           ? "File is too large (max 100MB)."
-          : "File too large for Free plan (max 5MB). Upgrade to Pro for up to 100MB."
+          : "Bestand te groot voor het gratis plan (max 5MB). Upgrade naar Pro voor tot 100MB."
       );
       return;
     }

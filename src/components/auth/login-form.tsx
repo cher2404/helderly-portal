@@ -113,7 +113,7 @@ export function LoginForm({ branding }: Props) {
             >
               Helderly
             </Link>
-            <CardTitle className="text-xl text-zinc-900 dark:text-zinc-50">Sign in</CardTitle>
+            <CardTitle className="text-xl text-zinc-900 dark:text-zinc-50">Inloggen</CardTitle>
             <CardDescription className="text-zinc-500 dark:text-zinc-400">
               Kies je accounttype. Gebruik een magic link voor inloggen zonder wachtwoord.
             </CardDescription>

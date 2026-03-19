@@ -119,7 +119,7 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">E-mailadres</Label>
             <Input
               id="email"
               type="email"
@@ -131,7 +131,7 @@ export default function SignUpPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Wachtwoord</Label>
             <Input
               id="password"
               type="password"
@@ -167,12 +167,12 @@ export default function SignUpPage() {
       </CardContent>
       <CardFooter className="flex justify-center border-t border-zinc-800 pt-6">
         <p className="text-sm text-zinc-400">
-          Already have an account?{" "}
+          Al een account?{" "}
           <Link
             href={ROUTES.login}
             className="text-zinc-100 hover:underline underline-offset-4"
           >
-            Sign in
+            Inloggen
           </Link>
         </p>
       </CardFooter>

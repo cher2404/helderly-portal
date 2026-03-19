@@ -20,7 +20,7 @@ export function PaywallOverlay({ show }: Props) {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/80 backdrop-blur-sm"
           aria-modal="true"
           role="dialog"
-          aria-label="Trial ended – upgrade to continue"
+          aria-label="Proefperiode afgelopen – upgrade om door te gaan"
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}

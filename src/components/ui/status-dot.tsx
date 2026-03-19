@@ -5,15 +5,15 @@ import type { ProjectHealthStatus } from "@/lib/database.types";
 
 const statusConfig: Record<ProjectHealthStatus, { label: string; className: string }> = {
   on_track: {
-    label: "On track",
+    label: "Op schema",
     className: "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]",
   },
   needs_attention: {
-    label: "Needs attention",
+    label: "Aandacht nodig",
     className: "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]",
   },
   blocked: {
-    label: "Blocked",
+    label: "Geblokkeerd",
     className: "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]",
   },
 };

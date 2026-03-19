@@ -18,9 +18,9 @@ export async function POST(request: Request) {
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
     to: [to],
-    subject: "Welcome to Helderly",
+    subject: "Welkom bij Helderly",
     html: `
-      <h1>Welcome to Helderly, ${name}!</h1>
+      <h1>Welkom bij Helderly, ${name}!</h1>
       <p>You're all set. Create projects, add milestones, and collaborate with your clients in one place.</p>
       <p><a href="${request.headers.get("origin") ?? "https://helderly.app"}/dashboard">Go to Dashboard</a></p>
       <p>— The Helderly team</p>

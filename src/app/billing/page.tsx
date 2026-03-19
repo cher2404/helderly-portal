@@ -26,10 +26,10 @@ export default async function BillingPage({
             <Lock className="h-7 w-7" />
           </div>
           <h1 className="text-xl font-semibold text-slate-100">
-            Trial ended — upgrade to continue
+            Proefperiode afgelopen — upgrade om verder te gaan
           </h1>
           <p className="mt-2 text-sm text-zinc-400">
-            Your 30-day trial has ended. Upgrade to Pro to access the dashboard again.
+            Je proefperiode van 30 dagen is afgelopen. Upgraden naar Pro to access the dashboard again.
           </p>
           <Link href={ROUTES.pricing} className="mt-6 w-full sm:w-auto">
             <Button
@@ -37,7 +37,7 @@ export default async function BillingPage({
               className="w-full gap-2 bg-sky-500 text-white hover:bg-sky-600 sm:w-auto"
             >
               <Sparkles className="h-4 w-4" />
-              Upgrade to Pro — €19/month
+              Upgraden naar Pro — €19/month
             </Button>
           </Link>
           <p className="mt-4 text-xs text-slate-500">

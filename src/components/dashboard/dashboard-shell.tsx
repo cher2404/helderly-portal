@@ -370,6 +370,23 @@ function DashboardShellInner({
               <span className="truncate">Inloglink voor klanten</span>
             </Link>
           )}
+          {!isFreelancer && (
+            <a
+              href="https://helderly.io?ref=portal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-[8px] px-2 py-1.5 transition-colors hover:bg-[#6366f1]/5 group"
+            >
+              <div className="w-4 h-4 bg-[#6366f1] rounded-[4px] flex flex-col justify-center px-[3px] gap-[2.5px] shrink-0">
+                <span className="block h-[1.5px] w-full bg-white rounded-full" />
+                <span className="block h-[1.5px] bg-white rounded-full opacity-65" style={{ width: "68%" }} />
+                <span className="block h-[1.5px] bg-white rounded-full opacity-35" style={{ width: "83%" }} />
+              </div>
+              <span className="text-[10px] text-zinc-600 group-hover:text-zinc-400 transition-colors">
+                Gemaakt met <span className="font-medium text-zinc-500">Helderly</span>
+              </span>
+            </a>
+          )}
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               {isPreviewMode ? "Klantweergave" : isFreelancer ? "Freelancer" : "Klant"}

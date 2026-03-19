@@ -45,12 +45,25 @@ export default async function BrandedLoginPage({
       <div className="w-full max-w-md">
         <LoginForm branding={branding} />
       </div>
-      <p className="mt-6 text-center text-xs text-zinc-500">
-        Powered by{" "}
-        <Link href={ROUTES.home} className="text-zinc-400 hover:text-zinc-300">
-          Helderly
+      <div className="mt-6 flex items-center justify-center gap-3">
+        <div className="flex items-center gap-1.5">
+          <div className="w-4 h-4 bg-[#6366f1] rounded-[4px] flex flex-col justify-center px-[3px] gap-[2.5px] shrink-0">
+            <span className="block h-[1.5px] w-full bg-white rounded-full" />
+            <span className="block h-[1.5px] bg-white rounded-full opacity-65" style={{ width: "68%" }} />
+            <span className="block h-[1.5px] bg-white rounded-full opacity-35" style={{ width: "83%" }} />
+          </div>
+          <span className="text-[11px] text-zinc-600">
+            Klantportaal door <span className="text-zinc-500 font-medium">Helderly</span>
+          </span>
+        </div>
+        <span className="text-zinc-700 text-[11px]">·</span>
+        <Link
+          href={`${ROUTES.signUp}?ref=branded-login`}
+          className="text-[11px] font-medium text-[#6366f1] hover:text-[#818cf8] transition-colors"
+        >
+          Zelf gratis proberen →
         </Link>
-      </p>
+      </div>
     </div>
   );
 }

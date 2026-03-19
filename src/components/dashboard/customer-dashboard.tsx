@@ -150,6 +150,25 @@ export function CustomerDashboard({
           </section>
         </>
       )}
+
+      {/* Powered by — subtiele pill badge */}
+      <div className="flex justify-center pt-8 pb-2">
+        <a
+          href="https://helderly.io?ref=client-dashboard"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-zinc-800 px-4 py-2 text-[11px] text-zinc-600 transition-all hover:border-[#6366f1]/30 hover:text-zinc-400 hover:bg-[#6366f1]/4"
+        >
+          <div className="w-3.5 h-3.5 bg-[#6366f1] rounded-[3px] flex flex-col justify-center px-[3px] gap-[2px] shrink-0">
+            <span className="block h-[1.5px] w-full bg-white rounded-full" />
+            <span className="block h-[1.5px] bg-white rounded-full opacity-65" style={{ width: "68%" }} />
+            <span className="block h-[1.5px] bg-white rounded-full opacity-35" style={{ width: "83%" }} />
+          </div>
+          Klantportaal door <span className="font-medium text-zinc-500">Helderly</span>
+          <span className="text-zinc-700">·</span>
+          <span className="text-[#6366f1]">Zelf ook gratis proberen →</span>
+        </a>
+      </div>
     </div>
   );
 }

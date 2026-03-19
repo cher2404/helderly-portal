@@ -20,7 +20,7 @@ export async function updateProfileAccent(accentColor: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
-  const hex = /^#[0-9A-Fa-f]{6}$/.test(accentColor) ? accentColor : "#3b82f6";
+  const hex = /^#[0-9A-Fa-f]{6}$/.test(accentColor) ? accentColor : "#6366f1";
   const { error } = await supabase
     .from("profiles")
     .update({ accent_color: hex, updated_at: new Date().toISOString() })

@@ -375,7 +375,7 @@ function ProjectDetailContent({
               </span>
             ) : isFreelancer ? (
               <select
-                className="shrink-0 rounded-lg border border-slate-500/20 bg-slate-500/10 text-xs text-slate-200 py-1.5 px-2 focus:border-sky-400/40 focus:outline-none"
+                className="shrink-0 rounded-lg border border-zinc-700 bg-zinc-800/50 text-xs py-1.5 px-2 focus:border-[#6366f1]/40 focus:outline-none"
                 value={project.health_status ?? "on_track"}
                 onChange={async (e) => {
                   const v = e.target.value as ProjectHealthStatus;
@@ -406,7 +406,7 @@ function ProjectDetailContent({
             {project.client_email && !isPreviewMode && (
               <a
                 href={`mailto:${project.client_email}`}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-500/20 bg-slate-500/10 px-3 py-2 text-sm font-medium text-slate-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-sm font-medium text-zinc-200 hover:bg-[var(--primary-accent)]/15 hover:border-[var(--primary-accent)]/25 hover:text-slate-100 transition-colors"
               >
                 <Mail className="h-3.5 w-3.5" />
                 E-mail klant
@@ -416,7 +416,7 @@ function ProjectDetailContent({
               <Button
                 variant={effectiveEditMode ? "secondary" : "outline"}
                 size="sm"
-                className="rounded-xl border-slate-500/20 bg-slate-500/10 text-slate-200 hover:bg-sky-500/15 hover:border-sky-400/25 hover:text-sky-100"
+                className="rounded-xl border-zinc-700 bg-zinc-800/50 text-zinc-200 hover:bg-[#6366f1]/15 hover:border-[#6366f1]/25 hover:text-zinc-100"
                 onClick={() => setEditMode(!editMode)}
               >
                 <LayoutGrid className="h-3.5 w-3.5 mr-1.5" />

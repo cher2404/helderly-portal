@@ -329,7 +329,7 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
                   ) : stage.stage_status === "blocked" ? (
                     <AlertCircle className="h-4 w-4 shrink-0 text-amber-500" />
                   ) : isFirst ? (
-                    <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
+                    <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#6366f1] shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
                   ) : (
                     <Circle className="h-4 w-4 shrink-0 text-zinc-500" />
                   )}
@@ -343,7 +343,7 @@ function MilestonesWidgetContent({ projectId, stages, setStages, isFreelancer }:
                     />
                   ) : (
                     <span
-                      className={`text-sm truncate ${stage.is_completed ? "text-zinc-500 line-through" : isFirst ? "text-sky-300 font-medium" : "text-zinc-200"}`}
+                      className={`text-sm truncate ${stage.is_completed ? "text-zinc-500 line-through" : isFirst ? "text-[var(--primary-accent)] font-medium" : "text-zinc-200"}`}
                     >
                       {stage.title}
                     </span>
@@ -459,7 +459,7 @@ function DocumentsWidgetContent({ assets }: ProjectWidgetProps) {
                 }
                 window.open(signedUrl, "_blank", "noopener,noreferrer");
               }}
-              className="text-zinc-400 hover:text-sky-300"
+              className="text-zinc-400 hover:text-[var(--primary-accent)]"
             >
               <Download className="h-4 w-4" />
             </a>
@@ -549,7 +549,7 @@ function MeetingsWidgetContent({
           <Button
             variant="ghost"
             size="sm"
-            className="rounded-lg border border-sky-400/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 [&_svg]:drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]"
+            className="rounded-lg border border-[#6366f1]/30 bg-[#6366f1]/10 text-[#818cf8] hover:bg-[#6366f1]/20 [&_svg]:drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]"
             onClick={() => setModal("meeting")}
           >
             <Plus className="h-4 w-4" />
@@ -772,7 +772,7 @@ function ScratchpadWidgetContent({
       <div className="flex items-center gap-2">
         <Button
           type="button"
-          className="rounded-xl bg-gradient-to-r from-sky-500 to-lime-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 hover:opacity-90 transition-opacity"
+          className="rounded-xl bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-[#6366f1]/25 hover:opacity-90 transition-opacity"
         >
           GENERATE
         </Button>
@@ -784,16 +784,16 @@ function ScratchpadWidgetContent({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-14 w-14 rounded-lg border border-sky-400/30 bg-gradient-to-br from-sky-500/20 to-lime-500/20 flex items-center justify-center"
+            className="h-14 w-14 rounded-lg border border-[#6366f1]/30 bg-gradient-to-br from-[#6366f1]/20 to-[#8b5cf6]/20 flex items-center justify-center"
             aria-hidden
           >
-            <div className="h-6 w-6 rounded border border-sky-400/50 bg-transparent" style={{ transform: `rotate(${i * 15}deg)` }} />
+            <div className="h-6 w-6 rounded border border-[#6366f1]/50 bg-transparent" style={{ transform: `rotate(${i * 15}deg)` }} />
           </div>
         ))}
       </div>
       <textarea
         rows={2}
-        className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-500 resize-none focus:border-sky-400/30 focus:outline-none"
+        className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 placeholder:text-zinc-500 resize-none focus:border-[#6366f1]/30 focus:outline-none"
         placeholder="Quick thoughts, reminders…"
         value={internalNotes}
         onChange={(e) => setInternalNotes(e.target.value)}

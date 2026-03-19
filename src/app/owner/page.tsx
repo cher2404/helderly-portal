@@ -48,7 +48,7 @@ export default async function OwnerDashboardPage() {
               label: "Freelancers",
               value: stats.freelancers,
               icon: UserCog,
-              color: "bg-sky-500/10 text-sky-400",
+              color: "bg-[#6366f1]/10 text-[#6366f1]",
             },
             {
               label: "Klanten",

@@ -8,7 +8,7 @@ type Props = {
 };
 
 export function ThemeProvider({ children, accentColor }: Props) {
-  const color = accentColor || "#3b82f6";
+  const color = accentColor || "#6366f1";
   return (
     <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <div style={{ ["--primary-accent" as string]: color }} className="min-h-screen">

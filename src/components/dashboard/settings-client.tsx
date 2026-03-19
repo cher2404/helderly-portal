@@ -200,13 +200,13 @@ export function SettingsClient({ profile }: Props) {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  defaultValue={profile.accent_color ?? "#3b82f6"}
+                  defaultValue={profile.accent_color ?? "#6366f1"}
                   onChange={handleAccentColorChange}
                   className="h-10 w-14 cursor-pointer rounded-lg border border-zinc-200 dark:border-zinc-700 bg-transparent"
                 />
                 <Input
                   type="text"
-                  defaultValue={profile.accent_color ?? "#3b82f6"}
+                  defaultValue={profile.accent_color ?? "#6366f1"}
                   onBlur={(e) => saveAccent(e.target.value)}
                   className="w-28 font-mono text-sm rounded-lg border-zinc-200 dark:border-zinc-700"
                 />

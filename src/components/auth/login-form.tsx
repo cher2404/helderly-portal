@@ -129,12 +129,12 @@ export function LoginForm({ branding }: Props) {
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 rounded-md py-2 text-sm font-medium transition-colors",
                 role === "client"
-                  ? "bg-[var(--primary-accent)] text-white"
+                  ? "bg-[#6366f1] text-white"
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
               )}
             >
               <User className="h-4 w-4" />
-              Client
+              Klant
             </button>
             <button
               type="button"
@@ -142,7 +142,7 @@ export function LoginForm({ branding }: Props) {
               className={cn(
                 "flex-1 flex items-center justify-center gap-2 rounded-md py-2 text-sm font-medium transition-colors",
                 role === "freelancer"
-                  ? "bg-[var(--primary-accent)] text-white"
+                  ? "bg-[#6366f1] text-white"
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
               )}
             >
@@ -213,7 +213,7 @@ export function LoginForm({ branding }: Props) {
               )}
               <Button
                 type="submit"
-                className="w-full rounded-lg bg-[var(--primary-accent)] hover:opacity-90"
+                className="w-full rounded-lg bg-[#6366f1] hover:opacity-90 text-white"
                 disabled={loading}
               >
                 {loading ? "Bezig…" : "Inloggen"}

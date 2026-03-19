@@ -42,6 +42,10 @@ import type { ProjectHealthStatus } from "@/lib/database.types";
 import { ProjectLayoutProvider, useProjectLayout } from "./project-layout-provider";
 import { ProjectPageTabs, getProjectTab } from "./project-page-tabs";
 import { ProjectDashboardKpi } from "./project-dashboard-kpi";
+import { DocumentsClient } from "@/components/dashboard/documents-client";
+import { FeedbackThreadClient } from "@/components/dashboard/feedback-thread-client";
+import { TimelinePageClient } from "@/components/dashboard/timeline-page-client";
+import type { ProjectMessage } from "@/lib/database.types";
 import { renderWidgetContent, type ProjectWidgetPropsWithSetProject } from "./project-dashboard-widgets";
 import { WIDGET_META, type WidgetId } from "@/lib/project-widgets";
 import { usePreviewMode } from "@/contexts/preview-mode-context";
@@ -55,6 +59,7 @@ type Props = {
   initialDecisions: Decision[];
   initialFaqs: ProjectFaq[];
   initialInternalNotes: InternalNote | null;
+  initialMessages?: ProjectMessage[];
   profile: Profile;
 };
 
@@ -67,6 +72,7 @@ export function ProjectDetailView({
   initialDecisions,
   initialFaqs,
   initialInternalNotes,
+  initialMessages = [],
   profile,
 }: Props) {
   const [project, setProject] = useState(initialProject);
@@ -140,11 +146,13 @@ export function ProjectDetailView({
       initialLayoutConfig={project.layout_config ?? null}
       isFreelancer={isFreelancer}
     >
-      <ProjectPageTabs projectSegment={projectSegment(project)} projectId={project.id} isFreelancer={isFreelancer} />
+      <ProjectPageTabs projectSegment={projectSegment(project)} isFreelancer={isFreelancer} />
       <ProjectDetailContent
         initialProject={initialProject}
         project={project}
         setProject={setProject}
+        profile={profile}
+        initialMessages={initialMessages}
         stages={stages}
         setStages={setStages}
         appointments={appointments}
@@ -200,10 +208,14 @@ function ProjectDetailContent({
   isFreelancer,
   closeModal,
   projectTab,
+  profile,
+  initialMessages = [],
 }: {
   initialProject: Project;
   project: Project;
   setProject: React.Dispatch<React.SetStateAction<Project>>;
+  profile: Profile;
+  initialMessages?: ProjectMessage[];
   stages: ProjectStage[];
   setStages: React.Dispatch<React.SetStateAction<ProjectStage[]>>;
   appointments: Appointment[];
@@ -650,7 +662,34 @@ function ProjectDetailContent({
         </div>
       )}
 
-      {!isDashboardView && !isSingleWidgetView && (
+      {/* Inline tab content: documents, feedback, timeline */}
+      {projectTab === "documents" && (
+        <DocumentsClient
+          initialProjects={[initialProject]}
+          profile={profile}
+          initialProjectId={initialProject.id}
+        />
+      )}
+
+      {projectTab === "feedback" && (
+        <FeedbackThreadClient
+          projects={[initialProject]}
+          selectedProject={initialProject}
+          initialMessages={initialMessages}
+          profile={profile}
+        />
+      )}
+
+      {projectTab === "timeline" && (
+        <TimelinePageClient
+          projects={[initialProject]}
+          selectedProject={initialProject}
+          initialStages={stages}
+          profile={profile}
+        />
+      )}
+
+      {!isDashboardView && !isSingleWidgetView && projectTab !== "documents" && projectTab !== "feedback" && projectTab !== "timeline" && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {visibleWidgetsFiltered.map((widget) => (
             <div

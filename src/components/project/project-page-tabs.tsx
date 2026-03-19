@@ -27,9 +27,12 @@ const PROJECT_TAB_IDS = [
   "faq",
   "contact",
   "scratchpad",
+  "documents",
+  "feedback",
+  "timeline",
 ] as const;
 
-type Props = { projectSegment: string; projectId: string; isFreelancer: boolean };
+type Props = { projectSegment: string; isFreelancer: boolean };
 
 const tabConfig: Record<
   string,
@@ -43,12 +46,12 @@ const tabConfig: Record<
   faq: { label: "FAQ", icon: HelpCircle, samePage: true },
   contact: { label: "Contact", icon: Phone, samePage: true },
   scratchpad: { label: "Notities", icon: StickyNote, samePage: true },
-  documents: { label: "Documenten", icon: FileText, samePage: false },
-  timeline: { label: "Timeline", icon: Calendar, samePage: false },
-  feedback: { label: "Feedback", icon: MessageSquare, samePage: false },
+  documents: { label: "Documenten", icon: FileText, samePage: true },
+  timeline: { label: "Timeline", icon: Calendar, samePage: true },
+  feedback: { label: "Feedback", icon: MessageSquare, samePage: true },
 };
 
-export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Props) {
+export function ProjectPageTabs({ projectSegment, isFreelancer }: Props) {
   const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
   const tab = searchParams?.get("tab") ?? "dashboard";
@@ -71,25 +74,13 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
   const moreRef = useRef<HTMLDivElement>(null);
 
   const buildHref = (key: string) => {
-    const c = tabConfig[key];
-    if (!c) return ROUTES.project(projectSegment);
-    if (c.samePage) {
-      if (key === "dashboard") return ROUTES.project(projectSegment);
-      return `${ROUTES.project(projectSegment)}?tab=${key}`;
-    }
-    if (key === "documents") return `${ROUTES.documents}?project=${projectId}`;
-    if (key === "timeline") return `${ROUTES.timeline}?project=${projectId}`;
-    if (key === "feedback") return `${ROUTES.messages}?project=${projectId}`;
-    return ROUTES.project(projectSegment);
+    if (key === "dashboard") return ROUTES.project(projectSegment);
+    return `${ROUTES.project(projectSegment)}?tab=${key}`;
   };
 
   const isActive = (key: string) => {
-    if (key === "dashboard") return isProjectPage && (tab === "dashboard" || !searchParams?.get("tab"));
-    if (tabConfig[key]?.samePage) return isProjectPage && tab === key;
-    if (key === "documents") return pathname === ROUTES.documents && searchParams?.get("project") === projectId;
-    if (key === "timeline") return pathname === ROUTES.timeline && searchParams?.get("project") === projectId;
-    if (key === "feedback") return pathname === ROUTES.messages && searchParams?.get("project") === projectId;
-    return false;
+    if (key === "dashboard") return isProjectPage && (!searchParams?.get("tab") || tab === "dashboard");
+    return isProjectPage && tab === key;
   };
 
   const isSecondaryActive = secondaryTabs.some((key) => isActive(key));
@@ -144,7 +135,7 @@ export function ProjectPageTabs({ projectSegment, projectId, isFreelancer }: Pro
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-500/10 hover:text-zinc-900 dark:hover:text-zinc-100 border-transparent"
             )}
           >
-            Meer {isSecondaryActive ? "●" : "▾"}
+            {(() => { const activeKey = secondaryTabs.find((k) => isActive(k)); return activeKey ? `${tabConfig[activeKey]?.label} ●` : "Meer ▾"; })()}
           </button>
 
           {moreOpen && (

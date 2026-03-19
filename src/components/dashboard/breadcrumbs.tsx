@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { ROUTES } from "@/lib/constants";
 import { useBreadcrumbProjectName } from "@/contexts/breadcrumb-context";
@@ -16,10 +16,26 @@ const LABELS: Record<string, string> = {
   project: "Project",
 };
 
+
+const TAB_LABELS: Record<string, string> = {
+  milestones: "Mijlpalen",
+  documents: "Documenten",
+  feedback: "Feedback",
+  decisions: "Beslissingen",
+  meetings: "Afspraken",
+  budget: "Budget",
+  faq: "FAQ",
+  contact: "Contact",
+  scratchpad: "Notities",
+  timeline: "Timeline",
+};
+
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function Breadcrumbs() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams?.get("tab") ?? null;
   const { projectName } = useBreadcrumbProjectName();
   const segments = pathname?.split("/").filter(Boolean) ?? [];
   const dashboardIndex = segments.indexOf("dashboard");
@@ -43,6 +59,10 @@ export function Breadcrumbs() {
       href += `/project/${relevant[i + 1]}`;
       const name = projectName || (UUID_REGEX.test(relevant[i + 1]) ? "Project" : relevant[i + 1]);
       items.push({ href, label: name });
+      // Voeg actieve tab toe als die er is
+      if (activeTab && TAB_LABELS[activeTab]) {
+        items.push({ href: href + "?tab=" + activeTab, label: TAB_LABELS[activeTab] });
+      }
       break;
     }
     href += `/${segment}`;

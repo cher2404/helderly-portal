@@ -96,6 +96,8 @@ export function DashboardShell({ profile, initialProjects, initialNotifications,
 
   const isActive = (href: string) => {
     if (href === ROUTES.dashboard) return pathname === href || isProjectPage;
+    // Documenten en Feedback nooit actief als je in een project zit
+    if (isProjectPage && (href === ROUTES.documents || href === ROUTES.messages)) return false;
     return pathname === href || (href !== ROUTES.dashboard && pathname.startsWith(href));
   };
 

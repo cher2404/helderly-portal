@@ -8,6 +8,7 @@ import {
   getDecisions,
   getProjectFaqs,
   getInternalNotes,
+  getProjectMessages,
 } from "@/lib/supabase/queries";
 import { redirect } from "next/navigation";
 import { isUuid } from "@/lib/utils";
@@ -96,6 +97,7 @@ export default async function ProjectPage({
     decisions,
     faqs,
     internalNotes,
+    messages,
   ] = await Promise.all([
     getProjectStages(projectId),
     getAppointments(projectId),
@@ -104,6 +106,7 @@ export default async function ProjectPage({
     getDecisions(projectId),
     getProjectFaqs(projectId),
     profile.role === "admin" ? getInternalNotes(projectId) : Promise.resolve(null),
+    getProjectMessages(projectId),
   ]);
 
   if (project.slug && isUuid(id)) {
@@ -120,6 +123,7 @@ export default async function ProjectPage({
       initialDecisions={decisions}
       initialFaqs={faqs}
       initialInternalNotes={internalNotes}
+      initialMessages={messages}
       profile={profile}
     />
   );

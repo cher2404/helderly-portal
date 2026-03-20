@@ -6,6 +6,7 @@ import { ThemeSync } from "@/components/dashboard/theme-sync";
 import { BreadcrumbProvider } from "@/contexts/breadcrumb-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/toast";
+import { PwaInstallBanner } from "@/components/pwa-install-banner";
 
 export default async function DashboardLayout({
   children,
@@ -39,6 +40,7 @@ export default async function DashboardLayout({
           </ErrorBoundary>
         </BreadcrumbProvider>
       </div>
+      <PwaInstallBanner />
     </AccentWrapper>
   );
 }

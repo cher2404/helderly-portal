@@ -175,7 +175,7 @@ export function LoginForm({ branding }: Props) {
               <Button
                 type="submit"
                 variant="outline"
-                className="w-full rounded-lg border-zinc-700 bg-transparent text-zinc-200 hover:bg-zinc-800"
+                className="w-full rounded-lg border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-transparent"
                 disabled={loading}
               >
                 <Mail className="h-4 w-4 mr-2" />
@@ -188,7 +188,7 @@ export function LoginForm({ branding }: Props) {
                 <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-zinc-900/50 px-2 text-zinc-500">of log in met wachtwoord</span>
+                <span className="bg-transparent px-2 text-zinc-600">of log in met wachtwoord</span>
               </div>
             </div>
 
@@ -213,7 +213,7 @@ export function LoginForm({ branding }: Props) {
               )}
               <Button
                 type="submit"
-                className="w-full rounded-lg bg-[#6366f1] hover:opacity-90 text-white"
+                className="w-full rounded-lg bg-[#6366f1] hover:opacity-90 text-white font-medium"
                 disabled={loading}
               >
                 {loading ? "Bezig…" : "Inloggen"}

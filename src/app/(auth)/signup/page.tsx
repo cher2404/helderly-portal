@@ -48,11 +48,6 @@ export default function SignUpPage() {
         return;
       }
       setSuccess(true);
-      const params = new URLSearchParams(window.location.search);
-      const next = params.get("next");
-      if (next === "pricing") {
-        router.push("/pricing");
-      }
       router.refresh();
     } finally {
       setLoading(false);
@@ -121,7 +116,7 @@ export default function SignUpPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md rounded-[14px] border-zinc-800 bg-zinc-900/50">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-xl text-zinc-50">Create account</CardTitle>
+            <CardTitle className="text-xl text-zinc-50">Account aanmaken</CardTitle>
             <CardDescription className="text-zinc-400">
               Choose your account type and set your credentials.
             </CardDescription>
@@ -162,7 +157,7 @@ export default function SignUpPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="jij@voorbeeld.nl"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -181,7 +176,7 @@ export default function SignUpPage() {
                   autoComplete="new-password"
                   minLength={6}
                 />
-                <p className="text-xs text-zinc-500">At least 6 characters.</p>
+                <p className="text-xs text-zinc-500">Minimaal 6 tekens.</p>
               </div>
               {error && (
                 <p className="text-sm text-red-400" role="alert">
@@ -205,8 +200,8 @@ export default function SignUpPage() {
                 </Link>
                 .
               </p>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account…" : "Create account"}
+              <Button type="submit" className="w-full bg-[#6366f1] hover:opacity-90 text-white" disabled={loading}>
+                {loading ? "Bezig..." : "Account aanmaken"}
               </Button>
             </form>
           </CardContent>

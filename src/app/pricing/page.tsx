@@ -37,12 +37,6 @@ function PricingContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ interval }),
       });
-
-      if (res.status === 401) {
-        window.location.href = `/signup?next=pricing&interval=${interval}`;
-        return;
-      }
-
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -136,7 +130,7 @@ function PricingContent() {
             ))}
           </ul>
           {checkoutError && (
-            <p className="mt-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-[8px] px-3 py-2 text-center">
+            <p className="mt-6 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-[8px] px-3 py-2 text-center">
               {checkoutError}
             </p>
           )}

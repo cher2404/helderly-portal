@@ -24,13 +24,11 @@ const PRO_FEATURES = [
 function PricingContent() {
   const [interval, setInterval] = useState<"monthly" | "yearly">("monthly");
   const [loading, setLoading] = useState(false);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const trialExpired = searchParams.get("trial") === "expired";
 
   async function handleSubscribe() {
     setLoading(true);
-    setCheckoutError(null);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
@@ -38,16 +36,10 @@ function PricingContent() {
         body: JSON.stringify({ interval }),
       });
       const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error(data.error ?? "Checkout mislukt");
-      }
+      if (data.url) window.location.href = data.url;
+      else throw new Error(data.error ?? "Checkout mislukt");
     } catch (e) {
       console.error(e);
-      setCheckoutError(
-        e instanceof Error ? e.message : "Er ging iets mis. Probeer het opnieuw."
-      );
       setLoading(false);
     }
   }
@@ -129,15 +121,10 @@ function PricingContent() {
               </li>
             ))}
           </ul>
-          {checkoutError && (
-            <p className="mt-6 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-[8px] px-3 py-2 text-center">
-              {checkoutError}
-            </p>
-          )}
           <Button
             onClick={handleSubscribe}
             disabled={loading}
-            className="w-full mt-4 h-11 bg-[#6366f1] hover:opacity-90 text-white"
+            className="w-full mt-8 h-11 bg-[#6366f1] hover:opacity-90 text-white"
           >
             {loading ? "Doorsturen…" : "Start gratis proefperiode"}
           </Button>

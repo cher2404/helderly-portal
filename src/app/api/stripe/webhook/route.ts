@@ -68,7 +68,11 @@ export async function POST(request: Request) {
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
       const customerId = subscription.customer as string;
-      const status = subscription.status === "active" ? "active" : "free";
+      // trialing = Stripe trial period on a paid subscription → same Pro access as active
+      const status =
+        subscription.status === "active" || subscription.status === "trialing"
+          ? "active"
+          : "free";
 
       const { error } = await supabase
         .from("profiles")

@@ -48,6 +48,11 @@ export default function SignUpPage() {
         return;
       }
       setSuccess(true);
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      if (next === "pricing") {
+        router.push("/pricing");
+      }
       router.refresh();
     } finally {
       setLoading(false);

@@ -3,7 +3,6 @@
 import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { ROUTES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Check, AlertCircle } from "lucide-react";
@@ -56,49 +55,37 @@ function PricingContent() {
           <span>Je proefperiode van 30 dagen is afgelopen. Upgrade naar Pro om het dashboard te blijven gebruiken.</span>
         </div>
       )}
-      <header className="border-b border-zinc-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <Link href={ROUTES.home} className="flex items-center gap-2.5">
-            <div className="w-6 h-6 bg-[#6366f1] rounded-[6px] flex flex-col justify-center px-1.5 gap-[3px] shrink-0">
-              <span className="block h-[2px] w-full bg-white rounded-full" />
-              <span className="block h-[2px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
-              <span className="block h-[2px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
-            </div>
-            <span className="font-semibold text-zinc-50">Helderly</span>
-          </Link>
-          <Link href={ROUTES.login} className="text-sm text-zinc-400 hover:text-zinc-50 transition-colors">
-            Inloggen
-          </Link>
-        </div>
+      <header className="border-b border-zinc-800/80 px-6 h-14 flex items-center justify-between">
+        <Link href={ROUTES.home} className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-[#6366f1] rounded-[7px] flex flex-col justify-center px-1.5 gap-1 shrink-0">
+            <span className="block h-[2.5px] w-full bg-white rounded-full" />
+            <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
+            <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
+          </div>
+          <span className="text-sm font-semibold text-zinc-100">Helderly</span>
+        </Link>
+        <Link href={ROUTES.login} className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors">
+          Inloggen →
+        </Link>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-16 sm:py-24">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-10"
-        >
+      <main className="flex-1 flex items-center justify-center p-6"><div className="w-full max-w-lg py-8">
+        <div className="text-center mb-10">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
             Eenvoudige prijzen
           </h1>
           <p className="mt-2 text-zinc-400">
             Één abonnement. Alles wat je nodig hebt om professioneel over te komen.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="flex rounded-xl border border-zinc-800 bg-zinc-900/50 p-1 mb-8"
-        >
+        <div className="flex rounded-xl border border-zinc-800 bg-zinc-900/50 p-1 mb-8">
           <button
             type="button"
             onClick={() => setInterval("monthly")}
             className={cn(
               "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors",
-              interval === "monthly" ? "bg-zinc-700 text-zinc-50" : "text-zinc-400 hover:text-zinc-100"
+              interval === "monthly" ? "bg-[#6366f1] text-white" : "text-zinc-400 hover:text-zinc-100"
             )}
           >
             Maandelijks
@@ -108,7 +95,7 @@ function PricingContent() {
             onClick={() => setInterval("yearly")}
             className={cn(
               "flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors flex items-center justify-center gap-2",
-              interval === "yearly" ? "bg-zinc-700 text-zinc-50" : "text-zinc-400 hover:text-zinc-100"
+              interval === "yearly" ? "bg-[#6366f1] text-white" : "text-zinc-400 hover:text-zinc-100"
             )}
           >
             Jaarlijks
@@ -116,14 +103,9 @@ function PricingContent() {
               {YEARLY_SAVE}% korting
             </span>
           </button>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-2xl p-6 sm:p-8"
-        >
+        <div className="rounded-[14px] border border-zinc-800 bg-zinc-900/50 p-6 sm:p-8">
           <div className="flex items-baseline gap-1">
             <span className="text-4xl font-semibold text-zinc-50">€{price}</span>
             <span className="text-zinc-400">{label}</span>
@@ -146,12 +128,12 @@ function PricingContent() {
           >
             {loading ? "Doorsturen…" : "Start gratis proefperiode"}
           </Button>
-        </motion.div>
+        </div>
 
         <p className="mt-6 text-center text-xs text-zinc-500">
           Op elk moment opzegbaar. Veilig betalen via Stripe. Betaal met iDEAL, creditcard of Bancontact.
         </p>
-      </main>
+      </div></main>
     </div>
   );
 }

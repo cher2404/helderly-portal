@@ -54,39 +54,38 @@ export default function SignUpPage() {
     }
   }
 
-  const Logo = () => (
-    <Link href={ROUTES.home} className="flex items-center gap-2.5 w-fit">
-      <div className="w-7 h-7 bg-[#6366f1] rounded-[7px] flex flex-col justify-center px-1.5 gap-1 shrink-0">
-        <span className="block h-[2.5px] w-full bg-white rounded-full" />
-        <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "68%", opacity: 0.65 }} />
-        <span className="block h-[2.5px] bg-white rounded-full" style={{ width: "83%", opacity: 0.35 }} />
-      </div>
-      <span className="text-sm font-semibold text-zinc-100">Helderly</span>
-    </Link>
-  );
-
   if (success) {
     return (
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
         <header className="border-b border-zinc-800/80 px-6 py-4">
-          <Logo />
+          <Link href={ROUTES.home} className="flex items-center gap-2.5 w-fit">
+            <div className="w-7 h-7 bg-[#6366f1] rounded-[7px] flex flex-col justify-center px-1.5 gap-1 shrink-0">
+              <span className="block h-[2.5px] w-full bg-white rounded-full" />
+              <span
+                className="block h-[2.5px] bg-white rounded-full"
+                style={{ width: "68%", opacity: 0.65 }}
+              />
+              <span
+                className="block h-[2.5px] bg-white rounded-full"
+                style={{ width: "83%", opacity: 0.35 }}
+              />
+            </div>
+            <span className="text-sm font-semibold text-zinc-100">Helderly</span>
+          </Link>
         </header>
         <div className="flex-1 flex items-center justify-center p-6">
           <Card className="w-full max-w-md rounded-[14px] border-zinc-800 bg-zinc-900/50">
-            <CardHeader className="text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-xl mx-auto">
-                ✓
-              </div>
-              <CardTitle className="text-xl text-zinc-50">Check je e-mail</CardTitle>
+            <CardHeader>
+              <CardTitle className="text-xl text-zinc-50">Check your email</CardTitle>
               <CardDescription className="text-zinc-400">
-                We hebben een bevestigingslink gestuurd naar{" "}
-                <strong className="text-zinc-300">{email}</strong>. Klik op de link
-                om je account te activeren en daarna in te loggen.
+                We sent a confirmation link to{" "}
+                <strong className="text-zinc-300">{email}</strong>. Click the link
+                to activate your account, then sign in.
               </CardDescription>
             </CardHeader>
             <CardFooter className="border-t border-zinc-800 pt-6">
-              <Button asChild className="w-full bg-[#6366f1] hover:opacity-90 text-white">
-                <Link href={ROUTES.login}>Ga naar inloggen</Link>
+              <Button asChild className="w-full">
+                <Link href={ROUTES.login}>Back to sign in</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -97,54 +96,76 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
-      <header className="border-b border-zinc-800/80 px-6 py-4">
-        <Logo />
+      <header className="border-b border-zinc-800/80 px-6 h-14 flex items-center justify-between">
+        <Link href={ROUTES.home} className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-[#6366f1] rounded-[7px] flex flex-col justify-center px-1.5 gap-1 shrink-0">
+            <span className="block h-[2.5px] w-full bg-white rounded-full" />
+            <span
+              className="block h-[2.5px] bg-white rounded-full"
+              style={{ width: "68%", opacity: 0.65 }}
+            />
+            <span
+              className="block h-[2.5px] bg-white rounded-full"
+              style={{ width: "83%", opacity: 0.35 }}
+            />
+          </div>
+          <span className="text-sm font-semibold text-zinc-100">Helderly</span>
+        </Link>
       </header>
 
       <div className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md rounded-[14px] border-zinc-800 bg-zinc-900/50">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-xl text-zinc-50">Account aanmaken</CardTitle>
+            <CardTitle className="text-xl text-zinc-50">Create account</CardTitle>
             <CardDescription className="text-zinc-400">
-              Kies je accounttype en stel je gegevens in.
+              Choose your account type and set your credentials.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-3">
-              {(["client", "freelancer"] as const).map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setRole(r)}
-                  className={cn(
-                    "flex-1 flex flex-col items-center gap-2 rounded-[12px] border p-4 text-sm font-medium transition-all",
-                    role === r
-                      ? "border-[#6366f1]/50 bg-[#6366f1]/10 text-[#818cf8]"
-                      : "border-zinc-800 bg-transparent text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
-                  )}
-                >
-                  {r === "client" ? <User className="h-4 w-4" /> : <Briefcase className="h-4 w-4" />}
-                  {r === "client" ? "Klant" : "Freelancer"}
-                </button>
-              ))}
+            <div className="flex rounded-lg border border-zinc-800 p-1 bg-zinc-900/50">
+              <button
+                type="button"
+                onClick={() => setRole("client")}
+                className={cn(
+                  "flex-1 flex flex-col items-center gap-2 rounded-[12px] border p-4 text-sm font-medium transition-all",
+                  role === "client"
+                    ? "border-[#6366f1]/50 bg-[#6366f1]/10 text-[#818cf8]"
+                    : "border-zinc-700 bg-transparent text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                )}
+              >
+                <User className="h-4 w-4" />
+                Klant
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("freelancer")}
+                className={cn(
+                  "flex-1 flex flex-col items-center gap-2 rounded-[12px] border p-4 text-sm font-medium transition-all",
+                  role === "freelancer"
+                    ? "border-[#6366f1]/50 bg-[#6366f1]/10 text-[#818cf8]"
+                    : "border-zinc-700 bg-transparent text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                )}
+              >
+                <Briefcase className="h-4 w-4" />
+                Freelancer
+              </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-zinc-300">E-mailadres</Label>
+                <Label htmlFor="email">E-mailadres</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="jij@voorbeeld.nl"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
-                  className="border-zinc-800 bg-zinc-900/50 text-zinc-100 placeholder:text-zinc-600 focus:border-[#6366f1]/50"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-zinc-300">Wachtwoord</Label>
+                <Label htmlFor="password">Wachtwoord</Label>
                 <Input
                   id="password"
                   type="password"
@@ -154,39 +175,43 @@ export default function SignUpPage() {
                   required
                   autoComplete="new-password"
                   minLength={6}
-                  className="border-zinc-800 bg-zinc-900/50 text-zinc-100 placeholder:text-zinc-600 focus:border-[#6366f1]/50"
                 />
-                <p className="text-xs text-zinc-600">Minimaal 6 tekens.</p>
+                <p className="text-xs text-zinc-500">At least 6 characters.</p>
               </div>
               {error && (
-                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-[8px] px-3 py-2" role="alert">
+                <p className="text-sm text-red-400" role="alert">
                   {error}
                 </p>
               )}
-              <p className="text-xs text-zinc-600">
+              <p className="text-xs text-zinc-500">
                 Door een account aan te maken ga je akkoord met onze{" "}
-                <Link href={ROUTES.privacy} className="text-zinc-500 hover:text-zinc-300 underline underline-offset-4">
+                <Link
+                  href={ROUTES.privacy}
+                  className="text-zinc-400 hover:underline underline-offset-4"
+                >
                   Privacyverklaring
                 </Link>{" "}
                 en{" "}
-                <Link href={ROUTES.cookies} className="text-zinc-500 hover:text-zinc-300 underline underline-offset-4">
+                <Link
+                  href={ROUTES.cookies}
+                  className="text-zinc-400 hover:underline underline-offset-4"
+                >
                   Cookiebeleid
                 </Link>
                 .
               </p>
-              <Button
-                type="submit"
-                className="w-full bg-[#6366f1] hover:opacity-90 text-white"
-                disabled={loading}
-              >
-                {loading ? "Bezig..." : "Account aanmaken"}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Creating account…" : "Create account"}
               </Button>
             </form>
           </CardContent>
           <CardFooter className="flex justify-center border-t border-zinc-800 pt-6">
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-400">
               Al een account?{" "}
-              <Link href={ROUTES.login} className="text-zinc-100 hover:underline underline-offset-4">
+              <Link
+                href={ROUTES.login}
+                className="text-zinc-100 hover:underline underline-offset-4"
+              >
                 Inloggen
               </Link>
             </p>
